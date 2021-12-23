@@ -6,8 +6,6 @@ namespace CodeBase.Infrastructure.StateMachine.States
 {
     public class LoadLevelState : IPayloadedState<string>
     {
-        private const string PlayerPath = "Player/XR Player";
-        private const string RevolverPath = "Guns/Revolver";
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly InitialPointHolder _initialPointHolder;
@@ -44,30 +42,11 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private void InstantiatePlayerWithGun()
         {
             var initialPoint = _initialPointHolder.GetInitialPoint(0);
-            var player = Instantiate(PlayerPath, initialPoint);
+            var player = ResourcesUtilities.Instantiate(AssetsPath.Player, initialPoint);
             
             var cameraTransform = Camera.main.transform;
             var gunPivot = cameraTransform.position + _gunPivotOffset;
-            var gun = Instantiate(RevolverPath, gunPivot, new Vector3(90,0,0));
+            var gun = ResourcesUtilities.Instantiate(AssetsPath.Revolver, gunPivot, new Vector3(90,0,0));
         }
-
-        private static GameObject Instantiate(string path)
-        {
-            var prefab = Resources.Load<GameObject>(path);
-            return Object.Instantiate(prefab);
-        }
-        
-        private static GameObject Instantiate(string path, Vector3 at)
-        {
-            var prefab = Resources.Load<GameObject>(path);
-            return Object.Instantiate(prefab, at, Quaternion.identity);
-        }
-        
-        private static GameObject Instantiate(string path, Vector3 at, Vector3 rotation)
-        {
-            var prefab = Resources.Load<GameObject>(path);
-            return Object.Instantiate(prefab, at, Quaternion.Euler(rotation));
-        }
-        
     }
 }

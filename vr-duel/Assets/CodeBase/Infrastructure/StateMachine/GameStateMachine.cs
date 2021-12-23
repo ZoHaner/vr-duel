@@ -16,6 +16,8 @@ namespace CodeBase.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
+                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader),
+                [typeof(LobbyCycleState)] = new LobbyCycleState(this),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, initialPointHolder, loadingCurtain),
                 [typeof(GameLoopState)] = new GameLoopState(),
                 

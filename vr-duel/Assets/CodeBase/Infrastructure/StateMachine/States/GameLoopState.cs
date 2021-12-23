@@ -1,4 +1,5 @@
-﻿using CodeBase.Infrastructure.StateMachine.States;
+﻿using System.Threading.Tasks;
+using CodeBase.Infrastructure.StateMachine.States;
 
 namespace CodeBase.Infrastructure.StateMachine
 {

@@ -4,7 +4,6 @@ namespace CodeBase.Infrastructure.StateMachine.States
 {
     public class BootstrapState : IState
     {
-        private const string InitialSceneName = "Initial";
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
 
@@ -16,11 +15,11 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         public void Enter()
         {
-            _sceneLoader.Load(InitialSceneName, onLoaded: EnterLoadLevel);
+            _sceneLoader.Load(AssetsPath.InitialSceneName, onLoaded: EnterLoadLevel);
         }
 
         private void EnterLoadLevel() => 
-            _stateMachine.Enter<LoadLevelState, string>("XR Test");
+            _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
 
         public void Exit()
         {
