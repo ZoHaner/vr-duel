@@ -7,11 +7,13 @@ namespace CodeBase.Behaviours.Guns
     {
         private const float Damage = 1f;
         public Transform ShootPointTransform;
+        public GunVfx GunVfx;
         
         public void Shoot()
         {
             PlayShootAnimation();
             TryApplyDamage();
+            GunVfx.PlayShootEffect(ShootPointTransform.position);
         }
 
         private void TryApplyDamage()
@@ -19,7 +21,7 @@ namespace CodeBase.Behaviours.Guns
             if (TryRaycastPlayer(out RaycastHit hit))
             {
                 var health = hit.transform.GetComponent<PlayerHealth>();
-                health?.TakeDamage(Damage);
+                health?.Hit(Damage, hit.point, hit.normal);
             }
         }
 

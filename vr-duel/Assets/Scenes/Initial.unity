@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: 12fdef2cabe5af546ad3e2176c65bb9a, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 868168438}
   - component: {fileID: 868168437}
-  - component: {fileID: 868168436}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -141,14 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &868168436
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 868168435}
-  m_Enabled: 1
 --- !u!20 &868168437
 Camera:
   m_ObjectHideFlags: 0
