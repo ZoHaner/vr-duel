@@ -1,4 +1,6 @@
-﻿namespace CodeBase.Infrastructure
+﻿using CodeBase.Infrastructure.Utilities;
+
+namespace CodeBase.Infrastructure.StateMachine.States
 {
     public class BootstrapState : IState
     {
@@ -18,7 +20,7 @@
         }
 
         private void EnterLoadLevel() => 
-            _stateMachine.Enter<LoadLevelState>();
+            _stateMachine.Enter<LoadLevelState, string>("XR Test");
 
         public void Exit()
         {
