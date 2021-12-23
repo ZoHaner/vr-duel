@@ -34,7 +34,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private void OnLoaded()
         {
             var initialPoint = _initialPointHolder.GetInitialPoint(0);
-            var player = Instantiate(PlayerPath, initialPoint);
+            // var player = Instantiate(PlayerPath, initialPoint);
             
             _gameStateMachine.Enter<GameLoopState>();
         }

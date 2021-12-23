@@ -1,9 +1,11 @@
-﻿namespace CodeBase.Player
+﻿using UnityEngine;
+
+namespace CodeBase.Player
 {
-    public class PlayerHealth
+    public class PlayerHealth : MonoBehaviour
     {
-        public PlayerVfx PlayerVfx;
-        public float Current { get; set; }
+        // public PlayerVfx PlayerVfx;
+        public float Current { get; set; } = 100f;
         public float Max { get; set; }
 
         public void TakeDamage(float damage)
@@ -12,8 +14,8 @@
                 return;
 
             Current -= damage;
-            
-            PlayerVfx.PlayDamageEffect();
+            // PlayerVfx.PlayDamageEffect();
+            Debug.Log($"Current health of '{gameObject.name}' is '{Current}'");
         }
     }
 }
