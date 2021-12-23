@@ -8,7 +8,6 @@ namespace CodeBase.Infrastructure.StateMachine.States
     {
         private const string PlayerPath = "Player/XR Player";
         private const string RevolverPath = "Guns/Revolver";
-        private const string GunPivotName = "GunPivot";
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly InitialPointHolder _initialPointHolder;
