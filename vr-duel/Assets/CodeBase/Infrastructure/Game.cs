@@ -1,6 +1,7 @@
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
+using CodeBase.Services;
 
 namespace CodeBase.Infrastructure
 {
@@ -12,6 +13,7 @@ namespace CodeBase.Infrastructure
         {
             StateMachine = new GameStateMachine(
                 new SceneLoader(coroutineRunner), 
+                new NetworkService(),
                 new InitialPointHolder(),
                 loadingCurtain);
         }

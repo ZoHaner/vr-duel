@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
+using CodeBase.Services;
 
 namespace CodeBase.Infrastructure.StateMachine
 {
@@ -11,13 +12,13 @@ namespace CodeBase.Infrastructure.StateMachine
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain)
+        public GameStateMachine(SceneLoader sceneLoader, NetworkService networkService, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain)
         {
             _states = new Dictionary<Type, IExitableState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader),
-                [typeof(LobbyCycleState)] = new LobbyCycleState(this),
+                [typeof(LobbyCycleState)] = new LobbyCycleState(this, networkService),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, initialPointHolder, loadingCurtain),
                 [typeof(GameLoopState)] = new GameLoopState(),
                 
