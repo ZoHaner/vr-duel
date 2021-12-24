@@ -11,6 +11,7 @@ namespace CodeBase.Services
         private IClient _client;
         private ISession _session;
         private ISocket _socket;
+        private string _ticket;
 
         public async Task Connect()
         {
@@ -20,9 +21,28 @@ namespace CodeBase.Services
             _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
             _socket = _client.NewSocket();
             await _socket.ConnectAsync(_session, true);
+
+            _socket.ReceivedMatchmakerMatched += OnReceivedMatchmakerMatched;
             
             Debug.Log(_session);
             Debug.Log(_socket);
+        }
+
+        private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatch)
+        {
+            var match = await _socket.JoinMatchAsync(matchmakerMatch);
+            Debug.Log("Session id : " + match.Id);
+        }
+
+        public async Task FindMatch()
+        {
+            var matchtakingTicket = await _socket.AddMatchmakerAsync("*", 2, 2);
+            _ticket = matchtakingTicket.Ticket;
+        }
+
+        public async Task Disconnect()
+        {
+            await _socket.CloseAsync();
         }
     }
 }
