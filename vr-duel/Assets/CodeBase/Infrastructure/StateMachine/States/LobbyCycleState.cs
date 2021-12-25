@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using CodeBase.Network;
 using CodeBase.Services;
-using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {
@@ -13,14 +13,19 @@ namespace CodeBase.Infrastructure.StateMachine.States
         {
             _gameStateMachine = gameStateMachine;
             _networkService = networkService;
+            
+            _networkService.MatchJoined += MatchJoined;
+        }
+
+        private void MatchJoined()
+        {
+            _gameStateMachine.Enter<LoadLevelState, string>(AssetsPath.GameSceneName);
         }
 
         public async void Enter()
         {
             await _networkService.Connect();
-            // find match
-            // and wait for another player
-            _gameStateMachine.Enter<LoadLevelState, string>(AssetsPath.GameSceneName);
+            await _networkService.FindMatch();
         }
 
         public void Exit()

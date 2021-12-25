@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CodeBase.Infrastructure;
+using CodeBase.Network;
 using CodeBase.Services.Network;
 using Nakama;
 using UnityEngine;
@@ -12,6 +14,8 @@ namespace CodeBase.Services
         private ISession _session;
         private ISocket _socket;
         private string _ticket;
+        
+        public Action MatchJoined;
 
         public async Task Connect()
         {
@@ -28,16 +32,20 @@ namespace CodeBase.Services
             Debug.Log(_socket);
         }
 
-        private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatch)
-        {
-            var match = await _socket.JoinMatchAsync(matchmakerMatch);
-            Debug.Log("Session id : " + match.Id);
-        }
-
         public async Task FindMatch()
         {
+            Debug.Log("Finding match ...");
             var matchtakingTicket = await _socket.AddMatchmakerAsync("*", 2, 2);
             _ticket = matchtakingTicket.Ticket;
+            Debug.Log("Ticket : " + _ticket);
+        }
+
+        private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatch)
+        {
+            Debug.Log("Match found!");
+            var match = await _socket.JoinMatchAsync(matchmakerMatch);
+            MainThreadDispatcher.Instance().Enqueue(() => MatchJoined?.Invoke());
+            Debug.Log("Session id : " + match.Id);
         }
 
         public async Task Disconnect()
