@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {
-    public class LoadLevelState : IPayloadedState<string>
+    public class LoadGameLevelState : IPayloadedState<string>
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -13,7 +13,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
 
 
-        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain)
+        public LoadGameLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;

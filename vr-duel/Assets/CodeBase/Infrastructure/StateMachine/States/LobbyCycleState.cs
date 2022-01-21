@@ -19,7 +19,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         private void MatchJoined()
         {
-            _gameStateMachine.Enter<LoadLevelState, string>(AssetsPath.GameSceneName);
+            _gameStateMachine.Enter<LoadGameLevelState, string>(AssetsPath.GameSceneName);
         }
 
         public async void Enter()

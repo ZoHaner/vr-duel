@@ -19,7 +19,7 @@ namespace CodeBase.Infrastructure.StateMachine
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this, networkService),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, initialPointHolder, loadingCurtain),
+                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, initialPointHolder, loadingCurtain),
                 [typeof(GameLoopState)] = new GameLoopState(),
                 
             };
