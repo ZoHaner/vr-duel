@@ -20,7 +20,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         private void OnLoaded()
         {
-            var player = ResourcesUtilities.Instantiate(AssetsPath.Player);
+            var player = ResourcesUtilities.Instantiate(AssetsPath.LocalPlayer);
             _gameStateMachine.Enter<LobbyCycleState>();
         }
 

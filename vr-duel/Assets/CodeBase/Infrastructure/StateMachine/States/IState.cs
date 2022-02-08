@@ -2,7 +2,7 @@
 {
     public interface IState : IExitableState
     {
-        void Enter();
+       void Enter();
     }
 
     public interface IExitableState

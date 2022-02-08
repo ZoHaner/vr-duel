@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using CodeBase.Network;
 using CodeBase.Services;
+using Nakama;
+using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {
@@ -17,15 +19,18 @@ namespace CodeBase.Infrastructure.StateMachine.States
             _networkService.MatchJoined += MatchJoined;
         }
 
-        private void MatchJoined()
-        {
-            _gameStateMachine.Enter<LoadGameLevelState, string>(AssetsPath.GameSceneName);
-        }
-
         public async void Enter()
         {
             await _networkService.Connect();
             await _networkService.FindMatch();
+            _networkService.Socket.ReceivedMatchmakerMatched += _networkService.JoinMatch;
+        }
+
+        private void MatchJoined()
+        {
+            _gameStateMachine.Enter<LoadGameLevelState, string>(AssetsPath.GameSceneName);
+            Debug.LogError("OnMatchJoined");
+            Debug.LogError("Session id : " + _networkService.Match.Id);
         }
 
         public void Exit()

@@ -10,47 +10,49 @@ namespace CodeBase.Services
 {
     public class NetworkService
     {
+        public ISocket Socket;
+        public IMatchmakerMatched MatchmakerMatch { get; private set; }
+        public IMatch Match { private set; get; }
+
+        public Action MatchJoined;
+
         private IClient _client;
         private ISession _session;
-        private ISocket _socket;
         private string _ticket;
-        
-        public Action MatchJoined;
 
         public async Task Connect()
         {
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
             _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, UnityWebRequestAdapter.Instance);
-            _session = await _client.AuthenticateDeviceAsync(SystemInfo.deviceUniqueIdentifier);
-            _socket = _client.NewSocket();
-            await _socket.ConnectAsync(_session, true);
+            _session = await _client.AuthenticateDeviceAsync(/*SystemInfo.deviceUniqueIdentifier*/ Guid.NewGuid().ToString());
+            Socket = _client.NewSocket();
+            await Socket.ConnectAsync(_session, true);
 
-            _socket.ReceivedMatchmakerMatched += OnReceivedMatchmakerMatched;
             
-            Debug.Log(_session);
-            Debug.Log(_socket);
+            Debug.LogError(_session);
+            Debug.LogError(Socket);
         }
 
         public async Task FindMatch()
         {
-            Debug.Log("Finding match ...");
-            var matchtakingTicket = await _socket.AddMatchmakerAsync("*", 2, 2);
+            Debug.LogError("Finding match ...");
+            var matchtakingTicket = await Socket.AddMatchmakerAsync("", 2, 2);
             _ticket = matchtakingTicket.Ticket;
-            Debug.Log("Ticket : " + _ticket);
+            Debug.LogError("Ticket : " + _ticket);
         }
 
-        private async void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatch)
+        public async void JoinMatch(IMatchmakerMatched matchmakerMatch)
         {
-            Debug.Log("Match found!");
-            var match = await _socket.JoinMatchAsync(matchmakerMatch);
+            Debug.LogError("Match found!");
+            Match = await Socket.JoinMatchAsync(matchmakerMatch);
+            MatchmakerMatch = matchmakerMatch;
             MainThreadDispatcher.Instance().Enqueue(() => MatchJoined?.Invoke());
-            Debug.Log("Session id : " + match.Id);
         }
 
         public async Task Disconnect()
         {
-            await _socket.CloseAsync();
+            await Socket.CloseAsync();
         }
     }
 }
