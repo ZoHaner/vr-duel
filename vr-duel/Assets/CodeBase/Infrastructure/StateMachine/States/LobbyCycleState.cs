@@ -1,4 +1,5 @@
 ﻿using CodeBase.Services;
+using CodeBase.Services.Network;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States

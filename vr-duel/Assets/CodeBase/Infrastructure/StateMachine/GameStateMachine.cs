@@ -4,6 +4,7 @@ using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
 using CodeBase.Services;
+using CodeBase.Services.Network;
 
 namespace CodeBase.Infrastructure.StateMachine
 {

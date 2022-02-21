@@ -2,6 +2,7 @@ using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
 using CodeBase.Services;
+using CodeBase.Services.Network;
 
 namespace CodeBase.Infrastructure
 {

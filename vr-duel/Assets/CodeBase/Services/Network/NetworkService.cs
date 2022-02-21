@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using CodeBase.Infrastructure;
 using CodeBase.Network;
-using CodeBase.Services.Network;
 using Nakama;
 using UnityEngine;
 
-namespace CodeBase.Services
+namespace CodeBase.Services.Network
 {
     public class NetworkService
     {

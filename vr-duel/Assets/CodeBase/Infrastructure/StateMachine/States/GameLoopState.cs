@@ -1,6 +1,4 @@
-﻿using CodeBase.Infrastructure.StateMachine.States;
-
-namespace CodeBase.Infrastructure.StateMachine
+﻿namespace CodeBase.Infrastructure.StateMachine.States
 {
     public class GameLoopState : IState
     {

@@ -1,4 +1,7 @@
-public interface IDamageable
+namespace CodeBase.Behaviours.Guns
 {
-    void ApplyDamage(int damage);
+    public interface IDamageable
+    {
+        void ApplyDamage(int damage);
+    }
 }
