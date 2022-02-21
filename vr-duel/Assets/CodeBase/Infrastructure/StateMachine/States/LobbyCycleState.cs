@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using CodeBase.Network;
-using CodeBase.Services;
-using Nakama;
+﻿using CodeBase.Services;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States
