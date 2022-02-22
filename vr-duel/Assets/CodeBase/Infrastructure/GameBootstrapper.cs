@@ -1,5 +1,8 @@
 using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Logic;
+using CodeBase.Network;
+using CodeBase.Services.ServiceLocator;
+using Nakama;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure
@@ -12,7 +15,7 @@ namespace CodeBase.Infrastructure
 
         private void Awake()
         {
-            _game = new Game(this, Curtain);
+            _game = new Game(this, Curtain, MainThreadDispatcher.Instance(), UnityWebRequestAdapter.Instance, AllServices.Container);
             _game.StateMachine.Enter<BootstrapState>();
             
             DontDestroyOnLoad(this);

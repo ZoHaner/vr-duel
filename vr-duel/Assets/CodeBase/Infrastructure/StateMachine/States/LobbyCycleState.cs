@@ -1,5 +1,4 @@
-﻿using CodeBase.Services;
-using CodeBase.Services.Network;
+﻿using CodeBase.Services.Network;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States
@@ -7,9 +6,9 @@ namespace CodeBase.Infrastructure.StateMachine.States
     public class LobbyCycleState : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly NetworkService _networkService;
+        private readonly INetworkService _networkService;
 
-        public LobbyCycleState(GameStateMachine gameStateMachine, NetworkService networkService)
+        public LobbyCycleState(GameStateMachine gameStateMachine, INetworkService networkService)
         {
             _gameStateMachine = gameStateMachine;
             _networkService = networkService;

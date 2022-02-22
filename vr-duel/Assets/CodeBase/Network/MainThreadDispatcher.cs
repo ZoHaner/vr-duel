@@ -1,17 +1,17 @@
-﻿namespace CodeBase.Network
-{
-    using UnityEngine;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System;
-    using System.Threading.Tasks;
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
 
+namespace CodeBase.Network
+{
     /// Author: Pim de Witte (pimdewitte.com) and contributors, https://github.com/PimDeWitte/UnityMainThreadDispatcher
     /// <summary>
     /// A thread-safe class which holds a queue with actions to execute on the next Update() method. It can be used to make calls to the main thread for
     /// things such as UI Manipulation in Unity. It was developed for use in combination with the Firebase Unity plugin, which uses separate threads for event handling
     /// </summary>
-    public class MainThreadDispatcher : MonoBehaviour
+    public class MainThreadDispatcher : MonoBehaviour, IMainThreadDispatcher 
     {
         private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 

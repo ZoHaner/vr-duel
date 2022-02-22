@@ -7,28 +7,36 @@ using UnityEngine;
 
 namespace CodeBase.Services.Network
 {
-    public class NetworkService
+    public class NetworkService : INetworkService
     {
-        public ISocket Socket;
+        public NetworkService(UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher)
+        {
+            _unityWebRequestAdapter = unityWebRequestAdapter;
+            _mainThreadDispatcher = mainThreadDispatcher;
+        }
+        
+        public ISocket Socket { get; set; }
         public IMatchmakerMatched MatchmakerMatch { get; private set; }
         public IMatch Match { private set; get; }
 
-        public Action MatchJoined;
+        public Action MatchJoined { get; set; }
 
         private IClient _client;
         private ISession _session;
         private string _ticket;
+        private UnityWebRequestAdapter _unityWebRequestAdapter;
+        private MainThreadDispatcher _mainThreadDispatcher;
 
         public async Task Connect()
         {
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
-            _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, UnityWebRequestAdapter.Instance);
+            _unityWebRequestAdapter = UnityWebRequestAdapter.Instance;
+            _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _unityWebRequestAdapter);
             _session = await _client.AuthenticateDeviceAsync(/*SystemInfo.deviceUniqueIdentifier*/ Guid.NewGuid().ToString());
             Socket = _client.NewSocket();
             await Socket.ConnectAsync(_session, true);
 
-            
             Debug.LogError(_session);
             Debug.LogError(Socket);
         }
@@ -36,8 +44,8 @@ namespace CodeBase.Services.Network
         public async Task FindMatch()
         {
             Debug.LogError("Finding match ...");
-            var matchtakingTicket = await Socket.AddMatchmakerAsync("", 2, 2);
-            _ticket = matchtakingTicket.Ticket;
+            var matchmakerTicket = await Socket.AddMatchmakerAsync("", 2, 2);
+            _ticket = matchmakerTicket.Ticket;
             Debug.LogError("Ticket : " + _ticket);
         }
 
@@ -46,7 +54,7 @@ namespace CodeBase.Services.Network
             Debug.LogError("Match found!");
             Match = await Socket.JoinMatchAsync(matchmakerMatch);
             MatchmakerMatch = matchmakerMatch;
-            MainThreadDispatcher.Instance().Enqueue(() => MatchJoined?.Invoke());
+            _mainThreadDispatcher.Enqueue(() => MatchJoined?.Invoke());
         }
 
         public async Task Disconnect()

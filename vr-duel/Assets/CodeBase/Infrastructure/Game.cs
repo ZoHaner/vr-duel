@@ -1,8 +1,9 @@
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
-using CodeBase.Services;
-using CodeBase.Services.Network;
+using CodeBase.Network;
+using CodeBase.Services.ServiceLocator;
+using Nakama;
 
 namespace CodeBase.Infrastructure
 {
@@ -10,13 +11,15 @@ namespace CodeBase.Infrastructure
     {
         public readonly GameStateMachine StateMachine;
 
-        public Game(ICoroutineRunner coroutineRunner, LoadingCurtain loadingCurtain)
+        public Game(ICoroutineRunner coroutineRunner, LoadingCurtain loadingCurtain, MainThreadDispatcher mainThreadDispatcher, UnityWebRequestAdapter unityWebRequestAdapter, AllServices allServices)
         {
             StateMachine = new GameStateMachine(
-                new SceneLoader(coroutineRunner), 
-                new NetworkService(),
+                new SceneLoader(coroutineRunner),
                 new InitialPointHolder(),
-                loadingCurtain);
+                loadingCurtain,
+                allServices,
+                mainThreadDispatcher, 
+                unityWebRequestAdapter);
         }
     }
 }

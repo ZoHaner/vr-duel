@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
-using CodeBase.Services;
+using CodeBase.Network;
 using CodeBase.Services.Network;
+using CodeBase.Services.ServiceLocator;
+using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine
 {
@@ -13,14 +15,14 @@ namespace CodeBase.Infrastructure.StateMachine
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, NetworkService networkService, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain)
+        public GameStateMachine(SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain, AllServices allServices, MainThreadDispatcher mainThreadDispatcher, UnityWebRequestAdapter unityWebRequestAdapter)
         {
             _states = new Dictionary<Type, IExitableState>()
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
+                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, unityWebRequestAdapter, mainThreadDispatcher),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader),
-                [typeof(LobbyCycleState)] = new LobbyCycleState(this, networkService),
-                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, initialPointHolder, loadingCurtain, networkService),
+                [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>()),
+                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, initialPointHolder, loadingCurtain, allServices.Single<INetworkService>()),
                 [typeof(GameLoopState)] = new GameLoopState(),
                 
             };

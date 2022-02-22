@@ -9,5 +9,6 @@
         public const string InitialSceneName = "Loader";
         public const string LobbySceneName = "Lobby";
         public const string GameSceneName = "Game";
+        public const string MatchWindow = "UI/MatchWindow";
     }
 }

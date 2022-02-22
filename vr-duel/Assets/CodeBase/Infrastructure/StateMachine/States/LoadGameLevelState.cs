@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
-using CodeBase.Services;
 using CodeBase.Services.Network;
 using Nakama;
 using UnityEngine;
@@ -14,11 +13,11 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private readonly SceneLoader _sceneLoader;
         private readonly InitialPointHolder _initialPointHolder;
         private readonly LoadingCurtain _loadingCurtain;
-        private readonly NetworkService _networkService;
+        private readonly INetworkService _networkService;
         private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
 
 
-        public LoadGameLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain, NetworkService networkService)
+        public LoadGameLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain, INetworkService networkService)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
