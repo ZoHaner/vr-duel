@@ -11,7 +11,12 @@ namespace CodeBase.Infrastructure
     {
         public readonly GameStateMachine StateMachine;
 
-        public Game(ICoroutineRunner coroutineRunner, LoadingCurtain loadingCurtain, MainThreadDispatcher mainThreadDispatcher, UnityWebRequestAdapter unityWebRequestAdapter, AllServices allServices)
+        public Game(
+            ICoroutineRunner coroutineRunner, 
+            LoadingCurtain loadingCurtain, 
+            MainThreadDispatcher mainThreadDispatcher, 
+            UnityWebRequestAdapter unityWebRequestAdapter, 
+            AllServices allServices)
         {
             StateMachine = new GameStateMachine(
                 new SceneLoader(coroutineRunner),

@@ -20,5 +20,10 @@ namespace CodeBase.Infrastructure
             
             DontDestroyOnLoad(this);
         }
+
+        private void OnDestroy()
+        {
+            _game.StateMachine.Enter<CleanupState>();
+        }
     }
 }

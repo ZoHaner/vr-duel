@@ -24,6 +24,7 @@ namespace CodeBase.Infrastructure.StateMachine
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>()),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, initialPointHolder, loadingCurtain, allServices.Single<INetworkService>()),
                 [typeof(GameLoopState)] = new GameLoopState(),
+                [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>())
                 
             };
         }

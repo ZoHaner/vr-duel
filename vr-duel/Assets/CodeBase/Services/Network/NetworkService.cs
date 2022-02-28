@@ -60,6 +60,7 @@ namespace CodeBase.Services.Network
         public async Task Disconnect()
         {
             await Socket.CloseAsync();
+            Debug.LogError("CLOSEED");
         }
     }
 }
