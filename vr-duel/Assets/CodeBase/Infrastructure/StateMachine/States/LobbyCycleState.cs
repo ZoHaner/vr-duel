@@ -19,8 +19,8 @@ namespace CodeBase.Infrastructure.StateMachine.States
         public async void Enter()
         {
             await _networkService.Connect();
-            await _networkService.FindMatch();
-            _networkService.Socket.ReceivedMatchmakerMatched += _networkService.JoinMatch;
+            // await _networkService.AddMatchmaker();
+            // _networkService.Socket.ReceivedMatchmakerMatched += _networkService.JoinMatch;
         }
 
         private void MatchJoined()

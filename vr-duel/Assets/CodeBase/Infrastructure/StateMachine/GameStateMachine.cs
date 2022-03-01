@@ -6,6 +6,8 @@ using CodeBase.Logic;
 using CodeBase.Network;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
+using CodeBase.UI.Services.Factory;
+using CodeBase.UI.Services.Windows;
 using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine
@@ -20,12 +22,11 @@ namespace CodeBase.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, unityWebRequestAdapter, mainThreadDispatcher),
-                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader),
+                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(),allServices.Single<IWindowService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>()),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, initialPointHolder, loadingCurtain, allServices.Single<INetworkService>()),
                 [typeof(GameLoopState)] = new GameLoopState(),
                 [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>())
-                
             };
         }
         

@@ -2,6 +2,10 @@
 using CodeBase.Network;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
+using CodeBase.Services.StaticData;
+using CodeBase.UI.Services;
+using CodeBase.UI.Services.Factory;
+using CodeBase.UI.Services.Windows;
 using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine.States
@@ -31,6 +35,22 @@ namespace CodeBase.Infrastructure.StateMachine.States
         }
 
         private void RegisterServices()
+        {
+            RegisterNetworkService();
+            RegisterStaticDataService();
+
+            _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
+            _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
+        }
+
+        private void RegisterStaticDataService()
+        {
+            var staticData = new StaticDataService();
+            staticData.LoadStatics();
+            _allServices.Register<IStaticDataService>(staticData);
+        }
+
+        private void RegisterNetworkService()
         {
             var networkService = new NetworkService(_unityWebRequestAdapter, _mainThreadDispatcher);
             _allServices.Register<INetworkService>(networkService);
