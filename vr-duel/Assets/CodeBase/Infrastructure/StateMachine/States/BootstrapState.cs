@@ -1,4 +1,5 @@
-﻿using CodeBase.Infrastructure.Utilities;
+﻿using CodeBase.Infrastructure.Factory;
+using CodeBase.Infrastructure.Utilities;
 using CodeBase.Network;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
@@ -40,17 +41,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
-            
-            RegisterSessionService();
-        }
-
-        private void RegisterSessionService()
-        {
-            var sessionService = new SessionService();
-            sessionService.Construct(
-                _allServices.Single<INetworkService>(),
-                _mainThreadDispatcher);
-            _allServices.Register<ISessionService>(sessionService);
+            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>()));
         }
 
         private void RegisterStaticDataService()

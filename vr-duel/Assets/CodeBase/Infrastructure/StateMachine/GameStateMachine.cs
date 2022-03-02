@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
@@ -25,7 +26,7 @@ namespace CodeBase.Infrastructure.StateMachine
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(),allServices.Single<IWindowService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, loadingCurtain),
-                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<ISessionService>()),
+                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<INetworkPlayerFactory>()),
                 [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>())
             };
         }

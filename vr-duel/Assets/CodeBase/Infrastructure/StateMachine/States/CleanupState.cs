@@ -13,13 +13,10 @@ namespace CodeBase.Infrastructure.StateMachine.States
         
         public void Enter()
         {
-            _networkService.Cleanup();
-            _networkService.Disconnect();
         }
 
         public void Exit()
         {
-            
         }
     }
 }

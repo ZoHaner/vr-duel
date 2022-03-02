@@ -10,9 +10,11 @@ namespace CodeBase.Services.Network
     public class NetworkService : INetworkService
     {
         public ISocket Socket { get; set; }
-        public IMatchmakerMatched MatchmakerMatch { get; private set; }
-        public IMatch Match { private set; get; }
-        public Action MatchJoined { get; set; }
+        private IMatch Match { set; get; }
+        public Action<IMatch> MatchJoined { get; set; }
+        public Action<IMatchmakerMatched> ReceivedMatchmakerMatched { get; set; }
+        public Action<IMatchPresenceEvent> ReceivedMatchPresence { get; set; }
+        public Action<IMatchState> ReceivedMatchState { get; set; }
         public Action<IApiMatchList> MatchListFound { get; set; }
 
         public const int MinPlayers = 2;
@@ -21,8 +23,8 @@ namespace CodeBase.Services.Network
         private IClient _client;
         private ISession _session;
         private string _ticket;
-        private UnityWebRequestAdapter _unityWebRequestAdapter;
-        private MainThreadDispatcher _mainThreadDispatcher;
+        private UnityWebRequestAdapter _adapter;
+        private MainThreadDispatcher _dispatcher;
         private readonly ICoroutineRunner _coroutineRunner;
         private Coroutine _matchSearchingCoroutine;
 
@@ -30,35 +32,56 @@ namespace CodeBase.Services.Network
         private const bool Authoritative = false;
         private const string Query = "*";
 
-
-        public NetworkService(UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher)
+        public NetworkService(UnityWebRequestAdapter adapter, MainThreadDispatcher dispatcher)
         {
-            _unityWebRequestAdapter = unityWebRequestAdapter;
-            _mainThreadDispatcher = mainThreadDispatcher;
+            _adapter = adapter;
+            _dispatcher = dispatcher;
         }
-        
+
+        public void SubscribeEvents()
+        {
+            Socket.ReceivedMatchmakerMatched += m => _dispatcher.Enqueue(() => OnReceivedMatchmakerMatched(m));
+            Socket.ReceivedMatchPresence += m => _dispatcher.Enqueue(() => OnReceivedMatchPresence(m));
+            Socket.ReceivedMatchState += m => _dispatcher.Enqueue(async () => await OnReceivedMatchState(m));
+        }
+
         public void Cleanup()
         {
-            Socket.ReceivedMatchmakerMatched -= JoinMatch;
+            Socket.ReceivedMatchmakerMatched -= m => _dispatcher.Enqueue(() => OnReceivedMatchmakerMatched(m));
+            Socket.ReceivedMatchPresence -= m => _dispatcher.Enqueue(() => OnReceivedMatchPresence(m));
+            Socket.ReceivedMatchState -= m => _dispatcher.Enqueue(async () => await OnReceivedMatchState(m));
+        }
+
+        private void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatched)
+        {
+            JoinMatch(matchmakerMatched);
+            ReceivedMatchmakerMatched?.Invoke(matchmakerMatched);
+        }
+
+        private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
+        {
+            ReceivedMatchPresence?.Invoke(matchPresenceEvent);
+        }
+        
+        private async Task OnReceivedMatchState(IMatchState matchState)
+        {
+            ReceivedMatchState?.Invoke(matchState);
         }
 
         public async Task Connect()
         {
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
-            _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _unityWebRequestAdapter);
+            _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _adapter);
             _session = await _client.AuthenticateDeviceAsync(/*SystemInfo.deviceUniqueIdentifier*/ Guid.NewGuid().ToString());
             Socket = _client.NewSocket();
             await Socket.ConnectAsync(_session, true);
             
-            Socket.ReceivedMatchmakerMatched += JoinMatch;
-
-
             Debug.LogError(_client);
             Debug.LogError(_session);
             Debug.LogError(Socket);
         }
-
+        
         public async Task<IApiMatchList> GetMatchList()
         {
             var result = await _client.ListMatchesAsync(
@@ -88,7 +111,7 @@ namespace CodeBase.Services.Network
         public async Task<IMatch> JoinMatch(string matchId)
         {
             var match = await Socket.JoinMatchAsync(matchId);
-            _mainThreadDispatcher.Enqueue(() => MatchJoined?.Invoke());
+            _dispatcher.Enqueue(() => MatchJoined?.Invoke(match));
 
             return match;
         }
@@ -101,12 +124,16 @@ namespace CodeBase.Services.Network
             Debug.LogError("Ticket : " + _ticket);
         }
 
+        public async Task CancelMatchmaker()
+        {
+            
+        }
+
         public async void JoinMatch(IMatchmakerMatched matchmakerMatch)
         {
             Debug.LogError("Match found!");
             Match = await Socket.JoinMatchAsync(matchmakerMatch);
-            MatchmakerMatch = matchmakerMatch;
-            _mainThreadDispatcher.Enqueue(() => MatchJoined?.Invoke());
+            _dispatcher.Enqueue(() => MatchJoined?.Invoke(Match));
         }
 
         public async Task Disconnect()
