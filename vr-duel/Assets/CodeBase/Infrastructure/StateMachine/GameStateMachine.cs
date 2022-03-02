@@ -23,9 +23,9 @@ namespace CodeBase.Infrastructure.StateMachine
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, unityWebRequestAdapter, mainThreadDispatcher),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(),allServices.Single<IWindowService>()),
-                [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>()),
-                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, initialPointHolder, loadingCurtain, allServices.Single<INetworkService>()),
-                [typeof(GameLoopState)] = new GameLoopState(),
+                [typeof(LobbyCycleState)] = new LobbyCycleState(this),
+                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, loadingCurtain),
+                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<ISessionService>()),
                 [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>())
             };
         }

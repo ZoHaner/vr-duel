@@ -45,7 +45,7 @@ namespace CodeBase.UI.Windows.Elements
 
         private void RefreshNonAvailableItems()
         {
-            bool activity = IsListExist();
+            bool activity = !IsListExist();
             
             foreach (var item in EmptyListItems)
             {

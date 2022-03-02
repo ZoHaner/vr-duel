@@ -26,10 +26,9 @@ namespace CodeBase.Services.Network
         private readonly ICoroutineRunner _coroutineRunner;
         private Coroutine _matchSearchingCoroutine;
 
-        private const int MatchesSearchLimit = 10;
-        private const bool Authoritative = true;
-        private const string Label = "";
-        private const string Query = "";
+        private const int MatchesSearchLimit = 0;
+        private const bool Authoritative = false;
+        private const string Query = "*";
 
 
         public NetworkService(UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher)
@@ -37,21 +36,28 @@ namespace CodeBase.Services.Network
             _unityWebRequestAdapter = unityWebRequestAdapter;
             _mainThreadDispatcher = mainThreadDispatcher;
         }
+        
+        public void Cleanup()
+        {
+            Socket.ReceivedMatchmakerMatched -= JoinMatch;
+        }
 
         public async Task Connect()
         {
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
-            _unityWebRequestAdapter = UnityWebRequestAdapter.Instance;
             _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _unityWebRequestAdapter);
             _session = await _client.AuthenticateDeviceAsync(/*SystemInfo.deviceUniqueIdentifier*/ Guid.NewGuid().ToString());
             Socket = _client.NewSocket();
             await Socket.ConnectAsync(_session, true);
+            
+            Socket.ReceivedMatchmakerMatched += JoinMatch;
 
+
+            Debug.LogError(_client);
             Debug.LogError(_session);
             Debug.LogError(Socket);
         }
-
 
         public async Task<IApiMatchList> GetMatchList()
         {
@@ -61,12 +67,12 @@ namespace CodeBase.Services.Network
                 MaxPlayers, 
                 MatchesSearchLimit, 
                 Authoritative, 
-                Label, 
+                null, 
                 Query);
 
             foreach (var match in result.Matches)
             {
-                Debug.LogFormat("{0}: {1}/{2} players", match.MatchId, match.Size, MaxPlayers);
+                Debug.LogFormat("MatchId : " + match.MatchId);
             }
 
             MatchListFound?.Invoke(result);
@@ -87,21 +93,21 @@ namespace CodeBase.Services.Network
             return match;
         }
 
-        // public async Task AddMatchmaker()
-        // {
-        //     Debug.LogError("Finding match ...");
-        //     var matchmakerTicket = await Socket.AddMatchmakerAsync(Query, MinPlayers, MaxPlayers);
-        //     _ticket = matchmakerTicket.Ticket;
-        //     Debug.LogError("Ticket : " + _ticket);
-        // }
+        public async Task AddMatchmaker()
+        {
+            Debug.LogError("Finding match ...");
+            var matchmakerTicket = await Socket.AddMatchmakerAsync(Query, MinPlayers, MaxPlayers);
+            _ticket = matchmakerTicket.Ticket;
+            Debug.LogError("Ticket : " + _ticket);
+        }
 
-        // public async void JoinMatch(IMatchmakerMatched matchmakerMatch)
-        // {
-        //     Debug.LogError("Match found!");
-        //     Match = await Socket.JoinMatchAsync(matchmakerMatch);
-        //     MatchmakerMatch = matchmakerMatch;
-        //     _mainThreadDispatcher.Enqueue(() => MatchJoined?.Invoke());
-        // }
+        public async void JoinMatch(IMatchmakerMatched matchmakerMatch)
+        {
+            Debug.LogError("Match found!");
+            Match = await Socket.JoinMatchAsync(matchmakerMatch);
+            MatchmakerMatch = matchmakerMatch;
+            _mainThreadDispatcher.Enqueue(() => MatchJoined?.Invoke());
+        }
 
         public async Task Disconnect()
         {

@@ -3,7 +3,6 @@ using CodeBase.Network;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.StaticData;
-using CodeBase.UI.Services;
 using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
 using Nakama;
@@ -41,6 +40,17 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
+            
+            RegisterSessionService();
+        }
+
+        private void RegisterSessionService()
+        {
+            var sessionService = new SessionService();
+            sessionService.Construct(
+                _allServices.Single<INetworkService>(),
+                _mainThreadDispatcher);
+            _allServices.Register<ISessionService>(sessionService);
         }
 
         private void RegisterStaticDataService()

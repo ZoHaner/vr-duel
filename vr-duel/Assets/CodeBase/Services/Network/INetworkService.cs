@@ -18,5 +18,8 @@ namespace CodeBase.Services.Network
         Task<IApiMatchList> GetMatchList();
         Task<IMatch> JoinMatch(string matchId);
         Task<IMatch> CreateMatch();
+        Task AddMatchmaker();
+        void JoinMatch(IMatchmakerMatched matchmakerMatch);
+        void Cleanup();
     }
 }

@@ -6,6 +6,7 @@ namespace CodeBase.UI.Windows
     public class MatchListWindow : WindowBase
     {
         public MatchListContainer MatchListContainer;
+        public CreateMatchButton CreateMatchButton;
         
         private INetworkService _networkService;
 
@@ -14,6 +15,7 @@ namespace CodeBase.UI.Windows
             _networkService = networkService;
             
             MatchListContainer.Construct(networkService);
+            CreateMatchButton.Construct(networkService);
         }
 
         protected override void Initialize()
@@ -24,11 +26,13 @@ namespace CodeBase.UI.Windows
         protected override void SubscribeUpdates()
         {
             MatchListContainer.SubscribeUpdates();
+            CreateMatchButton.SubscribeUpdates();
         }
 
         protected override void Cleanup()
         {
             MatchListContainer.Cleanup();
+            CreateMatchButton.Cleanup();
         }
     }
 }
