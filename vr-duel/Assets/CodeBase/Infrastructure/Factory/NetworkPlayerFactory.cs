@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Infrastructure.Utilities;
+using CodeBase.Player;
+using CodeBase.Player.Remote;
 using CodeBase.Services.Network;
 using Nakama;
 using UnityEngine;
@@ -51,19 +53,29 @@ namespace CodeBase.Infrastructure.Factory
 
             foreach (var user in match.Presences)
             {
-                SpawnPlayer(user);
+                SpawnPlayer(match.Id, user);
             }
         }
 
-        private void SpawnPlayer(IUserPresence user)
+        private void SpawnPlayer(string matchId, IUserPresence user)
         {
             Debug.LogError("Spawn Player");
             var isLocal = user.SessionId == _localUser.Presence.SessionId;
             Debug.LogError($"Is local : {isLocal} ; user.SessionId =  {user.SessionId} ; localUser.SessionId {_localUser.Presence.SessionId}");
             var playerPrefabPath = isLocal ? AssetsPath.LocalPlayer : AssetsPath.NetworkPlayer;
 
-            var initialPoint = _pointHolder.GetInitialPoint(isLocal ? 1 : 0);
+            var initialPoint = _pointHolder.GetInitialPoint();
             var player = ResourcesUtilities.Instantiate(playerPrefabPath, initialPoint);
+            player.transform.LookAt(Vector3.zero);
+
+            if (isLocal)
+            {
+                player.GetComponent<PlayerStateSender>().Construct(_networkService);
+            }
+            else
+            {
+                player.GetComponent<RemotePlayerSync>().Construct(new RemotePlayerNetworkData(matchId, user));
+            }
 
             _players.Add(user.SessionId, player);
         }
@@ -74,7 +86,7 @@ namespace CodeBase.Infrastructure.Factory
 
             foreach (var presence in matchPresenceEvent.Joins)
             {
-                SpawnPlayer(presence);
+                SpawnPlayer(matchPresenceEvent.MatchId, presence);
             }
 
             foreach (var presence in matchPresenceEvent.Leaves)
@@ -95,9 +107,20 @@ namespace CodeBase.Infrastructure.Factory
             _players.Remove(presence.SessionId);
         }
 
-        private void UpdatePlayersState(IMatchState obj)
+        private void UpdatePlayersState(IMatchState state)
         {
-            throw new System.NotImplementedException();
+            Debug.LogError("UpdatePlayersState");
+            foreach (var pair in _players)
+            {
+                var sessionId = pair.Key;
+                var playerObj = pair.Value;
+
+                if (sessionId != _localUser.Presence.SessionId)
+                {
+                    Debug.LogError("Update state for player session id = " + sessionId);
+                    playerObj.GetComponent<RemotePlayerSync>().UpdateState(state);
+                }
+            }
         }
     }
 }

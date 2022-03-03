@@ -81,7 +81,13 @@ namespace CodeBase.Services.Network
             Debug.LogError(_session);
             Debug.LogError(Socket);
         }
-        
+
+        public async Task Disconnect()
+        {
+            await Socket.CloseAsync();
+            Debug.LogError("CONNECTION CLOSED");
+        }
+
         public async Task<IApiMatchList> GetMatchList()
         {
             var result = await _client.ListMatchesAsync(
@@ -135,11 +141,10 @@ namespace CodeBase.Services.Network
             Match = await Socket.JoinMatchAsync(matchmakerMatch);
             _dispatcher.Enqueue(() => MatchJoined?.Invoke(Match));
         }
-
-        public async Task Disconnect()
+        
+        public void SendMatchState(long opCode, string state)
         {
-            await Socket.CloseAsync();
-            Debug.LogError("CONNECTION CLOSED");
+            Socket.SendMatchStateAsync(Match.Id, opCode, state);
         }
     }
 }

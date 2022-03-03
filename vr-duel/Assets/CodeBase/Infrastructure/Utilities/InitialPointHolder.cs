@@ -4,13 +4,14 @@ namespace CodeBase.Infrastructure.Utilities
 {
     public class InitialPointHolder
     {
-        private readonly float _distance = 10f;
-        private readonly Vector3 _basePoint = Vector3.zero;
+        private GameObject[] SpawnPoints;
 
-        public Vector3 GetInitialPoint(int playerIndex)
+        public Vector3 GetInitialPoint()
         {
-            float zShift =  playerIndex * _distance;
-            return new Vector3(_basePoint.x, _basePoint.y, _basePoint.z + zShift);
+            if (SpawnPoints == null)
+                SpawnPoints = GameObject.FindGameObjectsWithTag("Respawn");
+
+            return SpawnPoints[Random.Range(0, SpawnPoints.Length - 1)].transform.position;
         }
     }
 }

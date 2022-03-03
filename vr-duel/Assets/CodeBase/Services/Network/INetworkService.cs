@@ -20,5 +20,6 @@ namespace CodeBase.Services.Network
         void JoinMatch(IMatchmakerMatched matchmakerMatch);
         void SubscribeEvents();
         void Cleanup();
+        void SendMatchState(long opCode, string state);
     }
 }
