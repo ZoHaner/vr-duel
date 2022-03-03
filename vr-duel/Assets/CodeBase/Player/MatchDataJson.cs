@@ -16,17 +16,23 @@ namespace CodeBase.Player
         /// <param name="headVelocity">The velocity to send.</param>
         /// <param name="headPosition">The position to send.</param>
         /// <returns>A JSONified string containing velocity and position data.</returns>
-        public static string BodyVelocityAndPosition(Vector3 headVelocity, Vector3 headPosition, Vector3 lhandVelocity, Vector3 lhandPosition,Vector3 rhandVelocity, Vector3 rhandPosition)
+        public static string BodyVelocityAndPosition(
+            Vector3 headVelocity, 
+            Transform headTransform, 
+            Vector3 lhandVelocity, 
+            Transform lhandTransform,
+            Vector3 rhandVelocity, 
+            Transform rhandTransform)
         {
             var values = new Dictionary<string, string>();
-            values.AddRange(VelocityAndPosition("head", headVelocity, headPosition));
-            values.AddRange(VelocityAndPosition("lhand", lhandVelocity, lhandPosition));
-            values.AddRange(VelocityAndPosition("rhand", rhandVelocity, rhandPosition));
+            values.AddRange(VelocityAndPosition("head", headVelocity, headTransform.position, headTransform.eulerAngles));
+            values.AddRange(VelocityAndPosition("lhand", lhandVelocity, lhandTransform.position, lhandTransform.eulerAngles));
+            values.AddRange(VelocityAndPosition("rhand", rhandVelocity, rhandTransform.position, rhandTransform.eulerAngles));
 
             return values.ToJson();
         }
 
-        private static Dictionary<string, string> VelocityAndPosition(string prefix, Vector3 velocity, Vector3 position)
+        private static Dictionary<string, string> VelocityAndPosition(string prefix, Vector3 velocity, Vector3 position, Vector3 rotation)
         {
             return new Dictionary<string, string>
             {
@@ -36,6 +42,9 @@ namespace CodeBase.Player
                 { $"{prefix}.position.x", position.x.ToString() },
                 { $"{prefix}.position.y", position.y.ToString() },
                 { $"{prefix}.position.z", position.z.ToString() },
+                { $"{prefix}.rotation.x", rotation.x.ToString() },
+                { $"{prefix}.rotation.y", rotation.y.ToString() },
+                { $"{prefix}.rotation.z", rotation.z.ToString() },
             };
         }
 

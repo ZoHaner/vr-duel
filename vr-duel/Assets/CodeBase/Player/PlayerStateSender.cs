@@ -31,11 +31,11 @@ namespace CodeBase.Player
                     OpCodes.VelocityAndPosition,
                     MatchDataJson.BodyVelocityAndPosition(
                         HeadRigidbody.velocity,
-                        HeadTransform.position,
+                        HeadTransform,
                         LeftHandRigidbody.velocity,
-                        LeftHandTransform.position,
+                        LeftHandTransform,
                         RightHandRigidbody.velocity,
-                        RightHandTransform.position
+                        RightHandTransform
                     ));
 
                 _stateSyncTimer = StateFrequency;

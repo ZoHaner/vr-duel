@@ -52,17 +52,22 @@ namespace CodeBase.Player.Remote
         {
             IDictionary<string, string> stateDictionary = GetStateAsDictionary(state);
             
-            HeadTransform.position = GetPositionFromDictionary(stateDictionary, "head");
-            LeftHandTransform.position = GetPositionFromDictionary(stateDictionary, "lhand");
-            RightHandTransform.position = GetPositionFromDictionary(stateDictionary, "rhand");
+            HeadTransform.position = GetPositionFromDictionary(stateDictionary, "head", "position");
+            LeftHandTransform.position = GetPositionFromDictionary(stateDictionary, "lhand", "position");
+            RightHandTransform.position = GetPositionFromDictionary(stateDictionary, "rhand", "position");
+            
+            HeadTransform.rotation = Quaternion.Euler(GetPositionFromDictionary(stateDictionary, "head", "rotation"));
+            LeftHandTransform.rotation = Quaternion.Euler(GetPositionFromDictionary(stateDictionary, "lhand", "rotation"));
+            RightHandTransform.rotation = Quaternion.Euler(GetPositionFromDictionary(stateDictionary, "rhand", "rotation"));
+            
         }
 
-        private Vector3 GetPositionFromDictionary(IDictionary<string, string> dictionary, string prefix)
+        private Vector3 GetPositionFromDictionary(IDictionary<string, string> dictionary, string prefix, string attribute)
         {
             return new Vector3(
-                float.Parse(dictionary[$"{prefix}.position.x"]),
-                float.Parse(dictionary[$"{prefix}.position.y"]),
-                float.Parse(dictionary[$"{prefix}.position.z"])
+                float.Parse(dictionary[$"{prefix}.{attribute}.x"]),
+                float.Parse(dictionary[$"{prefix}.{attribute}.y"]),
+                float.Parse(dictionary[$"{prefix}.{attribute}.z"])
             );
         }
     }
