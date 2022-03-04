@@ -1,4 +1,5 @@
 using CodeBase.Player;
+using CodeBase.Services.Input;
 using UnityEngine;
 
 namespace CodeBase.Behaviours.Guns
@@ -8,7 +9,24 @@ namespace CodeBase.Behaviours.Guns
         private const float Damage = 1f;
         public Transform ShootPointTransform;
         public GunVfx GunVfx;
-        
+
+        private IInputService _inputService;
+
+        public void Construct(IInputService inputService)
+        {
+            _inputService = inputService;
+        }
+
+        private void OnEnable()
+        {
+            _inputService.AttackButtonPressed += Shoot;
+        }
+
+        private void OnDisable()
+        {
+            _inputService.AttackButtonPressed -= Shoot;
+        }
+
         public void Shoot()
         {
             PlayShootAnimation();

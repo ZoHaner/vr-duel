@@ -2,7 +2,7 @@
 {
     public class AssetsPath
     {
-        public static string LocalPlayer = "Player/XR Player";
+        public static string LocalPlayer = "Player/Standalone Player";
         public static string NetworkPlayer = "Player/Network Player";
         public const string Revolver = "Guns/Revolver";
         public const string ConfigHolder = "Network/Network Config Holder";

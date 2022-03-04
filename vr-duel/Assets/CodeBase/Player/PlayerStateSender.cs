@@ -30,11 +30,11 @@ namespace CodeBase.Player
                 _networkService.SendMatchState(
                     OpCodes.VelocityAndPosition,
                     MatchDataJson.BodyVelocityAndPosition(
-                        HeadRigidbody.velocity,
+                        Vector3.zero, 
                         HeadTransform,
-                        LeftHandRigidbody.velocity,
+                        Vector3.zero,
                         LeftHandTransform,
-                        RightHandRigidbody.velocity,
+                        Vector3.zero,
                         RightHandTransform
                     ));
 

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using CodeBase.Behaviours.Guns;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Player;
 using CodeBase.Player.Remote;
+using CodeBase.Services.Input;
 using CodeBase.Services.Network;
 using Nakama;
 using UnityEngine;
@@ -17,10 +19,12 @@ namespace CodeBase.Infrastructure.Factory
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
 
         private IMatchmakerUser _localUser;
+        private IInputService _inputService;
 
-        public NetworkPlayerFactory(INetworkService networkService)
+        public NetworkPlayerFactory(INetworkService networkService, IInputService inputService)
         {
             _networkService = networkService;
+            _inputService = inputService;
             _pointHolder = new InitialPointHolder();
         }
 
@@ -77,8 +81,18 @@ namespace CodeBase.Infrastructure.Factory
                 player.GetComponent<RemotePlayerSync>().Construct(new RemotePlayerNetworkData(matchId, user));
             }
 
+            CreateGun(player);
+
             _players.Add(user.SessionId, player);
         }
+
+        private void CreateGun(GameObject player)
+        {
+            var gunPivot = player.GetComponentInChildren<GunPivot>().transform;
+            var gun = ResourcesUtilities.Instantiate(AssetsPath.Revolver, gunPivot);
+            gun.GetComponent<GunShooting>().Construct(_inputService);
+        }
+        
 
         private void UpdatePlayers(IMatchPresenceEvent matchPresenceEvent)
         {

@@ -1,12 +1,16 @@
 ﻿using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Network;
+using CodeBase.Services.Input;
+using CodeBase.Services.Input.Standalone;
+using CodeBase.Services.Input.VR;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.StaticData;
 using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
 using Nakama;
+using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {
@@ -34,21 +38,34 @@ namespace CodeBase.Infrastructure.StateMachine.States
             _sceneLoader.Load(AssetsPath.InitialSceneName, onLoaded: EnterLoadLevel);
         }
 
+        public void Exit()
+        {
+        }
+
+        private void EnterLoadLevel() => 
+            _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
+
         private void RegisterServices()
         {
+            RegisterInputService();
             RegisterNetworkService();
             RegisterStaticDataService();
 
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
-            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>()));
+            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputService>()));
         }
 
-        private void RegisterStaticDataService()
+        private void RegisterInputService()
         {
-            var staticData = new StaticDataService();
-            staticData.LoadStatics();
-            _allServices.Register<IStaticDataService>(staticData);
+            if (Application.isMobilePlatform)
+            {
+                _allServices.Register<IInputService>(new VRInputService());
+            }
+            else
+            {
+                _allServices.Register<IInputService>(new StandaloneInputService());
+            }
         }
 
         private void RegisterNetworkService()
@@ -57,11 +74,11 @@ namespace CodeBase.Infrastructure.StateMachine.States
             _allServices.Register<INetworkService>(networkService);
         }
 
-        private void EnterLoadLevel() => 
-            _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
-
-        public void Exit()
+        private void RegisterStaticDataService()
         {
+            var staticData = new StaticDataService();
+            staticData.LoadStatics();
+            _allServices.Register<IStaticDataService>(staticData);
         }
     }
 }
