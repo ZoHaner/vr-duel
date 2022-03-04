@@ -7,6 +7,7 @@ using CodeBase.Services.Input.VR;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.StaticData;
+using CodeBase.Services.UpdateProvider;
 using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
 using Nakama;
@@ -21,15 +22,17 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private readonly AllServices _allServices;
         private readonly UnityWebRequestAdapter _unityWebRequestAdapter;
         private readonly MainThreadDispatcher _mainThreadDispatcher;
+        private readonly UpdateProvider _updateProvider;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices allServices, UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher)
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices allServices, UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher, UpdateProvider updateProvider)
         {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
             _allServices = allServices;
             _unityWebRequestAdapter = unityWebRequestAdapter;
             _mainThreadDispatcher = mainThreadDispatcher;
-            
+            _updateProvider = updateProvider;
+
             RegisterServices();
         }
 
@@ -53,18 +56,18 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
-            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputService>()));
+            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputEventService>()));
         }
 
         private void RegisterInputService()
         {
             if (Application.isMobilePlatform)
             {
-                _allServices.Register<IInputService>(new VRInputService());
+                _allServices.Register<IInputEventService>(new VRInputEventService());
             }
             else
             {
-                _allServices.Register<IInputService>(new StandaloneInputService());
+                _allServices.Register<IInputEventService>(new StandaloneInputEventService(_updateProvider));
             }
         }
 

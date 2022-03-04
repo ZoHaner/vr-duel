@@ -7,6 +7,7 @@ using CodeBase.Logic;
 using CodeBase.Network;
 using CodeBase.Services.Network;
 using CodeBase.Services.ServiceLocator;
+using CodeBase.Services.UpdateProvider;
 using CodeBase.UI.Services.Factory;
 using CodeBase.UI.Services.Windows;
 using Nakama;
@@ -18,16 +19,16 @@ namespace CodeBase.Infrastructure.StateMachine
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, InitialPointHolder initialPointHolder, LoadingCurtain loadingCurtain, AllServices allServices, MainThreadDispatcher mainThreadDispatcher, UnityWebRequestAdapter unityWebRequestAdapter)
+        public GameStateMachine(SceneLoader sceneLoader, InitialPointHolder pointHolder, LoadingCurtain curtain, AllServices allServices, MainThreadDispatcher dispatcher, UpdateProvider updateProvider, UnityWebRequestAdapter adapter)
         {
             _states = new Dictionary<Type, IExitableState>()
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, unityWebRequestAdapter, mainThreadDispatcher),
+                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(),allServices.Single<IWindowService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this),
-                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, loadingCurtain),
+                [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
                 [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<INetworkPlayerFactory>()),
-                [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>())
+                [typeof(CleanupState)] = new CleanupState()
             };
         }
         

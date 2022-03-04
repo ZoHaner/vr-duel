@@ -1,14 +1,13 @@
 using System;
-using UnityEngine;
 
 namespace CodeBase.Services.Input.VR
 {
-    public class VRInputService : IInputService
+    public class VRInputEventService : IInputEventService
     {
-        public Vector3 HeadPosition { get; }
-        public Vector3 LeftHandPosition { get; }
-        public Vector3 RightHandPosition { get; }
+        bool IInputEventService.InputChanged { get; set; }
+
         public Action AttackButtonPressed { get; set; }
+       
         public bool IsAttackButtonPressed()
         {
             throw new NotImplementedException();

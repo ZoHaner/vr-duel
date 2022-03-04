@@ -10,25 +10,33 @@ namespace CodeBase.Behaviours.Guns
         public Transform ShootPointTransform;
         public GunVfx GunVfx;
 
-        private IInputService _inputService;
+        private IInputEventService _inputEventService;
 
-        public void Construct(IInputService inputService)
+        public void Construct(IInputEventService inputEventService)
         {
-            _inputService = inputService;
+            _inputEventService = inputEventService;
+
+            // SubscribeEvents();
         }
 
-        private void OnEnable()
+        // private void OnDestroy()
+        // {
+        //     UnsubscribeEvents();
+        // }
+
+        public void SubscribeEvents()
         {
-            _inputService.AttackButtonPressed += Shoot;
+            _inputEventService.AttackButtonPressed += Shoot;
         }
 
-        private void OnDisable()
+        public void UnsubscribeEvents()
         {
-            _inputService.AttackButtonPressed -= Shoot;
+            _inputEventService.AttackButtonPressed -= Shoot;
         }
 
         public void Shoot()
         {
+            Debug.LogError("Shoot");
             PlayShootAnimation();
             TryApplyDamage();
             GunVfx.PlayShootEffect(ShootPointTransform.position);

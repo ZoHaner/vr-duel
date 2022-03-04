@@ -1,3 +1,4 @@
+using CodeBase.Services.Input;
 using CodeBase.Services.Network;
 using UnityEngine;
 
@@ -7,9 +8,6 @@ namespace CodeBase.Player
     {
         public float StateFrequency = 0.1f;
 
-        private INetworkService _networkService;
-        private float _stateSyncTimer;
-
         public Transform HeadTransform;
         public Transform LeftHandTransform;
         public Transform RightHandTransform;
@@ -17,9 +15,14 @@ namespace CodeBase.Player
         public Rigidbody HeadRigidbody;
         public Rigidbody LeftHandRigidbody;
         public Rigidbody RightHandRigidbody;
-
-        public void Construct(INetworkService networkService)
+        
+        private IInputEventService _eventService;
+        private INetworkService _networkService;
+        private float _stateSyncTimer;
+        
+        public void Construct(INetworkService networkService, IInputEventService eventService)
         {
+            _eventService = eventService;
             _networkService = networkService;
         }
 
@@ -30,7 +33,7 @@ namespace CodeBase.Player
                 _networkService.SendMatchState(
                     OpCodes.VelocityAndPosition,
                     MatchDataJson.BodyVelocityAndPosition(
-                        Vector3.zero, 
+                        headVelocity: Vector3.zero, 
                         HeadTransform,
                         Vector3.zero,
                         LeftHandTransform,
@@ -39,6 +42,11 @@ namespace CodeBase.Player
                     ));
 
                 _stateSyncTimer = StateFrequency;
+            }
+
+            if (_eventService.InputChanged)
+            {
+                _networkService.SendMatchState(OpCodes.Input, MatchDataJson.Input(_eventService.IsAttackButtonPressed()));
             }
 
             _stateSyncTimer -= Time.deltaTime;

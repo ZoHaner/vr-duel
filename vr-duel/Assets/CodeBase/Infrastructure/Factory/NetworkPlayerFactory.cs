@@ -19,12 +19,12 @@ namespace CodeBase.Infrastructure.Factory
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
 
         private IMatchmakerUser _localUser;
-        private IInputService _inputService;
+        private IInputEventService _inputEventService;
 
-        public NetworkPlayerFactory(INetworkService networkService, IInputService inputService)
+        public NetworkPlayerFactory(INetworkService networkService, IInputEventService inputEventService)
         {
             _networkService = networkService;
-            _inputService = inputService;
+            _inputEventService = inputEventService;
             _pointHolder = new InitialPointHolder();
         }
 
@@ -74,25 +74,32 @@ namespace CodeBase.Infrastructure.Factory
 
             if (isLocal)
             {
-                player.GetComponent<PlayerStateSender>().Construct(_networkService);
+                player.GetComponent<PlayerStateSender>().Construct(_networkService, _inputEventService);
+                CreateLocalPlayerGun(player);
             }
             else
             {
-                player.GetComponent<RemotePlayerSync>().Construct(new RemotePlayerNetworkData(matchId, user));
+                GunShooting gunMono = CreateGun(player);
+                player.GetComponent<RemotePlayerSync>().Construct(new RemotePlayerNetworkData(matchId, user), gunMono);
             }
-
-            CreateGun(player);
-
             _players.Add(user.SessionId, player);
         }
 
-        private void CreateGun(GameObject player)
+        private void CreateLocalPlayerGun(GameObject player)
         {
-            var gunPivot = player.GetComponentInChildren<GunPivot>().transform;
-            var gun = ResourcesUtilities.Instantiate(AssetsPath.Revolver, gunPivot);
-            gun.GetComponent<GunShooting>().Construct(_inputService);
+            GunShooting gunMono = CreateGun(player);
+            gunMono.Construct(_inputEventService);
+            gunMono.SubscribeEvents();
         }
         
+        private GunShooting CreateGun(GameObject player)
+        {
+            var gunPivot = player.GetComponentInChildren<GunPivot>().transform;
+            var gunObject = ResourcesUtilities.Instantiate(AssetsPath.Revolver, gunPivot);
+            var gunMono = gunObject.GetComponent<GunShooting>();
+            return gunMono;
+        }
+
 
         private void UpdatePlayers(IMatchPresenceEvent matchPresenceEvent)
         {

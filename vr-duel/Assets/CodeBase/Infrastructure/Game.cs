@@ -3,6 +3,7 @@ using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
 using CodeBase.Network;
 using CodeBase.Services.ServiceLocator;
+using CodeBase.Services.UpdateProvider;
 using Nakama;
 
 namespace CodeBase.Infrastructure
@@ -11,11 +12,11 @@ namespace CodeBase.Infrastructure
     {
         public readonly GameStateMachine StateMachine;
 
-        public Game(
-            ICoroutineRunner coroutineRunner, 
-            LoadingCurtain loadingCurtain, 
-            MainThreadDispatcher mainThreadDispatcher, 
-            UnityWebRequestAdapter unityWebRequestAdapter, 
+        public Game(ICoroutineRunner coroutineRunner,
+            LoadingCurtain loadingCurtain,
+            MainThreadDispatcher mainThreadDispatcher,
+            UnityWebRequestAdapter unityWebRequestAdapter,
+            UpdateProvider updateProvider,
             AllServices allServices)
         {
             StateMachine = new GameStateMachine(
@@ -24,6 +25,7 @@ namespace CodeBase.Infrastructure
                 loadingCurtain,
                 allServices,
                 mainThreadDispatcher, 
+                updateProvider,
                 unityWebRequestAdapter);
         }
     }
