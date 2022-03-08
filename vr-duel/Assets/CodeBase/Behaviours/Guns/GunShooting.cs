@@ -12,6 +12,7 @@ namespace CodeBase.Behaviours.Guns
         public GunVfx GunVfx;
 
         private IInputEventService _inputEventService;
+        private bool _subscribed;
 
         public void Construct(IInputEventService inputEventService)
         {
@@ -21,11 +22,13 @@ namespace CodeBase.Behaviours.Guns
         public void SubscribeEvents()
         {
             _inputEventService.AttackButtonPressed += Shoot;
+            _subscribed = true;
         }
 
-        public void OnDestroy()
+        private void OnDestroy()
         {
-            UnsubscribeEvents();
+            if (_subscribed)
+                UnsubscribeEvents();
         }
 
         public void UnsubscribeEvents()
@@ -57,7 +60,6 @@ namespace CodeBase.Behaviours.Guns
 
         private void PlayShootAnimation()
         {
-            
         }
     }
 }

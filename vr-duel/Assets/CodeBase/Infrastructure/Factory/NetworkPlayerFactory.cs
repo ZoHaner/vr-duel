@@ -96,8 +96,9 @@ namespace CodeBase.Infrastructure.Factory
         public void RemovePlayer(string sessionId)
         {
             Debug.LogError("Remove player");
-            _players[sessionId].SetActive(false);
+            var player = _players[sessionId];
             _players.Remove(sessionId);
+            Object.Destroy(player);
         }
 
         public void UpdatePlayersState(IMatchState state)

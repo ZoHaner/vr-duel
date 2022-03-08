@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Player;
@@ -72,7 +71,6 @@ namespace CodeBase.Services
 
         private void CacheLocalUser(IMatchmakerMatched matched)
         {
-            // _localUser = matched.Self;
             _playerFactory.LocalUserSessionId = matched.Self.Presence.SessionId;
 
             RoundState = RoundState.WaitForPlayers;
@@ -135,6 +133,9 @@ namespace CodeBase.Services
             }
         }
         
+        /// <summary>
+        /// Local player death handling
+        /// </summary>
         private void OnPlayerDeath(IUserPresence userPresence)
         {
             _networkService.SendMatchState(OpCodes.Died, MatchDataJson.Died(userPresence.SessionId));
@@ -150,6 +151,7 @@ namespace CodeBase.Services
             var playerToRemove = _createdPlayers.First(p => p.SessionId == sessionId);
             
             _playerFactory.RemovePlayer(sessionId);
+            _createdPlayers.Remove(playerToRemove);
             _waitingPlayers.Add(playerToRemove);
             CheckFinishRound();
         }
