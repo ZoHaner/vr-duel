@@ -4,12 +4,10 @@ namespace CodeBase.Player.Remote
 {
     public class RemotePlayerNetworkData
     {
-        public string MatchId;
         public IUserPresence User;
 
-        public RemotePlayerNetworkData(string matchId, IUserPresence user)
+        public RemotePlayerNetworkData(IUserPresence user)
         {
-            MatchId = matchId;
             User = user;
         }
     }

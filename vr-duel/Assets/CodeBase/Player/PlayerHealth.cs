@@ -1,21 +1,30 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace CodeBase.Player
 {
     public class PlayerHealth : MonoBehaviour
     {
         public PlayerVfx PlayerVfx;
-        public float Current { get; set; } = 100f;
-        public float Max { get; set; }
+        public int Current { get; set; } = 3;
+        public int Max { get; set; }
 
-        public void Hit(float damage, Vector3 hitPoint, Vector3 direction)
+        public Action<int> HealthChanged;
+
+        public void Hit(int damage, Vector3 hitPoint, Vector3 direction)
         {
             if (Current <= 0)
                 return;
 
-            Current -= damage;
+            ApplyDamage(damage);
             PlayerVfx.PlayDamageEffect(hitPoint, direction);
             Debug.Log($"Current health of '{gameObject.name}' is '{Current}'");
+        }
+
+        private void ApplyDamage(int damage)
+        {
+            Current -= damage;
+            HealthChanged?.Invoke(Current);
         }
     }
 }

@@ -34,10 +34,8 @@ namespace CodeBase.Player.Remote
 
         public void UpdateState(IMatchState matchState)
         {
-            if (matchState.UserPresence.SessionId != NetworkData.User.SessionId)
-            {
+            if (NotMyMatchState(matchState))
                 return;
-            }
 
             switch (matchState.OpCode)
             {
@@ -50,9 +48,9 @@ namespace CodeBase.Player.Remote
             }
         }
 
-        private IDictionary<string, string> GetStateAsDictionary(byte[] state)
+        private bool NotMyMatchState(IMatchState matchState)
         {
-            return Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
+            return matchState.UserPresence.SessionId != NetworkData.User.SessionId;
         }
 
         private void UpdateVelocityAndPositionFromState(byte[] state)
@@ -88,6 +86,12 @@ namespace CodeBase.Player.Remote
                 float.Parse(dictionary[$"{prefix}.{attribute}.y"]),
                 float.Parse(dictionary[$"{prefix}.{attribute}.z"])
             );
+        }
+
+
+        private IDictionary<string, string> GetStateAsDictionary(byte[] state)
+        {
+            return Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
         }
     }
 }

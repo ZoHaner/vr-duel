@@ -1,6 +1,7 @@
 ﻿using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Network;
+using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
 using CodeBase.Services.Input.VR;
@@ -57,6 +58,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
             _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputEventService>()));
+            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IStaticDataService>()));
         }
 
         private void RegisterInputService()

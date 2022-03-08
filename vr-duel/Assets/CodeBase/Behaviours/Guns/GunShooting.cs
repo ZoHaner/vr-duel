@@ -1,3 +1,4 @@
+using System;
 using CodeBase.Player;
 using CodeBase.Services.Input;
 using UnityEngine;
@@ -6,7 +7,7 @@ namespace CodeBase.Behaviours.Guns
 {
     public class GunShooting : MonoBehaviour
     {
-        private const float Damage = 1f;
+        private const int Damage = 1;
         public Transform ShootPointTransform;
         public GunVfx GunVfx;
 
@@ -15,18 +16,16 @@ namespace CodeBase.Behaviours.Guns
         public void Construct(IInputEventService inputEventService)
         {
             _inputEventService = inputEventService;
-
-            // SubscribeEvents();
         }
-
-        // private void OnDestroy()
-        // {
-        //     UnsubscribeEvents();
-        // }
 
         public void SubscribeEvents()
         {
             _inputEventService.AttackButtonPressed += Shoot;
+        }
+
+        public void OnDestroy()
+        {
+            UnsubscribeEvents();
         }
 
         public void UnsubscribeEvents()

@@ -6,5 +6,6 @@ namespace CodeBase.Services.StaticData
     public interface IStaticDataService : IService
     {
         WindowConfig ForWindow(WindowId matchControl);
+        PlayerStaticData ForPlayer(string name);
     }
 }

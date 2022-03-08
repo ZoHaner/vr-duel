@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using CodeBase.Behaviours.Guns;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Player;
 using CodeBase.Player.Remote;
+using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Network;
 using Nakama;
@@ -13,13 +13,16 @@ namespace CodeBase.Infrastructure.Factory
 {
     public class NetworkPlayerFactory : INetworkPlayerFactory
     {
-        private INetworkService _networkService;
-        private InitialPointHolder _pointHolder;
+        public int PlayersCount => _players.Count;
+        public string LocalUserSessionId { get; set; }
+
+        private readonly INetworkService _networkService;
+        private readonly InitialPointHolder _pointHolder;
+        private readonly IInputEventService _inputEventService;
 
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
 
-        private IMatchmakerUser _localUser;
-        private IInputEventService _inputEventService;
+        // private IMatchmakerUser _localUser;
 
         public NetworkPlayerFactory(INetworkService networkService, IInputEventService inputEventService)
         {
@@ -28,44 +31,19 @@ namespace CodeBase.Infrastructure.Factory
             _pointHolder = new InitialPointHolder();
         }
 
-        public void SubscribeEvents()
+        public void SpawnPlayers(IEnumerable<IUserPresence> users, IRoundService roundService)
         {
-            _networkService.ReceivedMatchmakerMatched += CacheLocalUser;
-            _networkService.MatchJoined += InstantiatePlayers;
-            _networkService.ReceivedMatchPresence += UpdatePlayers;
-            _networkService.ReceivedMatchState += UpdatePlayersState;
-        }
-
-        public void Cleanup()
-        {
-            _networkService.ReceivedMatchmakerMatched -= CacheLocalUser;
-            _networkService.MatchJoined -= InstantiatePlayers;
-            _networkService.ReceivedMatchPresence -= UpdatePlayers;
-            _networkService.ReceivedMatchState -= UpdatePlayersState;
-        }
-
-        private void CacheLocalUser(IMatchmakerMatched matched)
-        {
-            _localUser = matched.Self;
-        }
-
-        private void InstantiatePlayers(IMatch match)
-        {
-            Debug.LogError("FirstInstantiatePlayers");
-            Debug.LogError($"_networkService.Match.Presences.Count() : {match.Presences.Count()}");
-            Debug.LogError($"MatchID : {match.Id}");
-
-            foreach (var user in match.Presences)
+            foreach (var user in users)
             {
-                SpawnPlayer(match.Id, user);
+                SpawnPlayer(user, roundService);
             }
         }
 
-        private void SpawnPlayer(string matchId, IUserPresence user)
+        private void SpawnPlayer(IUserPresence user, IRoundService roundService)
         {
             Debug.LogError("Spawn Player");
-            var isLocal = user.SessionId == _localUser.Presence.SessionId;
-            Debug.LogError($"Is local : {isLocal} ; user.SessionId =  {user.SessionId} ; localUser.SessionId {_localUser.Presence.SessionId}");
+            var isLocal = user.SessionId == LocalUserSessionId;
+            Debug.LogError($"Is local : {isLocal} ; user.SessionId =  {user.SessionId} ; localUser.SessionId {LocalUserSessionId}");
             var playerPrefabPath = isLocal ? AssetsPath.LocalPlayer : AssetsPath.NetworkPlayer;
 
             var initialPoint = _pointHolder.GetInitialPoint();
@@ -80,8 +58,12 @@ namespace CodeBase.Infrastructure.Factory
             else
             {
                 GunShooting gunMono = CreateGun(player);
-                player.GetComponent<RemotePlayerSync>().Construct(new RemotePlayerNetworkData(matchId, user), gunMono);
+
+                var networkData = new RemotePlayerNetworkData(user);
+                player.GetComponent<RemotePlayerSync>().Construct(networkData, gunMono);
+                player.GetComponent<RemotePlayerSender>().Construct(roundService, networkData);
             }
+
             _players.Add(user.SessionId, player);
         }
 
@@ -91,7 +73,7 @@ namespace CodeBase.Infrastructure.Factory
             gunMono.Construct(_inputEventService);
             gunMono.SubscribeEvents();
         }
-        
+
         private GunShooting CreateGun(GameObject player)
         {
             var gunPivot = player.GetComponentInChildren<GunPivot>().transform;
@@ -100,48 +82,56 @@ namespace CodeBase.Infrastructure.Factory
             return gunMono;
         }
 
-
-        private void UpdatePlayers(IMatchPresenceEvent matchPresenceEvent)
+        public void RemovePlayers(IEnumerable<IUserPresence> userPresences)
         {
-            Debug.LogError("Start Update Players");
-
-            foreach (var presence in matchPresenceEvent.Joins)
-            {
-                SpawnPlayer(matchPresenceEvent.MatchId, presence);
-            }
-
-            foreach (var presence in matchPresenceEvent.Leaves)
+            foreach (var presence in userPresences)
             {
                 if (_players.ContainsKey(presence.SessionId))
                 {
-                    RemovePlayer(presence);
+                    RemovePlayer(presence.SessionId);
                 }
             }
-
-            Debug.LogError("End Update Players");
         }
 
-        private void RemovePlayer(IUserPresence presence)
+        public void RemovePlayer(string sessionId)
         {
             Debug.LogError("Remove player");
-            _players[presence.SessionId].SetActive(false);
-            _players.Remove(presence.SessionId);
+            _players[sessionId].SetActive(false);
+            _players.Remove(sessionId);
         }
 
-        private void UpdatePlayersState(IMatchState state)
+        public void UpdatePlayersState(IMatchState state)
         {
-            Debug.LogError("UpdatePlayersState");
-            foreach (var pair in _players)
-            {
-                var sessionId = pair.Key;
-                var playerObj = pair.Value;
+            // Debug.LogError("UpdatePlayersState");
 
-                if (sessionId != _localUser.Presence.SessionId)
-                {
-                    Debug.LogError("Update state for player session id = " + sessionId);
-                    playerObj.GetComponent<RemotePlayerSync>().UpdateState(state);
-                }
+            string userSessionId = state.UserPresence.SessionId;
+
+            if (!_players.ContainsKey(userSessionId))
+            {
+                // Debug.LogError("State contains unknown SessionId!");
+                return;
             }
+
+            if (IsRemotePlayer(userSessionId))
+            {
+                _players[userSessionId].GetComponent<RemotePlayerSync>().UpdateState(state);
+            }
+        }
+
+        public void RemoveAllPlayers()
+        {
+            foreach (var player in _players)
+            {
+                Object.Destroy(player.Value);
+            }
+            
+            _players.Clear();
+        }
+
+
+        private bool IsRemotePlayer(string sessionId)
+        {
+            return sessionId != LocalUserSessionId;
         }
     }
 }

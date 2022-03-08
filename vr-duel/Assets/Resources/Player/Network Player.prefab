@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8920557843341576715}
   - component: {fileID: 840995929894824862}
+  - component: {fileID: 6013337302532469661}
+  - component: {fileID: 316388982884391471}
   m_Layer: 0
   m_Name: Network Player
   m_TagString: Untagged
@@ -54,6 +56,33 @@ MonoBehaviour:
   HeadRigidbody: {fileID: 0}
   LeftHandRigidbody: {fileID: 0}
   RightHandRigidbody: {fileID: 0}
+  Gun: {fileID: 0}
+--- !u!114 &6013337302532469661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274157759925357211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 581d6c679a1046459c250c9a0dea2fef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerDeath: {fileID: 316388982884391471}
+--- !u!114 &316388982884391471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274157759925357211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d609cc0692d84f80bc846c754dc0ccec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerHealth: {fileID: 577751202333167965}
 --- !u!1 &577751202333167964
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,8 +178,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 3.7262797, y: 5.6390624, z: 2.5668223}
+  m_Center: {x: 0.044751167, y: -1.5361164, z: 0}
 --- !u!114 &577751202333167965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,8 +218,6 @@ GameObject:
   - component: {fileID: 2473740266912816399}
   - component: {fileID: 2473740266912816384}
   - component: {fileID: 2473740266912816385}
-  - component: {fileID: 2473740266912816386}
-  - component: {fileID: 2473740266912816397}
   m_Layer: 0
   m_Name: Left Hand
   m_TagString: Untagged
@@ -274,32 +301,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2473740266912816386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473740266912816387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082a32cd8cb442e29d964edf36f8ecb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerVfx: {fileID: 2473740266912816397}
---- !u!114 &2473740266912816397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473740266912816387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f9eb4eb538b4e9480df51b14401cacb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BloodVfxPrefab: {fileID: 100000, guid: bc98890f6028f444eaa7789bde5e2eeb, type: 3}
 --- !u!1 &2473740267043206645
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,8 +313,6 @@ GameObject:
   - component: {fileID: 2473740267043206649}
   - component: {fileID: 2473740267043206646}
   - component: {fileID: 2473740267043206647}
-  - component: {fileID: 2473740267043206644}
-  - component: {fileID: 2473740267043206651}
   m_Layer: 0
   m_Name: Right Hand
   m_TagString: Untagged
@@ -397,32 +396,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2473740267043206644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473740267043206645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082a32cd8cb442e29d964edf36f8ecb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerVfx: {fileID: 2473740267043206651}
---- !u!114 &2473740267043206651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2473740267043206645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f9eb4eb538b4e9480df51b14401cacb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BloodVfxPrefab: {fileID: 100000, guid: bc98890f6028f444eaa7789bde5e2eeb, type: 3}
 --- !u!1 &2473740268641960009
 GameObject:
   m_ObjectHideFlags: 0

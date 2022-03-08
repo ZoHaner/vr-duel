@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using CodeBase.Extensions;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -69,17 +70,15 @@ namespace CodeBase.Player
         /// <summary>
         /// Creates a network message specifying that the player died and the position when they died.
         /// </summary>
+        /// <param name="sessionId"></param>
         /// <param name="position">The position on death.</param>
         /// <returns>A JSONified string containing the player's position on death.</returns>
-        public static string Died(Vector3 position)
+        public static string Died(string sessionId)
         {
-            var values = new Dictionary<string, string>
+            var values = new Dictionary<string, string>()
             {
-                { "position.x", position.x.ToString() },
-                { "position.y", position.y.ToString() },
-                { "position.z", position.z.ToString() }
+                {"deadPlayerSessionId", sessionId}
             };
-
             return values.ToJson();
         }
 
