@@ -15,11 +15,28 @@ namespace CodeBase.Services.Progress
                 return null;
 
             var progressDict = JsonConvert.DeserializeObject<Dictionary<string, PlayerProgress>>(json);
-            
+
             if (progressDict.ContainsKey(username))
                 return progressDict[username];
             else
                 return null;
+        }
+
+        public void SaveProgressForPlayer(string username, PlayerProgress progress)
+        {
+            Dictionary<string, PlayerProgress> progressDict = new Dictionary<string, PlayerProgress>();
+
+            var json = PlayerPrefs.GetString(ProgressId);
+            if (!string.IsNullOrEmpty(json))
+            {
+                progressDict = JsonConvert.DeserializeObject<Dictionary<string, PlayerProgress>>(json);
+            }
+
+            progressDict[username] = progress;
+            var updatedJson = JsonConvert.SerializeObject(progressDict);
+
+            PlayerPrefs.SetString(ProgressId, updatedJson);
+            PlayerPrefs.Save();
         }
     }
 }

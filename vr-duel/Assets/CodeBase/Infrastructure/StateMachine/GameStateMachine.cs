@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Logic;
@@ -26,16 +25,16 @@ namespace CodeBase.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
-                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(),allServices.Single<IWindowService>()),
+                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(), allServices.Single<IWindowService>()),
                 [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>()),
-                [typeof(LoadProgressState)] = new LoadProgressState(this,allServices.Single<IProgressService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(this, allServices.Single<IProgressService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
-                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<INetworkPlayerFactory>(), allServices.Single<IRoundService>()),
+                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<IRoundService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
                 [typeof(CleanupState)] = new CleanupState()
             };
         }
-        
+
         public void Enter<TState>() where TState : class, IState
         {
             IState state = ChangeState<TState>();
@@ -51,10 +50,10 @@ namespace CodeBase.Infrastructure.StateMachine
         private TState ChangeState<TState>() where TState : class, IExitableState
         {
             _activeState?.Exit();
-            
+
             TState state = GetState<TState>();
             _activeState = state;
-            
+
             return state;
         }
 
