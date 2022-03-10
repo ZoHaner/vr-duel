@@ -14,6 +14,7 @@ namespace CodeBase.Infrastructure.Factory
     public class NetworkPlayerFactory : INetworkPlayerFactory
     {
         public int PlayersCount => _players.Count;
+        
         public string LocalUserSessionId { get; set; }
 
         private readonly INetworkService _networkService;
@@ -21,8 +22,6 @@ namespace CodeBase.Infrastructure.Factory
         private readonly IInputEventService _inputEventService;
 
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
-
-        // private IMatchmakerUser _localUser;
 
         public NetworkPlayerFactory(INetworkService networkService, IInputEventService inputEventService)
         {
@@ -44,7 +43,7 @@ namespace CodeBase.Infrastructure.Factory
             Debug.LogError("Spawn Player");
             var isLocal = user.SessionId == LocalUserSessionId;
             Debug.LogError($"Is local : {isLocal} ; user.SessionId =  {user.SessionId} ; localUser.SessionId {LocalUserSessionId}");
-            var playerPrefabPath = isLocal ? AssetsPath.LocalPlayer : AssetsPath.NetworkPlayer;
+            var playerPrefabPath = isLocal ? AssetsPath.LocalNetworkPlayer : AssetsPath.RemoteNetworkPlayer;
 
             var initialPoint = _pointHolder.GetInitialPoint();
             var player = ResourcesUtilities.Instantiate(playerPrefabPath, initialPoint);

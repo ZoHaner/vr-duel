@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Player;
 using CodeBase.Services.Network;
-using CodeBase.Services.StaticData;
+using CodeBase.Services.Progress;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -26,7 +26,8 @@ namespace CodeBase.Services
 
         private INetworkService _networkService;
         private INetworkPlayerFactory _playerFactory;
-        private IStaticDataService _staticData;
+        private IProgressService _progressService;
+        private IPlayerDataService _playerDara;
 
         private RoundState RoundState = RoundState.Disable;
 
@@ -35,14 +36,12 @@ namespace CodeBase.Services
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
         private List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
 
-        // private IMatchmakerUser _localUser;
-
-
-        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IStaticDataService staticData)
+        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerDara)
         {
             _networkService = networkService;
             _playerFactory = playerFactory;
-            _staticData = staticData;
+            _progressService = progressService;
+            _playerDara = playerDara;
         }
 
         public void SubscribeEvents()
@@ -61,12 +60,8 @@ namespace CodeBase.Services
             _networkService.MatchJoined -= MatchJoined;
             _networkService.ReceivedMatchPresence -= ReceivedMatchPresence;
             _networkService.ReceivedMatchState -= ReceivedMatchState;
-
             
             PlayerDeath -= OnPlayerDeath;
-
-            // todo delete players
-            // todo clear lists
         }
 
         private void CacheLocalUser(IMatchmakerMatched matched)
@@ -123,10 +118,6 @@ namespace CodeBase.Services
                     break;
                 case OpCodes.Died:
                     Debug.LogError("Got a died match state. Deleting session id : " + matchState.UserPresence);
-                    
-                    // if me
-                    // show some dead screen
-
                     var deadInfo = GetStateAsDictionary(matchState.State);
                     HandlePlayerDeath(deadInfo["deadPlayerSessionId"]);
                     break;
@@ -144,10 +135,6 @@ namespace CodeBase.Services
 
         private void HandlePlayerDeath(string sessionId)
         {
-            // if (_playerFactory.LocalUserSessionId == userPresence.SessionId)
-            // {
-            //     
-            // }
             var playerToRemove = _createdPlayers.First(p => p.SessionId == sessionId);
             
             _playerFactory.RemovePlayer(sessionId);
@@ -192,7 +179,7 @@ namespace CodeBase.Services
             RoundState = RoundState.Playing;
         }
 
-        private void CheckFinishRound() // /* or IUserPresence */
+        private void CheckFinishRound()
         {
             Debug.LogError("CheckFinishRound");
             if (_playerFactory.PlayersCount == 1)
@@ -205,20 +192,28 @@ namespace CodeBase.Services
         {
             Debug.LogError("FinishRound");
 
-            // Todo : finish showing winner name
-            // var winnerName = DefineWinnerName();
-            // _staticData.ForPlayer(winnerName).AddWinToPlayer();
-            // ShowWinnerText();
-
-
-            await AnnounceWinnerAndRespawn();
+            AnnounceWinner();
+            await WaitAndRespawn();
         }
 
-        private async Task AnnounceWinnerAndRespawn()
+        private void AnnounceWinner()
+        {
+            IUserPresence winnerPresence = _createdPlayers.First();
+            string winnerName = winnerPresence.Username;
+
+            Debug.LogError("Player " + winnerName + " won the round");
+
+            if (_playerDara.Username == winnerName)
+            {
+                _progressService.Progress.WinsCount++;
+                Debug.LogError("WinsCount : " + _progressService.Progress.WinsCount);
+            }
+        }
+
+        private async Task WaitAndRespawn()
         {
             RoundState = RoundState.WaitForPlayers;
 
-            Debug.Log("AnnounceWinner and wait");
             await Task.Delay(2000);
             
             _waitingPlayers.AddRange(_createdPlayers);

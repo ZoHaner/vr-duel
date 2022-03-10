@@ -27,15 +27,17 @@ namespace CodeBase.Services.Network
         private MainThreadDispatcher _dispatcher;
         private readonly ICoroutineRunner _coroutineRunner;
         private Coroutine _matchSearchingCoroutine;
+        private IPlayerDataService _playerData;
 
         private const int MatchesSearchLimit = 0;
         private const bool Authoritative = false;
         private const string Query = "*";
 
-        public NetworkService(UnityWebRequestAdapter adapter, MainThreadDispatcher dispatcher)
+        public NetworkService(UnityWebRequestAdapter adapter, MainThreadDispatcher dispatcher, IPlayerDataService playerData)
         {
             _adapter = adapter;
             _dispatcher = dispatcher;
+            _playerData = playerData;
         }
 
         public void SubscribeEvents()
@@ -73,7 +75,14 @@ namespace CodeBase.Services.Network
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
             _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _adapter);
-            _session = await _client.AuthenticateDeviceAsync(/*SystemInfo.deviceUniqueIdentifier*/ Guid.NewGuid().ToString());
+
+            var id = SystemInfo.deviceUniqueIdentifier;
+            
+            #if UNITY_EDITOR
+            id = "e5ab1773-3fb3-45d4-8f50-7eb7a33eaeaa";
+            #endif
+            
+            _session = await _client.AuthenticateDeviceAsync(id, _playerData.Username);
             Socket = _client.NewSocket();
             await Socket.ConnectAsync(_session, true);
             

@@ -28,7 +28,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
         {
             var player = ResourcesUtilities.Instantiate(AssetsPath.LocalPlayer);
             _windowService.Open(WindowId.MatchesList);
-            _gameStateMachine.Enter<LobbyCycleState>();
+            _gameStateMachine.Enter<ChoosingNameState>();
         }
 
         public void Exit()

@@ -7,6 +7,7 @@ using CodeBase.Logic;
 using CodeBase.Network;
 using CodeBase.Services;
 using CodeBase.Services.Network;
+using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.UpdateProvider;
 using CodeBase.UI.Services.Factory;
@@ -26,6 +27,8 @@ namespace CodeBase.Infrastructure.StateMachine
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(),allServices.Single<IWindowService>()),
+                [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(this,allServices.Single<IProgressService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
                 [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<INetworkPlayerFactory>(), allServices.Single<IRoundService>()),

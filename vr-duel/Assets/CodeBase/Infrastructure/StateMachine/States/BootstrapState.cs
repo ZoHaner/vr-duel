@@ -6,6 +6,7 @@ using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
 using CodeBase.Services.Input.VR;
 using CodeBase.Services.Network;
+using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.StaticData;
 using CodeBase.Services.UpdateProvider;
@@ -52,13 +53,19 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private void RegisterServices()
         {
             RegisterInputService();
+            
+            _allServices.Register<IPlayerDataService>(new PlayerDataService());
+            
             RegisterNetworkService();
             RegisterStaticDataService();
 
+            _allServices.Register<INameSelectorService>(new NameSelectorService());
+            _allServices.Register<IProgressService>(new ProgressService());
+            _allServices.Register<ISaveLoadService>(new SaveLoadService());
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
             _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputEventService>()));
-            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IStaticDataService>()));
+            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(),_allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>()));
         }
 
         private void RegisterInputService()
@@ -75,7 +82,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         private void RegisterNetworkService()
         {
-            var networkService = new NetworkService(_unityWebRequestAdapter, _mainThreadDispatcher);
+            var networkService = new NetworkService(_unityWebRequestAdapter, _mainThreadDispatcher, _allServices.Single<IPlayerDataService>());
             _allServices.Register<INetworkService>(networkService);
         }
 
