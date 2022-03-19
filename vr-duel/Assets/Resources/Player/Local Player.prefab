@@ -47,6 +47,8 @@ MonoBehaviour:
   MouseSensitivity: 100
   Camera: {fileID: 8965989038360597775}
   PlayerBody: {fileID: 8965989037593818960}
+  LeftHand: {fileID: 8965989038076592464}
+  RightHand: {fileID: 8965989037533395514}
 --- !u!114 &5585350507179574345
 MonoBehaviour:
   m_ObjectHideFlags: 0
