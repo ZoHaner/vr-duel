@@ -5,6 +5,6 @@ namespace CodeBase.UI.Services.Factory
   public interface IUIFactory : IService
   {
     void CreateMatchesListWindow();
-    void CreateUIRoot();
+    void CreateMatchmakingWindow();
   }
 }
