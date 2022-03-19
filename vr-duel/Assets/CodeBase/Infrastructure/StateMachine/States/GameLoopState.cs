@@ -13,7 +13,6 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private readonly IPlayerDataService _playerData;
         private readonly IProgressService _playerProgress;
 
-        private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
 
         public GameLoopState(INetworkService networkService, IRoundService roundService, ISaveLoadService saveLoadService, IPlayerDataService playerData, IProgressService playerProgress)
         {
