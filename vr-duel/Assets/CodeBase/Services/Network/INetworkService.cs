@@ -17,6 +17,7 @@ namespace CodeBase.Services.Network
         Task<IMatch> JoinMatch(string matchId);
         Task<IMatch> CreateMatch();
         Task AddMatchmaker();
+        Task CancelMatchmaker();
         void JoinMatch(IMatchmakerMatched matchmakerMatch);
         void SubscribeEvents();
         void Cleanup();

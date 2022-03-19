@@ -25,13 +25,13 @@ namespace CodeBase.Infrastructure.StateMachine
             _states = new Dictionary<Type, IExitableState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
-                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(), allServices.Single<IWindowService>()),
                 [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>()),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, allServices.Single<IProgressService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>()),
-                [typeof(LobbyCycleState)] = new LobbyCycleState(this),
+                [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(), allServices.Single<IWindowService>()),
+                [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>(), allServices.Single<IUIFactory>(), allServices.Single<IRoundService>()),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
-                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<INetworkService>(), allServices.Single<IRoundService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
-                [typeof(CleanupState)] = new CleanupState()
+                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<IRoundService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
+                [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>(), allServices.Single<IRoundService>())
             };
         }
 

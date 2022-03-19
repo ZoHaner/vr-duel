@@ -141,7 +141,7 @@ namespace CodeBase.Services.Network
 
         public async Task CancelMatchmaker()
         {
-            
+            await Socket.RemoveMatchmakerAsync(_ticket);
         }
 
         public async void JoinMatch(IMatchmakerMatched matchmakerMatch)

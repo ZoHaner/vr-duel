@@ -22,6 +22,8 @@ namespace CodeBase.Infrastructure.Factory
         private readonly IInputEventService _inputEventService;
 
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
+        
+        private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
 
         public NetworkPlayerFactory(INetworkService networkService, IInputEventService inputEventService)
         {

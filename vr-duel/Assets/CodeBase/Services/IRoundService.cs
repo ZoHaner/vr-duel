@@ -8,5 +8,7 @@ namespace CodeBase.Services
         public Action<IUserPresence> PlayerDeath { get; set; }
         void SubscribeEvents();
         void Cleanup();
+        void StopRound();
+        void CheckPlayersCountAndStartRound();
     }
 }

@@ -10,7 +10,6 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private readonly SceneLoader _sceneLoader;
         private readonly LoadingCurtain _loadingCurtain;
 
-
         public LoadGameLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, LoadingCurtain loadingCurtain)
         {
             _gameStateMachine = gameStateMachine;
