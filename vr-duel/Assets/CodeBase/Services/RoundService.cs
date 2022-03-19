@@ -24,10 +24,12 @@ namespace CodeBase.Services
     {
         public Action<IUserPresence> PlayerDeath { get; set; }
 
-        private INetworkService _networkService;
-        private INetworkPlayerFactory _playerFactory;
-        private IProgressService _progressService;
-        private IPlayerDataService _playerDara;
+        private const int StartRoundCheckDelay = 1000;
+
+        private readonly INetworkService _networkService;
+        private readonly INetworkPlayerFactory _playerFactory;
+        private readonly IProgressService _progressService;
+        private readonly IPlayerDataService _playerData;
 
         private RoundState RoundState = RoundState.Disable;
 
@@ -36,12 +38,12 @@ namespace CodeBase.Services
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
         private List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
 
-        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerDara)
+        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData)
         {
             _networkService = networkService;
             _playerFactory = playerFactory;
             _progressService = progressService;
-            _playerDara = playerDara;
+            _playerData = playerData;
         }
 
         public void SubscribeEvents()
@@ -50,7 +52,7 @@ namespace CodeBase.Services
             _networkService.MatchJoined += MatchJoined;
             _networkService.ReceivedMatchPresence += ReceivedMatchPresence;
             _networkService.ReceivedMatchState += ReceivedMatchState;
-            
+
             PlayerDeath += OnPlayerDeath;
         }
 
@@ -60,9 +62,33 @@ namespace CodeBase.Services
             _networkService.MatchJoined -= MatchJoined;
             _networkService.ReceivedMatchPresence -= ReceivedMatchPresence;
             _networkService.ReceivedMatchState -= ReceivedMatchState;
-            
+
             PlayerDeath -= OnPlayerDeath;
         }
+
+
+        public async void CheckPlayersCountAndStartRound()
+        {
+            while (!EnoughPlayers())
+            {
+                if (RoundState != RoundState.WaitForPlayers)
+                {
+                    Debug.LogError($"RoundState should be in state WaitForPlayers, but it is - {RoundState}");
+                    return;
+                }
+                
+                await Task.Delay(StartRoundCheckDelay);
+            }
+
+            StartRound();
+        }
+
+
+        public void StopRound()
+        {
+            RoundState = RoundState.Disable;
+        }
+
 
         private void CacheLocalUser(IMatchmakerMatched matched)
         {
@@ -77,13 +103,9 @@ namespace CodeBase.Services
             {
                 case RoundState.Disable:
                     AddPlayersToWaitList(match.Presences);
-                    if (EnoughPlayers())
-                        StartRound();
                     break;
                 case RoundState.WaitForPlayers:
                     AddPlayersToWaitList(match.Presences);
-                    if (EnoughPlayers())
-                        StartRound();
                     break;
                 case RoundState.Playing:
                     Debug.LogError("You shouldn't be here");
@@ -99,7 +121,7 @@ namespace CodeBase.Services
                     Debug.LogError("Match updated event, but RoundState = Disable");
                     break;
                 case RoundState.WaitForPlayers:
-                    TryStartRound(matchPresenceEvent.Joins, matchPresenceEvent.Leaves);
+                    UpdateWaitList(matchPresenceEvent.Joins, matchPresenceEvent.Leaves);
                     break;
                 case RoundState.Playing:
                     _playerFactory.SpawnPlayers(matchPresenceEvent.Joins, this);
@@ -123,7 +145,7 @@ namespace CodeBase.Services
                     break;
             }
         }
-        
+
         /// <summary>
         /// Local player death handling
         /// </summary>
@@ -136,22 +158,17 @@ namespace CodeBase.Services
         private void HandlePlayerDeath(string sessionId)
         {
             var playerToRemove = _createdPlayers.First(p => p.SessionId == sessionId);
-            
+
             _playerFactory.RemovePlayer(sessionId);
             _createdPlayers.Remove(playerToRemove);
             _waitingPlayers.Add(playerToRemove);
             CheckFinishRound();
         }
 
-        private void TryStartRound(IEnumerable<IUserPresence> newUsers, IEnumerable<IUserPresence> leaveUsers)
+        private void UpdateWaitList(IEnumerable<IUserPresence> newUsers, IEnumerable<IUserPresence> leaveUsers)
         {
             AddPlayersToWaitList(newUsers);
             RemovePlayersFromWaitList(leaveUsers);
-
-            if (EnoughPlayers())
-            {
-                StartRound();
-            }
         }
 
         private void RemovePlayersFromWaitList(IEnumerable<IUserPresence> leaveUsers)
@@ -203,7 +220,7 @@ namespace CodeBase.Services
 
             Debug.LogError("Player " + winnerName + " won the round");
 
-            if (_playerDara.Username == winnerName)
+            if (_playerData.Username == winnerName)
             {
                 _progressService.Progress.WinsCount++;
                 Debug.LogError("WinsCount : " + _progressService.Progress.WinsCount);
@@ -215,12 +232,12 @@ namespace CodeBase.Services
             RoundState = RoundState.WaitForPlayers;
 
             await Task.Delay(2000);
-            
+
             _waitingPlayers.AddRange(_createdPlayers);
             _createdPlayers.Clear();
-            
+
             _playerFactory.RemoveAllPlayers();
-            
+
             if (EnoughPlayers())
                 StartRound();
         }
@@ -232,10 +249,10 @@ namespace CodeBase.Services
 
         private bool EnoughPlayers()
         {
-            Debug.LogError("EnoughPlayers. Count : " + _waitingPlayers.Count);
+            Debug.LogError("EnoughPlayers? Count : " + _waitingPlayers.Count);
             return _waitingPlayers.Count >= MinPlayers;
         }
-        
+
         private IDictionary<string, string> GetStateAsDictionary(byte[] state)
         {
             return Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
