@@ -6,5 +6,7 @@ namespace CodeBase.UI.Services.Factory
   {
     void CreateMatchesListWindow();
     void CreateMatchmakingWindow();
+    void CreateChoosePlayerNameWindow(INameSelectorService nameSelectorService);
+    void CreateGeneratePlayerNameWindow();
   }
 }

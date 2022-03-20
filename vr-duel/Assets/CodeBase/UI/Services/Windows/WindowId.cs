@@ -5,5 +5,7 @@ namespace CodeBase.UI.Services.Windows
         Unknown = 0,
         MatchesList = 1,
         Matchmaking = 2,
+        ChoosePlayerName = 3,
+        GeneratePlayerName = 4,
     }
 }

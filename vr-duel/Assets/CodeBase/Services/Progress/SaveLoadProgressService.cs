@@ -4,17 +4,23 @@ using UnityEngine;
 
 namespace CodeBase.Services.Progress
 {
-    public class SaveLoadService : ISaveLoadService
+    public class SaveLoadProgressService : ISaveLoadService
     {
+        private readonly IStorageService _storageService;
+        
         private const string ProgressId = "Progress";
 
+        public SaveLoadProgressService(IStorageService storageService)
+        {
+            _storageService = storageService;
+        }
+        
         public PlayerProgress LoadProgressForPlayer(string username)
         {
-            var json = PlayerPrefs.GetString(ProgressId);
-            if (string.IsNullOrEmpty(json))
+            Dictionary<string, PlayerProgress> progressDict = GetProgressDictionary();
+            
+            if (progressDict == null) 
                 return null;
-
-            var progressDict = JsonConvert.DeserializeObject<Dictionary<string, PlayerProgress>>(json);
 
             if (progressDict.ContainsKey(username))
                 return progressDict[username];
@@ -37,6 +43,16 @@ namespace CodeBase.Services.Progress
 
             PlayerPrefs.SetString(ProgressId, updatedJson);
             PlayerPrefs.Save();
+        }
+
+        private Dictionary<string, PlayerProgress> GetProgressDictionary()
+        {
+            var json = _storageService.ReadData(ProgressId);
+            if (string.IsNullOrEmpty(json))
+                return null;
+
+            var progressDict = JsonConvert.DeserializeObject<Dictionary<string, PlayerProgress>>(json);
+            return progressDict;
         }
     }
 }
