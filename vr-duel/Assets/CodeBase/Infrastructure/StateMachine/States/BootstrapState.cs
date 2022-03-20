@@ -60,7 +60,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
             RegisterNetworkService();
             RegisterStaticDataService();
 
-            _allServices.Register<INameSelectorService>(new NameSelectorService());
+            _allServices.Register<INameSelectorService>(new NameSelectorService(_allServices.Single<IStorageService>()));
             _allServices.Register<ISaveLoadService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>()));

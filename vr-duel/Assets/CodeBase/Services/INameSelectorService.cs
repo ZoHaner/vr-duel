@@ -1,10 +1,11 @@
 using System;
-using CodeBase.Services;
+using System.Collections.Generic;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.Services
 {
     public interface INameSelectorService : IService
     {
         Action<string> OnSelect { get; set; }
+        IEnumerable<string> GetSavedPlayersNames();
     }
 }

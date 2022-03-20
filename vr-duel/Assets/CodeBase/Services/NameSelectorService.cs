@@ -1,33 +1,36 @@
 using System;
-using CodeBase.Infrastructure.StateMachine.States;
+using System.Collections.Generic;
+using CodeBase.Services.Progress;
+using Newtonsoft.Json;
 
 namespace CodeBase.Services
 {
     public class NameSelectorService : INameSelectorService
     {
-        public Action<string> OnSelect
+        private readonly IStorageService _storageService;
+
+        private const string ProgressId = "Progress";
+
+        public Action<string> OnSelect { get; set; }
+
+        public NameSelectorService(IStorageService storageService)
         {
-            get => _onSelect;
-            set
-            {
-                _onSelect = value;
-                SendUsername();
-            }
+            _storageService = storageService;
         }
 
-        private Action<string> _onSelect;
-
-        private void SendUsername()
+        public IEnumerable<string> GetSavedPlayersNames()
         {
-            string username;
+            return GetProgressDictionary()?.Keys;
+        }
+        
+        private Dictionary<string, PlayerProgress> GetProgressDictionary()
+        {
+            var json = _storageService.ReadData(ProgressId);
+            if (string.IsNullOrEmpty(json))
+                return null;
 
-#if UNITY_EDITOR
-            username = "Editor";
-#else
-            username = "Build";
-#endif
-
-            OnSelect?.Invoke(username);
+            var progressDict = JsonConvert.DeserializeObject<Dictionary<string, PlayerProgress>>(json);
+            return progressDict;
         }
     }
 }
