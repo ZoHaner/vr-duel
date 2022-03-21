@@ -20,7 +20,16 @@ namespace CodeBase.UI.Windows
         protected override void Initialize()
         {
             _nameListContainer.Initialize();
-            _openGeneratorWindowButton.Initialize();
+        }
+
+        protected override void SubscribeUpdates()
+        {
+            _openGeneratorWindowButton.SubscribeUpdates();
+        }
+
+        protected override void Cleanup()
+        {
+            _openGeneratorWindowButton.Cleanup();
         }
     }
 }

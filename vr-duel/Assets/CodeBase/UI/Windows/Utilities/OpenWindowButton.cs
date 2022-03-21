@@ -17,9 +17,14 @@ namespace CodeBase.UI.Windows.Utilities
             _windowId = windowId;
         }
 
-        public void Initialize()
+        public void SubscribeUpdates()
         {
             _button.onClick.AddListener(Open);
+        }
+
+        public void Cleanup()
+        {
+            _button.onClick.RemoveListener(Open);
         }
 
         private void Open()
