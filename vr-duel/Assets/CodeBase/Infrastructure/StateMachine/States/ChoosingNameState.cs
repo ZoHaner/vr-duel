@@ -32,7 +32,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
                 return;
             }
 
-            _uiFactory.CreateGeneratePlayerNameWindow();
+            _windowService.Open(WindowId.GeneratePlayerName);
         }
 
         private void OnSelectedName(string username)

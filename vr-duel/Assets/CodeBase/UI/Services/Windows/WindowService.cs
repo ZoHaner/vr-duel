@@ -24,7 +24,7 @@ namespace CodeBase.UI.Services.Windows
                     _uiFactory.CreateChoosePlayerNameWindow(this);
                     break;
                 case WindowId.GeneratePlayerName:
-                    _uiFactory.CreateGeneratePlayerNameWindow();
+                    _uiFactory.CreateGeneratePlayerNameWindow(this);
                     break;
             }
         }

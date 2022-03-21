@@ -8,6 +8,6 @@ namespace CodeBase.UI.Services.Factory
     void CreateMatchesListWindow();
     void CreateMatchmakingWindow();
     void CreateChoosePlayerNameWindow(IWindowService windowService);
-    void CreateGeneratePlayerNameWindow();
+    void CreateGeneratePlayerNameWindow(IWindowService windowService);
   }
 }

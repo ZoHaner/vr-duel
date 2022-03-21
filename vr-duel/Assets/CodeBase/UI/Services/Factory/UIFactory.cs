@@ -54,13 +54,13 @@ namespace CodeBase.UI.Services.Factory
             chooseNameWindow.Construct(_nameSelectorService, windowService);
         }
 
-        public void CreateGeneratePlayerNameWindow()
+        public void CreateGeneratePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNecessary();
             
             var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
             var generateNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<GenerateNameWindow>();
-            //generateNameWindow.Construct(_nameSelectorService, windowService);
+            generateNameWindow.Construct(_nameSelectorService, windowService);
         }
 
         private void CreateRootIfNecessary()
