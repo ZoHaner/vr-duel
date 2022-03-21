@@ -20,6 +20,12 @@ namespace CodeBase.UI.Services.Windows
                 case WindowId.MatchesList:
                     _uiFactory.CreateMatchesListWindow();
                     break;
+                case WindowId.ChoosePlayerName:
+                    _uiFactory.CreateChoosePlayerNameWindow(this);
+                    break;
+                case WindowId.GeneratePlayerName:
+                    _uiFactory.CreateGeneratePlayerNameWindow();
+                    break;
             }
         }
     }

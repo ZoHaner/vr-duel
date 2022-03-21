@@ -17,12 +17,14 @@ namespace CodeBase.UI.Services.Factory
         private readonly IStaticDataService _staticData;
         private readonly INetworkService _networkService;
         private readonly ISaveLoadService _saveLoadService;
+        private readonly INameSelectorService _nameSelectorService;
 
-        public UIFactory(IStaticDataService staticData, INetworkService networkService, ISaveLoadService saveLoadService)
+        public UIFactory(IStaticDataService staticData, INetworkService networkService, ISaveLoadService saveLoadService, INameSelectorService nameSelectorService)
         {
             _staticData = staticData;
             _networkService = networkService;
             _saveLoadService = saveLoadService;
+            _nameSelectorService = nameSelectorService;
         }
 
         public void CreateMatchesListWindow()
@@ -43,18 +45,22 @@ namespace CodeBase.UI.Services.Factory
             matchmakingWindow.Construct(_networkService);
         }
 
-        public void CreateChoosePlayerNameWindow(INameSelectorService nameSelectorService)
+        public void CreateChoosePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNecessary();
             
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
             var chooseNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<ChooseNameWindow>();
-            chooseNameWindow.Construct(nameSelectorService);
+            chooseNameWindow.Construct(_nameSelectorService, windowService);
         }
 
         public void CreateGeneratePlayerNameWindow()
         {
+            CreateRootIfNecessary();
             
+            var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
+            var generateNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<GenerateNameWindow>();
+            //generateNameWindow.Construct(_nameSelectorService, windowService);
         }
 
         private void CreateRootIfNecessary()

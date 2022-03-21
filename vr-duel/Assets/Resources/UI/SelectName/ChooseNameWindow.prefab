@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 7921271034475891168}
   - component: {fileID: 2257891574718625133}
   - component: {fileID: 4579008159382513163}
+  - component: {fileID: 1926116395967874728}
   m_Layer: 5
   m_Name: ChooseNameWindow
   m_TagString: Untagged
@@ -270,6 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nameListContainer: {fileID: 4579008159382513163}
+  _openGeneratorWindowButton: {fileID: 1926116395967874728}
 --- !u!114 &4579008159382513163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,6 +286,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _selectNameButtonPrefab: {fileID: 770182002238529120, guid: 494f863597d8242479f666ff4beb97e9, type: 3}
   _listParent: {fileID: 4134013456596401944}
+--- !u!114 &1926116395967874728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7921271034475891174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d02406ee01a42acaeb2ad616d260167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 7921271035629797365}
 --- !u!1 &7921271034528802676
 GameObject:
   m_ObjectHideFlags: 0

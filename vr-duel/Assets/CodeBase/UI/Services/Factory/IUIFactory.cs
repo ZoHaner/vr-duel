@@ -1,4 +1,5 @@
 using CodeBase.Services;
+using CodeBase.UI.Services.Windows;
 
 namespace CodeBase.UI.Services.Factory
 {
@@ -6,7 +7,7 @@ namespace CodeBase.UI.Services.Factory
   {
     void CreateMatchesListWindow();
     void CreateMatchmakingWindow();
-    void CreateChoosePlayerNameWindow(INameSelectorService nameSelectorService);
+    void CreateChoosePlayerNameWindow(IWindowService windowService);
     void CreateGeneratePlayerNameWindow();
   }
 }
