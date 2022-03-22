@@ -29,40 +29,53 @@ namespace CodeBase.UI.Services.Factory
             _playersAccountService = playersAccountService;
         }
 
-        public void CreateMatchesListWindow()
+        public GameObject CreateMatchesListWindow()
         {
             CreateRootIfNecessary();
 
             var config = _staticData.ForWindow(WindowId.MatchesList);
-            var window = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<MatchListWindow>();
+            var configPrefab = config.Prefab;
+            var window = InstantiateWindow(configPrefab).GetComponent<MatchListWindow>();
             window.Construct(_networkService);
+            return window.gameObject;
         }
 
-        public void CreateMatchmakingWindow()
+        public GameObject CreateMatchmakingWindow()
         {
             CreateRootIfNecessary();
 
             var config = _staticData.ForWindow(WindowId.Matchmaking);
-            var matchmakingWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<MatchmakingWindow>();
+            var matchmakingWindow = InstantiateWindow(config.Prefab).GetComponent<MatchmakingWindow>();
             matchmakingWindow.Construct(_networkService);
+            return matchmakingWindow.gameObject;
         }
 
-        public void CreateChoosePlayerNameWindow(IWindowService windowService)
+        public GameObject CreateChoosePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNecessary();
-            
+
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
-            var chooseNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<ChooseNameWindow>();
+            var chooseNameWindow = InstantiateWindow(config.Prefab).GetComponent<ChooseNameWindow>();
             chooseNameWindow.Construct(_nameSelectorService, _playersAccountService, windowService);
+            return chooseNameWindow.gameObject;
         }
 
-        public void CreateGeneratePlayerNameWindow(IWindowService windowService)
+        public GameObject CreateGeneratePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNecessary();
-            
+
             var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
-            var generateNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<GenerateNameWindow>();
+            var generateNameWindow = InstantiateWindow(config.Prefab).GetComponent<GenerateNameWindow>();
             generateNameWindow.Construct(_nameSelectorService, windowService);
+
+            return generateNameWindow.gameObject;
+        }
+
+        private WindowBase InstantiateWindow(WindowBase configPrefab)
+        {
+            var window = Object.Instantiate(configPrefab, _uiRoot);
+            window.gameObject.transform.localPosition = Vector3.zero;
+            return window;
         }
 
         private void CreateRootIfNecessary()

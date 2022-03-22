@@ -28,7 +28,7 @@ namespace CodeBase.Infrastructure.StateMachine
                 [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IWindowService>(), allServices.Single<IPlayerAccountsService>()),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, allServices.Single<IProgressService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>()),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(), allServices.Single<IWindowService>()),
-                [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>(), allServices.Single<IUIFactory>(), allServices.Single<IRoundService>()),
+                [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>(), allServices.Single<IRoundService>(), allServices.Single<IWindowService>()),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
                 [typeof(GameLoopState)] = new GameLoopState(allServices.Single<IRoundService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
                 [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>(), allServices.Single<IRoundService>())

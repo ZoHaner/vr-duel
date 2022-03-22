@@ -1,10 +1,13 @@
 using CodeBase.UI.Services.Factory;
+using UnityEngine;
 
 namespace CodeBase.UI.Services.Windows
 {
     public class WindowService : IWindowService
     {
         private readonly IUIFactory _uiFactory;
+
+        private GameObject _openWindow;
 
         public WindowService(IUIFactory uiFactory)
         {
@@ -13,20 +16,35 @@ namespace CodeBase.UI.Services.Windows
 
         public void Open(WindowId windowId)
         {
+            CloseWindowIfOpened();
+
             switch (windowId)
             {
                 case WindowId.Unknown:
                     break;
+                case WindowId.Matchmaking:
+                    _openWindow = _uiFactory.CreateMatchmakingWindow();
+                    break;
                 case WindowId.MatchesList:
-                    _uiFactory.CreateMatchesListWindow();
+                    _openWindow = _uiFactory.CreateMatchesListWindow();
                     break;
                 case WindowId.ChoosePlayerName:
-                    _uiFactory.CreateChoosePlayerNameWindow(this);
+                    _openWindow = _uiFactory.CreateChoosePlayerNameWindow(this);
                     break;
                 case WindowId.GeneratePlayerName:
-                    _uiFactory.CreateGeneratePlayerNameWindow(this);
+                    _openWindow = _uiFactory.CreateGeneratePlayerNameWindow(this);
                     break;
             }
+        }
+
+        private void CloseWindowIfOpened()
+        {
+            if (_openWindow != null)
+            {
+                Object.Destroy(_openWindow);
+            }
+
+            _openWindow = null;
         }
     }
 }
