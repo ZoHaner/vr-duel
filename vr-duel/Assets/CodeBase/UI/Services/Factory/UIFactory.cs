@@ -1,7 +1,6 @@
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Services;
 using CodeBase.Services.Network;
-using CodeBase.Services.Progress;
 using CodeBase.Services.StaticData;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows;
@@ -13,18 +12,16 @@ namespace CodeBase.UI.Services.Factory
     {
         private const string UIRootPath = "UI/UIRoot";
         private Transform _uiRoot;
-        
+
         private readonly IStaticDataService _staticData;
         private readonly INetworkService _networkService;
-        private readonly ISaveLoadService _saveLoadService;
         private readonly INameSelectorService _nameSelectorService;
-        private IPlayerAccountsService _playersAccountService;
+        private readonly IPlayerAccountsService _playersAccountService;
 
-        public UIFactory(IStaticDataService staticData, INetworkService networkService, ISaveLoadService saveLoadService, INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService)
+        public UIFactory(IStaticDataService staticData, INetworkService networkService, INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService)
         {
             _staticData = staticData;
             _networkService = networkService;
-            _saveLoadService = saveLoadService;
             _nameSelectorService = nameSelectorService;
             _playersAccountService = playersAccountService;
         }

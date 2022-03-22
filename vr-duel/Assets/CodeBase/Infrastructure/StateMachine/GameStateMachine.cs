@@ -20,9 +20,9 @@ namespace CodeBase.Infrastructure.StateMachine
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, InitialPointHolder pointHolder, LoadingCurtain curtain, AllServices allServices, MainThreadDispatcher dispatcher, UpdateProvider updateProvider, UnityWebRequestAdapter adapter)
+        public GameStateMachine(SceneLoader sceneLoader, LoadingCurtain curtain, AllServices allServices, MainThreadDispatcher dispatcher, UpdateProvider updateProvider, UnityWebRequestAdapter adapter)
         {
-            _states = new Dictionary<Type, IExitableState>()
+            _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
                 [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IWindowService>(), allServices.Single<IPlayerAccountsService>()),
