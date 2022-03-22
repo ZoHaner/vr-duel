@@ -1,6 +1,6 @@
 using System.Linq;
 using CodeBase.Services;
-using CodeBase.UI.Services.Factory;
+using CodeBase.UI.Services.Windows;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {
@@ -9,35 +9,46 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private readonly INameSelectorService _nameSelectorService;
         private readonly GameStateMachine _gameStateMachine;
         private readonly IPlayerDataService _playerDataService;
-        private readonly IUIFactory _uiFactory;
+        private readonly IWindowService _windowService;
+        private readonly IPlayerAccountsService _accountsService;
 
-        public ChoosingNameState(GameStateMachine gameStateMachine, INameSelectorService nameSelectorService, IPlayerDataService playerDataService, IUIFactory uiFactory)
+        public ChoosingNameState(GameStateMachine gameStateMachine, INameSelectorService nameSelectorService, IPlayerDataService playerDataService, IWindowService windowService, IPlayerAccountsService accountsService)
         {
             _gameStateMachine = gameStateMachine;
             _nameSelectorService = nameSelectorService;
             _playerDataService = playerDataService;
-            _uiFactory = uiFactory;
+            _windowService = windowService;
+            _accountsService = accountsService;
         }
 
         public void Enter()
         {
             _nameSelectorService.OnSelect += OnSelectedName;
 
-            if (_nameSelectorService.GetSavedPlayersNames().Any())
+            if (_accountsService.GetAccountsList().Any())
             {
-                _uiFactory.CreateChoosePlayerNameWindow(_nameSelectorService);
+                _windowService.Open(WindowId.ChoosePlayerName);
                 return;
             }
 
-            _uiFactory.CreateGeneratePlayerNameWindow();
+            _windowService.Open(WindowId.GeneratePlayerName);
         }
 
         private void OnSelectedName(string username)
         {
-            _playerDataService.Username = username;
+            CreateAccountIfNotExist(username);
+            var user = _accountsService.GetAccountByUsername(username);
+            _playerDataService.User = user;
             _gameStateMachine.Enter<LoadProgressState>();
         }
 
+        private void CreateAccountIfNotExist(string username)
+        {
+            if (!_accountsService.AccountExist(username))
+            {
+                _accountsService.SaveNewAccount(username);
+            }
+        }
 
         public void Exit()
         {

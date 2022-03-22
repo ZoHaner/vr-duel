@@ -1,7 +1,9 @@
+using CodeBase.Data;
+
 namespace CodeBase.Services
 {
     public interface IPlayerDataService : IService
     {
-        string Username { get; set; }
+        UserAccount User { get; set; }
     }
 }

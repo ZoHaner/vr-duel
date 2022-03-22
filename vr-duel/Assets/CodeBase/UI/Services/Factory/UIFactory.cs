@@ -1,7 +1,6 @@
 using CodeBase.Infrastructure.Utilities;
 using CodeBase.Services;
 using CodeBase.Services.Network;
-using CodeBase.Services.Progress;
 using CodeBase.Services.StaticData;
 using CodeBase.UI.Services.Windows;
 using CodeBase.UI.Windows;
@@ -13,48 +12,67 @@ namespace CodeBase.UI.Services.Factory
     {
         private const string UIRootPath = "UI/UIRoot";
         private Transform _uiRoot;
-        
+
         private readonly IStaticDataService _staticData;
         private readonly INetworkService _networkService;
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly INameSelectorService _nameSelectorService;
+        private readonly IPlayerAccountsService _playersAccountService;
 
-        public UIFactory(IStaticDataService staticData, INetworkService networkService, ISaveLoadService saveLoadService)
+        public UIFactory(IStaticDataService staticData, INetworkService networkService, INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService)
         {
             _staticData = staticData;
             _networkService = networkService;
-            _saveLoadService = saveLoadService;
+            _nameSelectorService = nameSelectorService;
+            _playersAccountService = playersAccountService;
         }
 
-        public void CreateMatchesListWindow()
+        public GameObject CreateMatchesListWindow()
         {
             CreateRootIfNecessary();
 
             var config = _staticData.ForWindow(WindowId.MatchesList);
-            var window = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<MatchListWindow>();
+            var configPrefab = config.Prefab;
+            var window = InstantiateWindow(configPrefab).GetComponent<MatchListWindow>();
             window.Construct(_networkService);
+            return window.gameObject;
         }
 
-        public void CreateMatchmakingWindow()
+        public GameObject CreateMatchmakingWindow()
         {
             CreateRootIfNecessary();
 
             var config = _staticData.ForWindow(WindowId.Matchmaking);
-            var matchmakingWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<MatchmakingWindow>();
+            var matchmakingWindow = InstantiateWindow(config.Prefab).GetComponent<MatchmakingWindow>();
             matchmakingWindow.Construct(_networkService);
+            return matchmakingWindow.gameObject;
         }
 
-        public void CreateChoosePlayerNameWindow(INameSelectorService nameSelectorService)
+        public GameObject CreateChoosePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNecessary();
-            
+
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
-            var chooseNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<ChooseNameWindow>();
-            chooseNameWindow.Construct(nameSelectorService);
+            var chooseNameWindow = InstantiateWindow(config.Prefab).GetComponent<ChooseNameWindow>();
+            chooseNameWindow.Construct(_nameSelectorService, _playersAccountService, windowService);
+            return chooseNameWindow.gameObject;
         }
 
-        public void CreateGeneratePlayerNameWindow()
+        public GameObject CreateGeneratePlayerNameWindow(IWindowService windowService)
         {
-            
+            CreateRootIfNecessary();
+
+            var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
+            var generateNameWindow = InstantiateWindow(config.Prefab).GetComponent<GenerateNameWindow>();
+            generateNameWindow.Construct(_nameSelectorService, windowService);
+
+            return generateNameWindow.gameObject;
+        }
+
+        private WindowBase InstantiateWindow(WindowBase configPrefab)
+        {
+            var window = Object.Instantiate(configPrefab, _uiRoot);
+            window.gameObject.transform.localPosition = Vector3.zero;
+            return window;
         }
 
         private void CreateRootIfNecessary()
