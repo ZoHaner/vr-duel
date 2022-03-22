@@ -5,7 +5,8 @@ namespace CodeBase.Services
 {
     public interface IPlayerAccountsService : IService
     {
-        void SaveNewAccount(UserAccount newAccount);
+        void SaveNewAccount(string username);
         List<UserAccount> GetAccountsList();
+        bool AccountExist(string username);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CodeBase.Data;
@@ -9,41 +10,60 @@ namespace CodeBase.Services
     public class PlayerAccountsService : IPlayerAccountsService
     {
         private const string AccountsKey = "Accounts";
-        
-        private IStorageService _storageService;
+
+        private readonly IStorageService _storageService;
+        private bool _hasCache;
+        private List<UserAccount> _cachedList;
 
         public PlayerAccountsService(IStorageService storageService)
         {
             _storageService = storageService;
         }
 
-        public void SaveNewAccount(UserAccount newAccount)
+        public void SaveNewAccount(string username)
         {
-            var accountList = GetAccountsList();
-            if (AccountAlreadyExist(newAccount, accountList))
+            if (AccountExist(username))
             {
-                Debug.LogError($"Account with name {newAccount.Username} is already exist!");
+                Debug.LogError($"Account with name {username} is already exist!");
                 return;
             }
-            
-            accountList.Add(newAccount);
-            
-            var json = JsonConvert.SerializeObject(accountList);
- 
-            _storageService.WriteData(AccountsKey, json);
-        }
 
-        private bool AccountAlreadyExist(UserAccount newAccount, List<UserAccount> currentAccountList) => 
-            currentAccountList.Any(a=>a.Username == newAccount.Username);
+            var accountList = GetAccountsList();
+            accountList.Add(CreateAccount(username));
+            var json = JsonConvert.SerializeObject(accountList);
+
+            _storageService.WriteData(AccountsKey, json);
+            _hasCache = false;
+        }
 
         public List<UserAccount> GetAccountsList()
         {
-            var json = _storageService.ReadData(AccountsKey);
-            if (string.IsNullOrEmpty(json))
-                return null;
+            if (_hasCache)
+            {
+                return _cachedList;
+            }
 
-            var accountsList = JsonConvert.DeserializeObject<List<UserAccount>>(json);
+            var json = _storageService.ReadData(AccountsKey);
+
+            List<UserAccount> accountsList = string.IsNullOrEmpty(json) ? new List<UserAccount>() : JsonConvert.DeserializeObject<List<UserAccount>>(json);
+
+            CacheList(accountsList);
             return accountsList;
+        }
+
+        public bool AccountExist(string username)
+        {
+            var accountList = GetAccountsList();
+            return accountList.Any(a => a.Username == username);
+        }
+
+        private UserAccount CreateAccount(string username) =>
+            new UserAccount(new Guid().ToString(), username);
+
+        private void CacheList(List<UserAccount> accountsList)
+        {
+            _cachedList = accountsList;
+            _hasCache = true;
         }
     }
 }

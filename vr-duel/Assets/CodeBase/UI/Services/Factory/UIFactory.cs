@@ -18,13 +18,15 @@ namespace CodeBase.UI.Services.Factory
         private readonly INetworkService _networkService;
         private readonly ISaveLoadService _saveLoadService;
         private readonly INameSelectorService _nameSelectorService;
+        private IPlayerAccountsService _playersAccountService;
 
-        public UIFactory(IStaticDataService staticData, INetworkService networkService, ISaveLoadService saveLoadService, INameSelectorService nameSelectorService)
+        public UIFactory(IStaticDataService staticData, INetworkService networkService, ISaveLoadService saveLoadService, INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService)
         {
             _staticData = staticData;
             _networkService = networkService;
             _saveLoadService = saveLoadService;
             _nameSelectorService = nameSelectorService;
+            _playersAccountService = playersAccountService;
         }
 
         public void CreateMatchesListWindow()
@@ -51,7 +53,7 @@ namespace CodeBase.UI.Services.Factory
             
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
             var chooseNameWindow = Object.Instantiate(config.Prefab, _uiRoot).GetComponent<ChooseNameWindow>();
-            chooseNameWindow.Construct(_nameSelectorService, windowService);
+            chooseNameWindow.Construct(_nameSelectorService, _playersAccountService, windowService);
         }
 
         public void CreateGeneratePlayerNameWindow(IWindowService windowService)

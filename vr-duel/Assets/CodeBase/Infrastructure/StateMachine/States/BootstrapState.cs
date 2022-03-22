@@ -47,26 +47,26 @@ namespace CodeBase.Infrastructure.StateMachine.States
         {
         }
 
-        private void EnterLoadLevel() => 
+        private void EnterLoadLevel() =>
             _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
 
         private void RegisterServices()
         {
             RegisterInputService();
-            
+
             _allServices.Register<IStorageService>(new StorageService());
             _allServices.Register<IPlayerDataService>(new PlayerDataService());
-            
             RegisterNetworkService();
             RegisterStaticDataService();
 
-            _allServices.Register<INameSelectorService>(new NameSelectorService(_allServices.Single<IStorageService>()));
+            _allServices.Register<IPlayerAccountsService>(new PlayerAccountsService(_allServices.Single<IStorageService>()));
+            _allServices.Register<INameSelectorService>(new NameSelectorService());
             _allServices.Register<ISaveLoadService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
-            _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<ISaveLoadService>(), _allServices.Single<INameSelectorService>()));
+            _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<ISaveLoadService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
             _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputEventService>()));
-            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(),_allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>()));
+            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>()));
         }
 
         private void RegisterInputService()

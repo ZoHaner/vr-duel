@@ -11,9 +11,9 @@ namespace CodeBase.UI.Windows
         [SerializeField] private NameListContainer _nameListContainer;
         [SerializeField] private OpenWindowButton _openGeneratorWindowButton;
 
-        public void Construct(INameSelectorService nameSelectorService, IWindowService windowService)
+        public void Construct(INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService, IWindowService windowService)
         {
-            _nameListContainer.Construct(nameSelectorService);
+            _nameListContainer.Construct(nameSelectorService, playersAccountService);
             _openGeneratorWindowButton.Construct(windowService, WindowId.GeneratePlayerName);
         }
 
