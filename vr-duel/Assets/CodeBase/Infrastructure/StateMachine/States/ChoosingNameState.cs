@@ -37,8 +37,8 @@ namespace CodeBase.Infrastructure.StateMachine.States
         private void OnSelectedName(string username)
         {
             CreateAccountIfNotExist(username);
-
-            _playerDataService.Username = username;
+            var user = _accountsService.GetAccountByUsername(username);
+            _playerDataService.User = user;
             _gameStateMachine.Enter<LoadProgressState>();
         }
 

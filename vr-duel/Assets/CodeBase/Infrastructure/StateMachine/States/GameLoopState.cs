@@ -27,7 +27,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         public void Exit()
         {
-            _saveLoadService.SaveProgressForPlayer(_playerData.Username, _playerProgress.Progress);
+            _saveLoadService.SaveProgressForPlayer(_playerData.User.Username, _playerProgress.Progress);
             _roundService.StopRound();
             _roundService.Cleanup();
         }

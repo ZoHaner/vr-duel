@@ -57,8 +57,14 @@ namespace CodeBase.Services
             return accountList.Any(a => a.Username == username);
         }
 
+        public UserAccount GetAccountByUsername(string username)
+        {
+            var accountList = GetAccountsList();
+            return accountList.FirstOrDefault(a => a.Username == username);
+        }
+
         private UserAccount CreateAccount(string username) =>
-            new UserAccount(new Guid().ToString(), username);
+            new UserAccount(Guid.NewGuid().ToString(), username);
 
         private void CacheList(List<UserAccount> accountsList)
         {

@@ -64,7 +64,7 @@ namespace CodeBase.Services.Network
         {
             ReceivedMatchPresence?.Invoke(matchPresenceEvent);
         }
-        
+
         private async Task OnReceivedMatchState(IMatchState matchState)
         {
             ReceivedMatchState?.Invoke(matchState);
@@ -75,17 +75,10 @@ namespace CodeBase.Services.Network
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
             _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _adapter);
-
-            var id = SystemInfo.deviceUniqueIdentifier;
-            
-            #if UNITY_EDITOR
-            id = "e5ab1773-3fb3-45d4-8f50-7eb7a33eaeaa";
-            #endif
-            
-            _session = await _client.AuthenticateDeviceAsync(id, _playerData.Username);
+            _session = await _client.AuthenticateDeviceAsync(_playerData.User.Id, _playerData.User.Username);
             Socket = _client.NewSocket();
             await Socket.ConnectAsync(_session, true);
-            
+
             Debug.LogError(_client);
             Debug.LogError(_session);
             Debug.LogError(Socket);
@@ -100,12 +93,12 @@ namespace CodeBase.Services.Network
         public async Task<IApiMatchList> GetMatchList()
         {
             var result = await _client.ListMatchesAsync(
-                _session, 
-                MinPlayers, 
-                MaxPlayers, 
-                MatchesSearchLimit, 
-                Authoritative, 
-                null, 
+                _session,
+                MinPlayers,
+                MaxPlayers,
+                MatchesSearchLimit,
+                Authoritative,
+                null,
                 Query);
 
             foreach (var match in result.Matches)
@@ -150,7 +143,7 @@ namespace CodeBase.Services.Network
             Match = await Socket.JoinMatchAsync(matchmakerMatch);
             _dispatcher.Enqueue(() => MatchJoined?.Invoke(Match));
         }
-        
+
         public void SendMatchState(long opCode, string state)
         {
             Socket.SendMatchStateAsync(Match.Id, opCode, state);

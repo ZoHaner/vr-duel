@@ -29,7 +29,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         private void LoadProgressOrCreateNew()
         {
-            var username = _playerDataService.Username;
+            var username = _playerDataService.User.Username;
             _progressService.Progress = _saveLoadService.LoadProgressForPlayer(username) ?? NewProgress();
             _gameStateMachine.Enter<LobbyCycleState>();
         }

@@ -220,7 +220,7 @@ namespace CodeBase.Services
 
             Debug.LogError("Player " + winnerName + " won the round");
 
-            if (_playerData.Username == winnerName)
+            if (_playerData.User.Username == winnerName)
             {
                 _progressService.Progress.WinsCount++;
                 Debug.LogError("WinsCount : " + _progressService.Progress.WinsCount);

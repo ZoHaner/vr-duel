@@ -8,5 +8,6 @@ namespace CodeBase.Services
         void SaveNewAccount(string username);
         List<UserAccount> GetAccountsList();
         bool AccountExist(string username);
+        UserAccount GetAccountByUsername(string username);
     }
 }
