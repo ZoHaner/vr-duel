@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CodeBase.Behaviours;
 using CodeBase.Services;
 using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;

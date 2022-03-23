@@ -1,4 +1,3 @@
-using CodeBase.Behaviours;
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.Singletons;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CodeBase.Behaviours.Player;
 using CodeBase.Services.Progress;
 using CodeBase.StaticData;
 using CodeBase.Utilities.Network;
