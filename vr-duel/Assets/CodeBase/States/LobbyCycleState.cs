@@ -1,8 +1,10 @@
-﻿using CodeBase.Services;
+﻿using CodeBase.Infrastructure.StateMachine;
+using CodeBase.Services;
 using CodeBase.Services.UI;
+using CodeBase.StaticData;
 using Nakama;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class LobbyCycleState : IState
     {

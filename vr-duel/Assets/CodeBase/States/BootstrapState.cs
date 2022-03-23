@@ -1,5 +1,4 @@
-﻿using CodeBase.Infrastructure.Factory;
-using CodeBase.Infrastructure.Utilities;
+﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
@@ -8,10 +7,12 @@ using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.Singletons;
 using CodeBase.Services.UI;
+using CodeBase.StaticData;
+using CodeBase.Utilities;
 using Nakama;
 using UnityEngine;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class BootstrapState : IState
     {

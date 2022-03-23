@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using CodeBase.Behaviours;
-using CodeBase.Infrastructure.StateMachine.States;
-using CodeBase.Infrastructure.Utilities;
 using CodeBase.Services;
 using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.Singletons;
 using CodeBase.Services.UI;
+using CodeBase.States;
+using CodeBase.UI;
+using CodeBase.Utilities;
 using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine

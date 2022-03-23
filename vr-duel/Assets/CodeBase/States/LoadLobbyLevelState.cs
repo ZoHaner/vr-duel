@@ -1,7 +1,9 @@
-﻿using CodeBase.Infrastructure.Utilities;
+﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services.UI;
+using CodeBase.StaticData;
+using CodeBase.Utilities;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class LoadLobbyLevelState : IPayloadedState<string>
     {

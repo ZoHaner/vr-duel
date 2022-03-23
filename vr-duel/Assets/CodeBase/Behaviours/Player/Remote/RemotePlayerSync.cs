@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
 using CodeBase.Behaviours.Gun;
-using CodeBase.Data;
+using CodeBase.Entities;
+using CodeBase.StaticData;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace CodeBase.Behaviours.Player.Remote
 {
     public class RemotePlayerSync : MonoBehaviour
     {
-        public RemotePlayerNetworkData NetworkData;
+        public RemotePlayer NetworkData;
         
         public float LerpTime = 0.05f;
 
@@ -27,7 +28,7 @@ namespace CodeBase.Behaviours.Player.Remote
         private Rigidbody2D playerRigidbody;
         private Transform playerTransform;
 
-        public void Construct(RemotePlayerNetworkData networkData, GunShooting gun)
+        public void Construct(RemotePlayer networkData, GunShooting gun)
         {
             NetworkData = networkData;
             Gun = gun;
@@ -51,7 +52,7 @@ namespace CodeBase.Behaviours.Player.Remote
 
         private bool NotMyMatchState(IMatchState matchState)
         {
-            return matchState.UserPresence.SessionId != NetworkData.User.SessionId;
+            return matchState.UserPresence.SessionId != NetworkData.Presence.SessionId;
         }
 
         private void UpdateVelocityAndPositionFromState(byte[] state)

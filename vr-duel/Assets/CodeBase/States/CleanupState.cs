@@ -1,6 +1,7 @@
+using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class CleanupState : IState
     {

@@ -1,8 +1,9 @@
 using System.Linq;
+using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.UI;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class ChoosingNameState : IState
     {

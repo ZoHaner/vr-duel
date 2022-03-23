@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using CodeBase.Behaviours.Gun;
 using CodeBase.Behaviours.Player;
 using CodeBase.Behaviours.Player.Remote;
-using CodeBase.Data;
-using CodeBase.Infrastructure.Utilities;
-using CodeBase.Services;
+using CodeBase.Entities;
 using CodeBase.Services.Input;
+using CodeBase.StaticData;
+using CodeBase.Utilities;
+using CodeBase.Utilities.Spawn;
 using Nakama;
 using UnityEngine;
 
-namespace CodeBase.Infrastructure.Factory
+namespace CodeBase.Services
 {
     public class NetworkPlayerFactory : INetworkPlayerFactory
     {
@@ -60,7 +61,7 @@ namespace CodeBase.Infrastructure.Factory
             {
                 GunShooting gunMono = CreateGun(player);
 
-                var networkData = new RemotePlayerNetworkData(user);
+                var networkData = new RemotePlayer(user);
                 player.GetComponent<RemotePlayerSync>().Construct(networkData, gunMono);
                 player.GetComponent<RemotePlayerSender>().Construct(roundService, networkData);
             }

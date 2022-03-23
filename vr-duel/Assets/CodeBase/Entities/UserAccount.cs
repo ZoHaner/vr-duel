@@ -1,6 +1,6 @@
 using System;
 
-namespace CodeBase.Data
+namespace CodeBase.Entities
 {
     [Serializable]
     public class UserAccount

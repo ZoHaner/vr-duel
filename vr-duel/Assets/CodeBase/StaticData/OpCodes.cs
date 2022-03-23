@@ -1,4 +1,4 @@
-namespace CodeBase.Behaviours.Player
+namespace CodeBase.StaticData
 {
     public class OpCodes
     {

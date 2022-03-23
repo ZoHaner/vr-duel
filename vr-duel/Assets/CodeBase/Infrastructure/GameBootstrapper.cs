@@ -1,7 +1,8 @@
 using CodeBase.Behaviours;
-using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.Singletons;
+using CodeBase.States;
+using CodeBase.UI;
 using Nakama;
 using UnityEngine;
 

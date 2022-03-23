@@ -1,7 +1,7 @@
 using CodeBase.Behaviours.Gun;
 using CodeBase.Behaviours.Player;
 
-namespace CodeBase.Data
+namespace CodeBase.Entities
 {
     public class LocalPlayerFacade
     {

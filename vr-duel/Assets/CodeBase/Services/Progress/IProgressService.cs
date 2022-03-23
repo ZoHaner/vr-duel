@@ -1,4 +1,4 @@
-using CodeBase.Data;
+using CodeBase.Entities;
 
 namespace CodeBase.Services.Progress
 {

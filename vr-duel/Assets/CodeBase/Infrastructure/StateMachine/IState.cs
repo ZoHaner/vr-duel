@@ -1,4 +1,4 @@
-﻿namespace CodeBase.Infrastructure.StateMachine.States
+﻿namespace CodeBase.Infrastructure.StateMachine
 {
     public interface IState : IExitableState
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CodeBase.Infrastructure.Utilities
+namespace CodeBase.Utilities
 {
     public class ResourcesUtilities
     {

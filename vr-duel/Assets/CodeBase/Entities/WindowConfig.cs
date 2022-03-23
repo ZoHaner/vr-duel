@@ -2,7 +2,7 @@ using System;
 using CodeBase.Services.UI;
 using CodeBase.UI.Windows;
 
-namespace CodeBase.Data
+namespace CodeBase.Entities
 {
     [Serializable]
     public class WindowConfig

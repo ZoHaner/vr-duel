@@ -1,4 +1,4 @@
-using CodeBase.Data;
+using CodeBase.Entities;
 using CodeBase.Services;
 using UnityEngine;
 
@@ -8,37 +8,27 @@ namespace CodeBase.Behaviours.Player.Remote
     {
         public PlayerDeath PlayerDeath;
         private IRoundService _roundService;
-        private RemotePlayerNetworkData _remotePlayerNetworkData;
+        private RemotePlayer _remotePlayer;
 
-        public void Construct(IRoundService roundService, RemotePlayerNetworkData remotePlayerNetworkData)
+        public void Construct(IRoundService roundService, RemotePlayer remotePlayer)
         {
-            _remotePlayerNetworkData = remotePlayerNetworkData;
+            _remotePlayer = remotePlayer;
             _roundService = roundService;
         }
 
-        private void Awake()
-        {
+        private void Awake() => 
             SubscribeEvents();
-        }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() => 
             Cleanup();
-        }
 
-        public void SubscribeEvents()
-        {
+        private void SubscribeEvents() => 
             PlayerDeath.PlayerDead += SendPlayerDeadState;
-        }
 
-        public void Cleanup()
-        {
+        private void Cleanup() => 
             PlayerDeath.PlayerDead -= SendPlayerDeadState;
-        }
 
-        private void SendPlayerDeadState()
-        {
-            _roundService.PlayerDeath?.Invoke(_remotePlayerNetworkData.User);
-        }
+        private void SendPlayerDeadState() => 
+            _roundService.PlayerDeath?.Invoke(_remotePlayer.Presence);
     }
 }

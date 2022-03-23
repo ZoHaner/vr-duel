@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using CodeBase.Data;
+using CodeBase.Entities;
 using Newtonsoft.Json;
 using UnityEngine;
 

@@ -1,8 +1,9 @@
-﻿using CodeBase.Behaviours;
-using CodeBase.Infrastructure.Utilities;
+﻿using CodeBase.Infrastructure.StateMachine;
+using CodeBase.UI;
+using CodeBase.Utilities;
 using UnityEngine;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class LoadGameLevelState : IPayloadedState<string>
     {

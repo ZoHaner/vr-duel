@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CodeBase.Behaviours
+namespace CodeBase.Utilities.Spawn
 {
     public class SpawnPoint : MonoBehaviour
     {

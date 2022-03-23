@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using CodeBase.Services;
 using Nakama;
 
-namespace CodeBase.Infrastructure.Factory
+namespace CodeBase.Services
 {
     public interface INetworkPlayerFactory : IService
     {

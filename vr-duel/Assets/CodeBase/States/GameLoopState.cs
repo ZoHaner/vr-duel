@@ -1,8 +1,9 @@
-﻿using CodeBase.Services;
+﻿using CodeBase.Infrastructure.StateMachine;
+using CodeBase.Services;
 using CodeBase.Services.Progress;
 using UnityEngine;
 
-namespace CodeBase.Infrastructure.StateMachine.States
+namespace CodeBase.States
 {
     public class GameLoopState : IState
     {

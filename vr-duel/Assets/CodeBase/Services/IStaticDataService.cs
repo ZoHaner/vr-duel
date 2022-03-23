@@ -1,4 +1,4 @@
-using CodeBase.Data;
+using CodeBase.Entities;
 using CodeBase.Services.UI;
 
 namespace CodeBase.Services

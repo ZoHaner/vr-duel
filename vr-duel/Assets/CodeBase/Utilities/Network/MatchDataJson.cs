@@ -3,7 +3,7 @@ using CodeBase.Extensions;
 using Nakama.TinyJson;
 using UnityEngine;
 
-namespace CodeBase.Utilities.Player
+namespace CodeBase.Utilities.Network
 {
     /// <summary>
     /// A static class that creates JSON string network messages.
