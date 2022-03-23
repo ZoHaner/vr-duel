@@ -222,7 +222,7 @@ namespace CodeBase.Services
 
             if (_playerData.User.Username == winnerName)
             {
-                _progressService.Progress.WinsCount++;
+                _progressService.Progress.AddWin();
                 Debug.LogError("WinsCount : " + _progressService.Progress.WinsCount);
             }
         }
