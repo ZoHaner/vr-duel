@@ -1,5 +1,5 @@
-﻿using CodeBase.Infrastructure.Utilities;
-using CodeBase.Logic;
+﻿using CodeBase.Behaviours;
+using CodeBase.Infrastructure.Utilities;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.StateMachine.States

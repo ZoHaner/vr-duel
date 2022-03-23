@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using CodeBase.Behaviours;
 using CodeBase.Infrastructure.StateMachine.States;
 using CodeBase.Infrastructure.Utilities;
-using CodeBase.Logic;
-using CodeBase.Network;
 using CodeBase.Services;
-using CodeBase.Services.Network;
 using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
-using CodeBase.Services.UpdateProvider;
-using CodeBase.UI.Services.Factory;
-using CodeBase.UI.Services.Windows;
+using CodeBase.Services.Singletons;
+using CodeBase.Services.UI;
 using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine
@@ -26,11 +23,11 @@ namespace CodeBase.Infrastructure.StateMachine
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
                 [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IWindowService>(), allServices.Single<IPlayerAccountsService>()),
-                [typeof(LoadProgressState)] = new LoadProgressState(this, allServices.Single<IProgressService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(this, allServices.Single<IProgressService>(), allServices.Single<ISaveLoadProgressService>(), allServices.Single<IPlayerDataService>()),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(), allServices.Single<IWindowService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>(), allServices.Single<IRoundService>(), allServices.Single<IWindowService>()),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
-                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<IRoundService>(), allServices.Single<ISaveLoadService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
+                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<IRoundService>(), allServices.Single<ISaveLoadProgressService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
                 [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>(), allServices.Single<IRoundService>())
             };
         }

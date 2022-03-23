@@ -1,5 +1,4 @@
 using CodeBase.Services;
-using CodeBase.Services.Network;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {

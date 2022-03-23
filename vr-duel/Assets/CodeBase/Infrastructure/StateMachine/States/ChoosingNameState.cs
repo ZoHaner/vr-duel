@@ -1,6 +1,6 @@
 using System.Linq;
 using CodeBase.Services;
-using CodeBase.UI.Services.Windows;
+using CodeBase.Services.UI;
 
 namespace CodeBase.Infrastructure.StateMachine.States
 {

@@ -1,9 +1,8 @@
+using CodeBase.Behaviours;
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Infrastructure.Utilities;
-using CodeBase.Logic;
-using CodeBase.Network;
 using CodeBase.Services.ServiceLocator;
-using CodeBase.Services.UpdateProvider;
+using CodeBase.Services.Singletons;
 using Nakama;
 
 namespace CodeBase.Infrastructure

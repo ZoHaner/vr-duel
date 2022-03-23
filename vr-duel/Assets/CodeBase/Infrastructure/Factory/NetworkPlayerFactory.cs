@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using CodeBase.Behaviours.Guns;
+using CodeBase.Behaviours.Gun;
+using CodeBase.Behaviours.Player;
+using CodeBase.Behaviours.Player.Remote;
+using CodeBase.Data;
 using CodeBase.Infrastructure.Utilities;
-using CodeBase.Player;
-using CodeBase.Player.Remote;
 using CodeBase.Services;
 using CodeBase.Services.Input;
-using CodeBase.Services.Network;
 using Nakama;
 using UnityEngine;
 

@@ -1,6 +1,5 @@
 ﻿using CodeBase.Services;
-using CodeBase.Services.Network;
-using CodeBase.UI.Services.Windows;
+using CodeBase.Services.UI;
 using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine.States

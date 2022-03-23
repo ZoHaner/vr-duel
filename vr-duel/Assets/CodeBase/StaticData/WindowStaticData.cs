@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CodeBase.Data;
 using UnityEngine;
 
 namespace CodeBase.StaticData

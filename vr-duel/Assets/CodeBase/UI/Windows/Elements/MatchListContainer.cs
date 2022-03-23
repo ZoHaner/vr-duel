@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CodeBase.Services.Network;
+using CodeBase.Services;
 using Nakama;
 using UnityEngine;
 

@@ -1,17 +1,13 @@
 ﻿using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Utilities;
-using CodeBase.Network;
 using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
 using CodeBase.Services.Input.VR;
-using CodeBase.Services.Network;
 using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
-using CodeBase.Services.StaticData;
-using CodeBase.Services.UpdateProvider;
-using CodeBase.UI.Services.Factory;
-using CodeBase.UI.Services.Windows;
+using CodeBase.Services.Singletons;
+using CodeBase.Services.UI;
 using Nakama;
 using UnityEngine;
 
@@ -61,7 +57,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
             _allServices.Register<IPlayerAccountsService>(new PlayerAccountsService(_allServices.Single<IStorageService>()));
             _allServices.Register<INameSelectorService>(new NameSelectorService());
-            _allServices.Register<ISaveLoadService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
+            _allServices.Register<ISaveLoadProgressService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));

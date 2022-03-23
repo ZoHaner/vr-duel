@@ -1,4 +1,4 @@
-using CodeBase.Services.Network;
+using CodeBase.Services;
 using UnityEngine;
 using UnityEngine.UI;
 

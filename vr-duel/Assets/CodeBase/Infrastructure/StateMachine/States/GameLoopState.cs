@@ -7,14 +7,14 @@ namespace CodeBase.Infrastructure.StateMachine.States
     public class GameLoopState : IState
     {
         private readonly IRoundService _roundService;
-        private readonly ISaveLoadService _saveLoadService;
+        private readonly ISaveLoadProgressService _saveLoadProgressService;
         private readonly IPlayerDataService _playerData;
         private readonly IProgressService _playerProgress;
 
-        public GameLoopState(IRoundService roundService, ISaveLoadService saveLoadService, IPlayerDataService playerData, IProgressService playerProgress)
+        public GameLoopState(IRoundService roundService, ISaveLoadProgressService saveLoadProgressService, IPlayerDataService playerData, IProgressService playerProgress)
         {
             _roundService = roundService;
-            _saveLoadService = saveLoadService;
+            _saveLoadProgressService = saveLoadProgressService;
             _playerData = playerData;
             _playerProgress = playerProgress;
         }
@@ -27,7 +27,7 @@ namespace CodeBase.Infrastructure.StateMachine.States
 
         public void Exit()
         {
-            _saveLoadService.SaveProgressForPlayer(_playerData.User.Username, _playerProgress.Progress);
+            _saveLoadProgressService.SaveProgressForPlayer(_playerData.User.Username, _playerProgress.Progress);
             _roundService.StopRound();
             _roundService.Cleanup();
         }
