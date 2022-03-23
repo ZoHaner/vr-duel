@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CodeBase.UI.Windows
+namespace CodeBase.UI.Windows.Elements
 {
     public class NameGeneratorContainer : MonoBehaviour
     {

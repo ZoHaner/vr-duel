@@ -1,4 +1,4 @@
-using CodeBase.Services.Network;
+using CodeBase.Services;
 using Nakama;
 using TMPro;
 using UnityEngine;

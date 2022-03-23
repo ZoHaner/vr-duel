@@ -1,8 +1,8 @@
-using CodeBase.Infrastructure.StateMachine.States;
-using CodeBase.Logic;
-using CodeBase.Network;
+using CodeBase.Behaviours;
 using CodeBase.Services.ServiceLocator;
-using CodeBase.Services.UpdateProvider;
+using CodeBase.Services.Singletons;
+using CodeBase.States;
+using CodeBase.UI;
 using Nakama;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace CodeBase.Infrastructure
 
         private void Awake()
         {
-            _game = new Game(this, Curtain, MainThreadDispatcher.Instance(), UnityWebRequestAdapter.Instance, UpdateProvider.Instance, AllServices.Container);
+            _game = new Game(this, Curtain, MainThreadDispatcher.Instance, UnityWebRequestAdapter.Instance, UpdateProvider.Instance, AllServices.Container);
             _game.StateMachine.Enter<BootstrapState>();
             
             DontDestroyOnLoad(this);

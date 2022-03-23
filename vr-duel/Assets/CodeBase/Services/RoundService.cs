@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CodeBase.Infrastructure.Factory;
-using CodeBase.Player;
-using CodeBase.Services.Network;
+using CodeBase.Behaviours.Player;
 using CodeBase.Services.Progress;
+using CodeBase.StaticData;
+using CodeBase.Utilities.Network;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -25,18 +25,17 @@ namespace CodeBase.Services
         public Action<IUserPresence> PlayerDeath { get; set; }
 
         private const int StartRoundCheckDelay = 1000;
+        private const int MinPlayers = 2;
 
         private readonly INetworkService _networkService;
         private readonly INetworkPlayerFactory _playerFactory;
         private readonly IProgressService _progressService;
         private readonly IPlayerDataService _playerData;
 
-        private RoundState RoundState = RoundState.Disable;
-
-        private const int MinPlayers = 2;
-
+        private readonly List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
-        private List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
+
+        private RoundState _roundState = RoundState.Disable;
 
         public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData)
         {
@@ -71,9 +70,9 @@ namespace CodeBase.Services
         {
             while (!EnoughPlayers())
             {
-                if (RoundState != RoundState.WaitForPlayers)
+                if (_roundState != RoundState.WaitForPlayers)
                 {
-                    Debug.LogError($"RoundState should be in state WaitForPlayers, but it is - {RoundState}");
+                    Debug.LogError($"RoundState should be in state WaitForPlayers, but it is - {_roundState}");
                     return;
                 }
                 
@@ -86,7 +85,7 @@ namespace CodeBase.Services
 
         public void StopRound()
         {
-            RoundState = RoundState.Disable;
+            _roundState = RoundState.Disable;
         }
 
 
@@ -94,12 +93,12 @@ namespace CodeBase.Services
         {
             _playerFactory.LocalUserSessionId = matched.Self.Presence.SessionId;
 
-            RoundState = RoundState.WaitForPlayers;
+            _roundState = RoundState.WaitForPlayers;
         }
 
         private void MatchJoined(IMatch match)
         {
-            switch (RoundState)
+            switch (_roundState)
             {
                 case RoundState.Disable:
                     AddPlayersToWaitList(match.Presences);
@@ -115,7 +114,7 @@ namespace CodeBase.Services
 
         private void ReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
         {
-            switch (RoundState)
+            switch (_roundState)
             {
                 case RoundState.Disable:
                     Debug.LogError("Match updated event, but RoundState = Disable");
@@ -193,7 +192,7 @@ namespace CodeBase.Services
             _createdPlayers = new List<IUserPresence>(_waitingPlayers);
             _waitingPlayers.Clear();
 
-            RoundState = RoundState.Playing;
+            _roundState = RoundState.Playing;
         }
 
         private void CheckFinishRound()
@@ -222,14 +221,14 @@ namespace CodeBase.Services
 
             if (_playerData.User.Username == winnerName)
             {
-                _progressService.Progress.WinsCount++;
+                _progressService.Progress.AddWin();
                 Debug.LogError("WinsCount : " + _progressService.Progress.WinsCount);
             }
         }
 
         private async Task WaitAndRespawn()
         {
-            RoundState = RoundState.WaitForPlayers;
+            _roundState = RoundState.WaitForPlayers;
 
             await Task.Delay(2000);
 

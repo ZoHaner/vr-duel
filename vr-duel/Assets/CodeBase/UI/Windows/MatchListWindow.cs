@@ -1,4 +1,4 @@
-using CodeBase.Services.Network;
+using CodeBase.Services;
 using CodeBase.UI.Windows.Elements;
 
 namespace CodeBase.UI.Windows

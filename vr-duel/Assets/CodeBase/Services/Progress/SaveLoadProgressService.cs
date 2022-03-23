@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using CodeBase.Entities;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace CodeBase.Services.Progress
 {
-    public class SaveLoadProgressService : ISaveLoadService
+    public class SaveLoadProgressService : ISaveLoadProgressService
     {
         private readonly IStorageService _storageService;
         

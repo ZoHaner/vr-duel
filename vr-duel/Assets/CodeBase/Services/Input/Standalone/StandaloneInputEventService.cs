@@ -1,5 +1,6 @@
 using System;
 using CodeBase.Infrastructure;
+using CodeBase.Services.Singletons;
 
 namespace CodeBase.Services.Input.Standalone
 {
