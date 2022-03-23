@@ -12,5 +12,6 @@ namespace CodeBase.Services
         string LocalUserSessionId { get; set; }
         void RemovePlayer(string sessionId);
         void RemoveAllPlayers();
+        void DeactivatePlayer(string sessionId);
     }
 }

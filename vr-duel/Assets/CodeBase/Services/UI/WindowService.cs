@@ -5,12 +5,14 @@ namespace CodeBase.Services.UI
     public class WindowService : IWindowService
     {
         private readonly IUIFactory _uiFactory;
+        private readonly IGameUIFactory _gameUIFactory;
 
         private GameObject _openWindow;
 
-        public WindowService(IUIFactory uiFactory)
+        public WindowService(IUIFactory uiFactory, IGameUIFactory gameUIFactory)
         {
             _uiFactory = uiFactory;
+            _gameUIFactory = gameUIFactory;
         }
 
         public void Open(WindowId windowId)
@@ -33,8 +35,17 @@ namespace CodeBase.Services.UI
                 case WindowId.GeneratePlayerName:
                     _openWindow = _uiFactory.CreateGeneratePlayerNameWindow(this);
                     break;
+                case WindowId.WinnerPopup:
+                    _openWindow = _gameUIFactory.CreateWinnerPopup();
+                    break;
+                case WindowId.LoosePopup:
+                    _openWindow = _gameUIFactory.ShowLoosePopup();
+                    break;
             }
         }
+
+        public void CloseAllWindows() => 
+            CloseWindowIfOpened();
 
         private void CloseWindowIfOpened()
         {
