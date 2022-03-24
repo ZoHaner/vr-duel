@@ -5,6 +5,7 @@ namespace CodeBase.Entities
     [Serializable]
     public class PlayerProgress
     {
+        public Action<int> Changed;
         public int WinsCount { get; private set; }
 
         public PlayerProgress(int winsCount)
@@ -15,6 +16,7 @@ namespace CodeBase.Entities
         public void AddWin()
         {
             WinsCount++;
+            Changed?.Invoke(WinsCount);
         }
     }
 }

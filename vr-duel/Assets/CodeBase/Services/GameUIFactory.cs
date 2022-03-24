@@ -1,3 +1,4 @@
+using CodeBase.Services.Progress;
 using CodeBase.Services.UI;
 using CodeBase.UI.Windows;
 using CodeBase.Utilities;
@@ -11,11 +12,13 @@ namespace CodeBase.Services
         private readonly Vector3 _rootPosition = Vector3.up * 2;
         
         private readonly IStaticDataService _staticData;
+        private readonly IProgressService _progressService;
         private Transform _uiRoot;
 
-        public GameUIFactory(IStaticDataService staticData)
+        public GameUIFactory(IStaticDataService staticData, IProgressService progressService)
         {
             _staticData = staticData;
+            _progressService = progressService;
         }
 
         public void CreateRootIfNotExist()
@@ -29,7 +32,8 @@ namespace CodeBase.Services
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.WinnerPopup);
-            var window = InstantiateWindow(config.Prefab);
+            var window = InstantiateWindow(config.Prefab).GetComponent<WinPopup>();
+            window.Construct(_progressService);
             return window.gameObject;
         }
 
