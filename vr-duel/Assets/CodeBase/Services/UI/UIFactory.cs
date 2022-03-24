@@ -22,9 +22,15 @@ namespace CodeBase.Services.UI
             _playersAccountService = playersAccountService;
         }
 
+        public void CreateRootIfNotExist()
+        {
+            if (_uiRoot == null)
+                CreateUIRoot();
+        }
+
         public GameObject CreateMatchesListWindow()
         {
-            CreateRootIfNecessary();
+            CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.MatchesList);
             var configPrefab = config.Prefab;
@@ -35,7 +41,7 @@ namespace CodeBase.Services.UI
 
         public GameObject CreateMatchmakingWindow()
         {
-            CreateRootIfNecessary();
+            CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.Matchmaking);
             var matchmakingWindow = InstantiateWindow(config.Prefab).GetComponent<MatchmakingWindow>();
@@ -45,7 +51,7 @@ namespace CodeBase.Services.UI
 
         public GameObject CreateChoosePlayerNameWindow(IWindowService windowService)
         {
-            CreateRootIfNecessary();
+            CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
             var chooseNameWindow = InstantiateWindow(config.Prefab).GetComponent<ChooseNameWindow>();
@@ -55,7 +61,7 @@ namespace CodeBase.Services.UI
 
         public GameObject CreateGeneratePlayerNameWindow(IWindowService windowService)
         {
-            CreateRootIfNecessary();
+            CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
             var generateNameWindow = InstantiateWindow(config.Prefab).GetComponent<GenerateNameWindow>();
@@ -69,12 +75,6 @@ namespace CodeBase.Services.UI
             var window = Object.Instantiate(configPrefab, _uiRoot);
             window.gameObject.transform.localPosition = Vector3.zero;
             return window;
-        }
-
-        private void CreateRootIfNecessary()
-        {
-            if (_uiRoot == null)
-                CreateUIRoot();
         }
 
         private void CreateUIRoot()

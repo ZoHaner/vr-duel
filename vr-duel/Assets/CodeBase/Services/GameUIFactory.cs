@@ -18,9 +18,15 @@ namespace CodeBase.Services
             _staticData = staticData;
         }
 
+        public void CreateRootIfNotExist()
+        {
+            if (_uiRoot == null)
+                CreateUIRoot();
+        }
+
         public GameObject CreateWinnerPopup()
         {
-            CreateRootIfNecessary();
+            CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.WinnerPopup);
             var window = InstantiateWindow(config.Prefab);
@@ -29,17 +35,11 @@ namespace CodeBase.Services
 
         public GameObject ShowLoosePopup()
         {
-            CreateRootIfNecessary();
+            CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LoosePopup);
             var window = InstantiateWindow(config.Prefab);
             return window.gameObject;
-        }
-
-        private void CreateRootIfNecessary()
-        {
-            if (_uiRoot == null)
-                CreateUIRoot();
         }
 
         private void CreateUIRoot()
