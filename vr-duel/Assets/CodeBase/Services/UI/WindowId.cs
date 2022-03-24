@@ -7,5 +7,7 @@ namespace CodeBase.Services.UI
         Matchmaking = 2,
         ChoosePlayerName = 3,
         GeneratePlayerName = 4,
+        WinnerPopup = 5,
+        LoosePopup = 6,
     }
 }

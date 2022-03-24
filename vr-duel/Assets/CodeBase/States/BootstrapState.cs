@@ -60,10 +60,13 @@ namespace CodeBase.States
             _allServices.Register<INameSelectorService>(new NameSelectorService());
             _allServices.Register<ISaveLoadProgressService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
+           
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
-            _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>()));
+            _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>()));
+            _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>(), _allServices.Single<IGameUIFactory>()));
+            
             _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputEventService>()));
-            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>()));
+            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IWindowService>()));
         }
 
         private void RegisterInputService()

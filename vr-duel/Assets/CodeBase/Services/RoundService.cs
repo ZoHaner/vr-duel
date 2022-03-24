@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CodeBase.Behaviours.Player;
 using CodeBase.Services.Progress;
+using CodeBase.Services.UI;
 using CodeBase.StaticData;
 using CodeBase.Utilities.Network;
 using Nakama;
@@ -31,18 +31,20 @@ namespace CodeBase.Services
         private readonly INetworkPlayerFactory _playerFactory;
         private readonly IProgressService _progressService;
         private readonly IPlayerDataService _playerData;
+        private readonly IWindowService _windowService;
 
         private readonly List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
 
         private RoundState _roundState = RoundState.Disable;
 
-        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData)
+        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
         {
             _networkService = networkService;
             _playerFactory = playerFactory;
             _progressService = progressService;
             _playerData = playerData;
+            _windowService = windowService;
         }
 
         public void SubscribeEvents()
@@ -158,7 +160,7 @@ namespace CodeBase.Services
         {
             var playerToRemove = _createdPlayers.First(p => p.SessionId == sessionId);
 
-            _playerFactory.RemovePlayer(sessionId);
+            _playerFactory.DeactivatePlayer(sessionId);
             _createdPlayers.Remove(playerToRemove);
             _waitingPlayers.Add(playerToRemove);
             CheckFinishRound();
@@ -222,7 +224,13 @@ namespace CodeBase.Services
             if (_playerData.User.Username == winnerName)
             {
                 _progressService.Progress.AddWin();
-                Debug.LogError("WinsCount : " + _progressService.Progress.WinsCount);
+                _windowService.Open(WindowId.WinnerPopup);
+                Debug.LogError($"You won {_progressService.Progress.WinsCount} times");
+            }
+            else
+            {
+                _windowService.Open(WindowId.LoosePopup);
+                Debug.LogError($"You dead");
             }
         }
 
@@ -236,6 +244,7 @@ namespace CodeBase.Services
             _createdPlayers.Clear();
 
             _playerFactory.RemoveAllPlayers();
+            _windowService.CloseAllWindows();
 
             if (EnoughPlayers())
                 StartRound();

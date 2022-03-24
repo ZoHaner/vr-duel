@@ -103,6 +103,15 @@ namespace CodeBase.Services
             Object.Destroy(player);
         }
 
+        // Todo shouldn't destroy player
+        public void DeactivatePlayer(string sessionId)
+        {
+            Debug.LogError("Deactivate Player");
+            var player = _players[sessionId];
+            _players.Remove(sessionId);
+            Object.Destroy(player, 1.5f);
+        }
+
         public void UpdatePlayersState(IMatchState state)
         {
             // Debug.LogError("UpdatePlayersState");

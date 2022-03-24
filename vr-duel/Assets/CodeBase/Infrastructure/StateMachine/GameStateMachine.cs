@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CodeBase.Behaviours;
 using CodeBase.Services;
 using CodeBase.Services.Progress;
 using CodeBase.Services.ServiceLocator;
@@ -28,7 +27,7 @@ namespace CodeBase.Infrastructure.StateMachine
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IUIFactory>(), allServices.Single<IWindowService>()),
                 [typeof(LobbyCycleState)] = new LobbyCycleState(this, allServices.Single<INetworkService>(), allServices.Single<IRoundService>(), allServices.Single<IWindowService>()),
                 [typeof(LoadGameLevelState)] = new LoadGameLevelState(this, sceneLoader, curtain),
-                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<IRoundService>(), allServices.Single<ISaveLoadProgressService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>()),
+                [typeof(GameLoopState)] = new GameLoopState(allServices.Single<IRoundService>(), allServices.Single<ISaveLoadProgressService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IProgressService>(), allServices.Single<IGameUIFactory>()),
                 [typeof(CleanupState)] = new CleanupState(allServices.Single<INetworkService>(), allServices.Single<IRoundService>())
             };
         }
