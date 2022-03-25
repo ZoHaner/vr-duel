@@ -1,6 +1,6 @@
 ﻿using CodeBase.Infrastructure.StateMachine;
+using CodeBase.Services;
 using CodeBase.Services.UI;
-using CodeBase.StaticData;
 using CodeBase.Utilities;
 
 namespace CodeBase.States
@@ -9,15 +9,15 @@ namespace CodeBase.States
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly IUIFactory _uiFactory;
         private readonly IWindowService _windowService;
+        private readonly IPlayerFactory _playerFactory;
 
-        public LoadLobbyLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IUIFactory uiFactory, IWindowService windowService)
+        public LoadLobbyLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IWindowService windowService, IPlayerFactory playerFactory)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
-            _uiFactory = uiFactory;
             _windowService = windowService;
+            _playerFactory = playerFactory;
         }
 
         public void Enter(string sceneName)
@@ -27,7 +27,7 @@ namespace CodeBase.States
 
         private void OnLoaded()
         {
-            var player = ResourcesUtilities.Instantiate(AssetsPath.LocalPlayer);
+            _playerFactory.SpawnLocalPlayer();
             _windowService.Open(WindowId.MatchesList);
             _gameStateMachine.Enter<ChoosingNameState>();
         }

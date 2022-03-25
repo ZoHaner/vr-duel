@@ -11,7 +11,7 @@ namespace CodeBase.Services
     {
         private const string UIRootPath = "UI/GameLoop/UIRoot";
         private readonly Vector3 _rootPosition = Vector3.up * 2;
-        
+
         private readonly IStaticDataService _staticData;
         private readonly IProgressService _progressService;
         private Transform _uiRoot;

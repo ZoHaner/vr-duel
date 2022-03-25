@@ -4,6 +4,7 @@ using CodeBase.Behaviours.Player;
 using CodeBase.Behaviours.Player.Remote;
 using CodeBase.Entities;
 using CodeBase.Services.Input;
+using CodeBase.Services.Input.Standalone;
 using CodeBase.StaticData;
 using CodeBase.Utilities;
 using CodeBase.Utilities.Spawn;
@@ -20,16 +21,16 @@ namespace CodeBase.Services
 
         private readonly INetworkService _networkService;
         private readonly InitialPointHolder _pointHolder;
-        private readonly IInputEventService _inputEventService;
+        private readonly IInputService _inputService;
 
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
         
         private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
 
-        public NetworkPlayerFactory(INetworkService networkService, IInputEventService inputEventService)
+        public NetworkPlayerFactory(INetworkService networkService, IInputService inputService)
         {
             _networkService = networkService;
-            _inputEventService = inputEventService;
+            _inputService = inputService;
             _pointHolder = new InitialPointHolder();
         }
 
@@ -54,7 +55,8 @@ namespace CodeBase.Services
 
             if (isLocal)
             {
-                player.GetComponent<PlayerStateSender>().Construct(_networkService, _inputEventService);
+                player.GetComponent<PlayerStateSender>().Construct(_networkService, _inputService);
+                player.GetComponent<PlayerMovement>().Construct(_inputService);
                 CreateLocalPlayerGun(player);
             }
             else
@@ -72,7 +74,7 @@ namespace CodeBase.Services
         private void CreateLocalPlayerGun(GameObject player)
         {
             GunShooting gunMono = CreateGun(player);
-            gunMono.Construct(_inputEventService);
+            gunMono.Construct(_inputService);
             gunMono.SubscribeEvents();
         }
 
