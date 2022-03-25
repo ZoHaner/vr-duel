@@ -75,7 +75,6 @@ namespace CodeBase.Services
         {
             GunShooting gunMono = CreateGun(player);
             gunMono.Construct(_inputService);
-            gunMono.SubscribeEvents();
         }
 
         private GunShooting CreateGun(GameObject player)
