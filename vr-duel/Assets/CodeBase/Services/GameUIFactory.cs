@@ -1,3 +1,4 @@
+using System;
 using CodeBase.Services.Progress;
 using CodeBase.Services.UI;
 using CodeBase.UI.Windows;
@@ -14,6 +15,7 @@ namespace CodeBase.Services
         private readonly IStaticDataService _staticData;
         private readonly IProgressService _progressService;
         private Transform _uiRoot;
+        private Action _backToLobby;
 
         public GameUIFactory(IStaticDataService staticData, IProgressService progressService)
         {
@@ -46,6 +48,28 @@ namespace CodeBase.Services
             return window.gameObject;
         }
 
+        public GameObject CreateBackToLobbyWindow(WindowService windowService)
+        {
+            CreateRootIfNotExist();
+
+            var config = _staticData.ForWindow(WindowId.BackToLobby);
+            var window = InstantiateWindow(config.Prefab).GetComponent<BackToLobbyWindow>();
+            window.Construct(
+                windowService.CloseAllWindows, 
+                () => _backToLobby());
+            return window.gameObject;
+        }
+
+        public void SetExitCallback(Action backToLobby)
+        {
+            _backToLobby = backToLobby;
+        }
+
+        public void ClearExitCallback()
+        {
+            _backToLobby = null;
+        }
+
         private void CreateUIRoot()
         {
             _uiRoot = ResourcesUtilities.Instantiate(UIRootPath).transform;
@@ -54,7 +78,7 @@ namespace CodeBase.Services
 
         private WindowBase InstantiateWindow(WindowBase configPrefab)
         {
-            var window = Object.Instantiate(configPrefab, _uiRoot);
+            var window = UnityEngine.Object.Instantiate(configPrefab, _uiRoot);
             window.gameObject.transform.localPosition = Vector3.zero;
             return window;
         }
