@@ -9,9 +9,11 @@ namespace CodeBase.Services
         void RemovePlayers(IEnumerable<IUserPresence> userPresences);
         void UpdatePlayersState(IMatchState state);
         int PlayersCount { get; }
-        string LocalUserSessionId { get; set; }
-        void RemovePlayer(string sessionId);
+        string LocalUserId { get; set; }
+        void RemovePlayer(string userId);
         void RemoveAllPlayers();
-        void DeactivatePlayer(string sessionId);
+        void DeactivatePlayer(string userId);
+        void Initialize();
+        void CleanUp();
     }
 }

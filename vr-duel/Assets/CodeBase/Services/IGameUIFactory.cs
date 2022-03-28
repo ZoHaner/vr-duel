@@ -1,3 +1,5 @@
+using System;
+using CodeBase.Services.UI;
 using UnityEngine;
 
 namespace CodeBase.Services
@@ -7,5 +9,8 @@ namespace CodeBase.Services
         void CreateRootIfNotExist();
         GameObject CreateWinnerPopup();
         GameObject ShowLoosePopup();
+        GameObject CreateBackToLobbyWindow(WindowService windowService);
+        void SetExitCallback(Action backToLobby);
+        void ClearExitCallback();
     }
 }

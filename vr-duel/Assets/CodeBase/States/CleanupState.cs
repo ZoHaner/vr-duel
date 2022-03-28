@@ -13,12 +13,13 @@ namespace CodeBase.States
             _networkService = networkService;
             _roundService = roundService;
         }
-        
+
         public void Enter()
         {
             _roundService.Cleanup();
             _networkService.Cleanup();
-            _networkService.Disconnect();
+            if (_networkService.IsConnected())
+                _networkService.Disconnect();
         }
 
         public void Exit()

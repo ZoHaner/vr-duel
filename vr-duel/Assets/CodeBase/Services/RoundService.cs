@@ -37,6 +37,7 @@ namespace CodeBase.Services
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
 
         private RoundState _roundState = RoundState.Disable;
+        private IMatch _currentMatch;
 
         public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
         {
@@ -65,6 +66,9 @@ namespace CodeBase.Services
             _networkService.ReceivedMatchState -= ReceivedMatchState;
 
             PlayerDeath -= OnPlayerDeath;
+
+            _waitingPlayers.Clear();
+            _createdPlayers.Clear();
         }
 
 
@@ -77,7 +81,7 @@ namespace CodeBase.Services
                     Debug.LogError($"RoundState should be in state WaitForPlayers, but it is - {_roundState}");
                     return;
                 }
-                
+
                 await Task.Delay(StartRoundCheckDelay);
             }
 
@@ -85,21 +89,23 @@ namespace CodeBase.Services
         }
 
 
-        public void StopRound()
+        public void LeaveRound()
         {
+            _networkService.LeaveMatch(_currentMatch.Id);
             _roundState = RoundState.Disable;
         }
 
 
         private void CacheLocalUser(IMatchmakerMatched matched)
         {
-            _playerFactory.LocalUserSessionId = matched.Self.Presence.SessionId;
+            _playerFactory.LocalUserId = matched.Self.Presence.UserId;
 
             _roundState = RoundState.WaitForPlayers;
         }
 
         private void MatchJoined(IMatch match)
         {
+            _currentMatch = match;
             switch (_roundState)
             {
                 case RoundState.Disable:
@@ -142,7 +148,7 @@ namespace CodeBase.Services
                 case OpCodes.Died:
                     Debug.LogError("Got a died match state. Deleting session id : " + matchState.UserPresence);
                     var deadInfo = GetStateAsDictionary(matchState.State);
-                    HandlePlayerDeath(deadInfo["deadPlayerSessionId"]);
+                    HandlePlayerDeath(deadInfo["deadPlayerId"]);
                     break;
             }
         }
@@ -152,19 +158,20 @@ namespace CodeBase.Services
         /// </summary>
         private void OnPlayerDeath(IUserPresence userPresence)
         {
-            _networkService.SendMatchState(OpCodes.Died, MatchDataJson.Died(userPresence.SessionId));
-            HandlePlayerDeath(userPresence.SessionId);
+            _networkService.SendMatchState(OpCodes.Died, MatchDataJson.Died(userPresence.UserId));
+            HandlePlayerDeath(userPresence.UserId);
         }
 
-        private void HandlePlayerDeath(string sessionId)
+        private void HandlePlayerDeath(string userId)
         {
-            var playerToRemove = _createdPlayers.First(p => p.SessionId == sessionId);
+            var playerToRemove = _createdPlayers.First(p => p.UserId == userId);
 
-            _playerFactory.DeactivatePlayer(sessionId);
+            _playerFactory.DeactivatePlayer(userId);
             _createdPlayers.Remove(playerToRemove);
-            _waitingPlayers.Add(playerToRemove);
+            AddPlayerToWaitList(playerToRemove);
             CheckFinishRound();
         }
+
 
         private void UpdateWaitList(IEnumerable<IUserPresence> newUsers, IEnumerable<IUserPresence> leaveUsers)
         {
@@ -240,7 +247,7 @@ namespace CodeBase.Services
 
             await Task.Delay(2000);
 
-            _waitingPlayers.AddRange(_createdPlayers);
+            AddPlayersToWaitList(_createdPlayers);
             _createdPlayers.Clear();
 
             _playerFactory.RemoveAllPlayers();
@@ -252,7 +259,18 @@ namespace CodeBase.Services
 
         private void AddPlayersToWaitList(IEnumerable<IUserPresence> matchPresences)
         {
-            _waitingPlayers.AddRange(matchPresences);
+            foreach (var presence in matchPresences)
+            {
+                AddPlayerToWaitList(presence);
+            }
+        }
+
+        private void AddPlayerToWaitList(IUserPresence presence)
+        {
+            if (!_waitingPlayers.Contains(presence))
+                _waitingPlayers.Add(presence);
+            else
+                Debug.LogError($"Presence '{presence.Username}' is already in the waiting list!");
         }
 
         private bool EnoughPlayers()

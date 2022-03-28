@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CodeBase.Services.UI
 {
@@ -41,6 +43,11 @@ namespace CodeBase.Services.UI
                 case WindowId.LoosePopup:
                     _openWindow = _gameUIFactory.ShowLoosePopup();
                     break;
+                case WindowId.BackToLobby:
+                    _openWindow = _gameUIFactory.CreateBackToLobbyWindow(this);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(windowId), windowId, null);
             }
         }
 

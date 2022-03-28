@@ -13,5 +13,10 @@ namespace CodeBase.Utilities.Spawn
 
             return SpawnPoints[Random.Range(0, SpawnPoints.Length - 1)].transform.position;
         }
+
+        public void CleanPoints()
+        {
+            SpawnPoints = null;
+        }
     }
 }

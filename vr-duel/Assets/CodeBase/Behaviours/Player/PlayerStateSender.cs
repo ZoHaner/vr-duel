@@ -20,14 +20,15 @@ namespace CodeBase.Behaviours.Player
         public Rigidbody LeftHandRigidbody;
         public Rigidbody RightHandRigidbody;
         
-        private IInputEventService _eventService;
+        private IInputService _service;
         private INetworkService _networkService;
         private float _stateSyncTimer;
+        private bool _lastAttackData;
 
-        
-        public void Construct(INetworkService networkService, IInputEventService eventService)
+
+        public void Construct(INetworkService networkService, IInputService service)
         {
-            _eventService = eventService;
+            _service = service;
             _networkService = networkService;
         }
 
@@ -60,10 +61,12 @@ namespace CodeBase.Behaviours.Player
 
         private void SendInput()
         {
-            if (_eventService.InputChanged)
+            if (_service.IsAttackButtonPressed() != _lastAttackData)
             {
-                _networkService.SendMatchState(OpCodes.Input, MatchDataJson.Input(_eventService.IsAttackButtonPressed()));
+                _networkService.SendMatchState(OpCodes.Input, MatchDataJson.Input(_service.IsAttackButtonPressed()));
             }
+            
+            _lastAttackData = _service.IsAttackButtonPressed();
         }
     }
 }

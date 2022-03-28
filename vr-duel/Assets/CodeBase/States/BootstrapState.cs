@@ -21,9 +21,9 @@ namespace CodeBase.States
         private readonly AllServices _allServices;
         private readonly UnityWebRequestAdapter _unityWebRequestAdapter;
         private readonly MainThreadDispatcher _mainThreadDispatcher;
-        private readonly UpdateProvider _updateProvider;
+        private readonly IUpdateProvider _updateProvider;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices allServices, UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher, UpdateProvider updateProvider)
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices allServices, UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher, IUpdateProvider updateProvider)
         {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
@@ -45,11 +45,13 @@ namespace CodeBase.States
         }
 
         private void EnterLoadLevel() =>
-            _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
+            _stateMachine.Enter<ChoosingNameState>();
 
         private void RegisterServices()
         {
             RegisterInputService();
+
+            _allServices.Register<IUpdateProvider>(_updateProvider);
 
             _allServices.Register<IStorageService>(new StorageService());
             _allServices.Register<IPlayerDataService>(new PlayerDataService());
@@ -64,8 +66,11 @@ namespace CodeBase.States
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
             _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>(), _allServices.Single<IGameUIFactory>()));
+
+            _allServices.Register<IGameMenuService>(new GameMenuService(_allServices.Single<IInputService>(), _allServices.Single<IWindowService>(), _allServices.Single<IUpdateProvider>()));
             
-            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputEventService>()));
+            _allServices.Register<IPlayerFactory>(new PlayerFactory(_allServices.Single<IInputService>()));
+            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputService>()));
             _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IWindowService>()));
         }
 
@@ -73,11 +78,11 @@ namespace CodeBase.States
         {
             if (Application.isMobilePlatform)
             {
-                _allServices.Register<IInputEventService>(new VRInputEventService());
+                _allServices.Register<IInputService>(new VRInputService());
             }
             else
             {
-                _allServices.Register<IInputEventService>(new StandaloneInputEventService(_updateProvider));
+                _allServices.Register<IInputService>(new StandaloneInputService());
             }
         }
 

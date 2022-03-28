@@ -9,5 +9,6 @@ namespace CodeBase.Services.UI
         GeneratePlayerName = 4,
         WinnerPopup = 5,
         LoosePopup = 6,
+        BackToLobby = 7,
     }
 }

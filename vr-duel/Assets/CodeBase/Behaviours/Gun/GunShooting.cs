@@ -10,29 +10,22 @@ namespace CodeBase.Behaviours.Gun
         public Transform ShootPointTransform;
         public GunVfx GunVfx;
 
-        private IInputEventService _inputEventService;
-        private bool _subscribed;
+        private IInputService _inputService;
 
-        public void Construct(IInputEventService inputEventService)
+        public void Construct(IInputService inputService)
         {
-            _inputEventService = inputEventService;
+            _inputService = inputService;
         }
 
-        public void SubscribeEvents()
+        private void Update()
         {
-            _inputEventService.AttackButtonPressed += Shoot;
-            _subscribed = true;
-        }
+            if (_inputService == null)
+                return;
 
-        private void OnDestroy()
-        {
-            if (_subscribed)
-                UnsubscribeEvents();
-        }
-
-        public void UnsubscribeEvents()
-        {
-            _inputEventService.AttackButtonPressed -= Shoot;
+            if (_inputService.IsAttackButtonPressed())
+            {
+                Shoot();
+            }
         }
 
         public void Shoot()

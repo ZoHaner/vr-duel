@@ -4,6 +4,7 @@ using CodeBase.Behaviours.Player;
 using CodeBase.Behaviours.Player.Remote;
 using CodeBase.Entities;
 using CodeBase.Services.Input;
+using CodeBase.Services.Input.Standalone;
 using CodeBase.StaticData;
 using CodeBase.Utilities;
 using CodeBase.Utilities.Spawn;
@@ -16,21 +17,31 @@ namespace CodeBase.Services
     {
         public int PlayersCount => _players.Count;
         
-        public string LocalUserSessionId { get; set; }
+        public string LocalUserId { get; set; }
 
         private readonly INetworkService _networkService;
-        private readonly InitialPointHolder _pointHolder;
-        private readonly IInputEventService _inputEventService;
+        private readonly IInputService _inputService;
+        private InitialPointHolder _pointHolder;
 
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
         
         private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
 
-        public NetworkPlayerFactory(INetworkService networkService, IInputEventService inputEventService)
+        public NetworkPlayerFactory(INetworkService networkService, IInputService inputService)
         {
             _networkService = networkService;
-            _inputEventService = inputEventService;
+            _inputService = inputService;
+        }
+
+        public void Initialize()
+        {
             _pointHolder = new InitialPointHolder();
+        }
+
+        public void CleanUp()
+        {
+            _pointHolder.CleanPoints();
+            RemoveAllPlayers();
         }
 
         public void SpawnPlayers(IEnumerable<IUserPresence> users, IRoundService roundService)
@@ -44,8 +55,8 @@ namespace CodeBase.Services
         private void SpawnPlayer(IUserPresence user, IRoundService roundService)
         {
             Debug.LogError("Spawn Player");
-            var isLocal = user.SessionId == LocalUserSessionId;
-            Debug.LogError($"Is local : {isLocal} ; user.SessionId =  {user.SessionId} ; localUser.SessionId {LocalUserSessionId}");
+            var isLocal = user.UserId == LocalUserId;
+            Debug.LogError($"Is local : {isLocal} ; user.UserId =  {user.UserId} ; localUser.UserId {LocalUserId}");
             var playerPrefabPath = isLocal ? AssetsPath.LocalNetworkPlayer : AssetsPath.RemoteNetworkPlayer;
 
             var initialPoint = _pointHolder.GetInitialPoint();
@@ -54,7 +65,8 @@ namespace CodeBase.Services
 
             if (isLocal)
             {
-                player.GetComponent<PlayerStateSender>().Construct(_networkService, _inputEventService);
+                player.GetComponent<PlayerStateSender>().Construct(_networkService, _inputService);
+                player.GetComponent<PlayerMovement>().Construct(_inputService);
                 CreateLocalPlayerGun(player);
             }
             else
@@ -66,14 +78,13 @@ namespace CodeBase.Services
                 player.GetComponent<RemotePlayerSender>().Construct(roundService, networkData);
             }
 
-            _players.Add(user.SessionId, player);
+            _players.Add(user.UserId, player);
         }
 
         private void CreateLocalPlayerGun(GameObject player)
         {
             GunShooting gunMono = CreateGun(player);
-            gunMono.Construct(_inputEventService);
-            gunMono.SubscribeEvents();
+            gunMono.Construct(_inputService);
         }
 
         private GunShooting CreateGun(GameObject player)
@@ -88,27 +99,27 @@ namespace CodeBase.Services
         {
             foreach (var presence in userPresences)
             {
-                if (_players.ContainsKey(presence.SessionId))
+                if (_players.ContainsKey(presence.UserId))
                 {
-                    RemovePlayer(presence.SessionId);
+                    RemovePlayer(presence.UserId);
                 }
             }
         }
 
-        public void RemovePlayer(string sessionId)
+        public void RemovePlayer(string userId)
         {
             Debug.LogError("Remove player");
-            var player = _players[sessionId];
-            _players.Remove(sessionId);
+            var player = _players[userId];
+            _players.Remove(userId);
             Object.Destroy(player);
         }
 
         // Todo shouldn't destroy player
-        public void DeactivatePlayer(string sessionId)
+        public void DeactivatePlayer(string userId)
         {
             Debug.LogError("Deactivate Player");
-            var player = _players[sessionId];
-            _players.Remove(sessionId);
+            var player = _players[userId];
+            _players.Remove(userId);
             Object.Destroy(player, 1.5f);
         }
 
@@ -116,17 +127,17 @@ namespace CodeBase.Services
         {
             // Debug.LogError("UpdatePlayersState");
 
-            string userSessionId = state.UserPresence.SessionId;
+            string userId = state.UserPresence.UserId;
 
-            if (!_players.ContainsKey(userSessionId))
+            if (!_players.ContainsKey(userId))
             {
                 // Debug.LogError("State contains unknown SessionId!");
                 return;
             }
 
-            if (IsRemotePlayer(userSessionId))
+            if (IsRemotePlayer(userId))
             {
-                _players[userSessionId].GetComponent<RemotePlayerSync>().UpdateState(state);
+                _players[userId].GetComponent<RemotePlayerSync>().UpdateState(state);
             }
         }
 
@@ -141,9 +152,9 @@ namespace CodeBase.Services
         }
 
 
-        private bool IsRemotePlayer(string sessionId)
+        private bool IsRemotePlayer(string userId)
         {
-            return sessionId != LocalUserSessionId;
+            return userId != LocalUserId;
         }
     }
 }

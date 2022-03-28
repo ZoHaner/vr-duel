@@ -22,5 +22,7 @@ namespace CodeBase.Services
         void SubscribeEvents();
         void Cleanup();
         void SendMatchState(long opCode, string state);
+        bool IsConnected();
+        void LeaveMatch(string matchId);
     }
 }
