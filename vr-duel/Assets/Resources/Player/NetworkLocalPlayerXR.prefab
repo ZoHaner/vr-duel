@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 1384366550777818613}
   - component: {fileID: 8478214269940743850}
   m_Layer: 0
-  m_Name: XR Player
+  m_Name: NetworkLocalPlayerXR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
