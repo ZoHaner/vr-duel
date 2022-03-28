@@ -1,4 +1,5 @@
-﻿using CodeBase.Infrastructure.StateMachine;
+﻿using System.Threading.Tasks;
+using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.UI;
 using CodeBase.StaticData;
@@ -23,13 +24,19 @@ namespace CodeBase.States
 
         public async void Enter()
         {
-            await _networkService.Connect();
+            await ConnectIfNotConnected();
             _networkService.SubscribeEvents();
             _roundService.SubscribeEvents();
-            
+
             _networkService.ReceivedMatchmakerMatched += LoadGameState;
-            
+
             _windowService.Open(WindowId.Matchmaking);
+        }
+
+        private async Task ConnectIfNotConnected()
+        {
+            if (!_networkService.IsConnected())
+                await _networkService.Connect();
         }
 
         private void LoadGameState(IMatchmakerMatched matchmakerMatched)
