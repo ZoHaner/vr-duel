@@ -69,14 +69,14 @@ namespace CodeBase.Utilities.Network
         /// <summary>
         /// Creates a network message specifying that the player died and the position when they died.
         /// </summary>
-        /// <param name="sessionId"></param>
+        /// <param name="userId"></param>
         /// <param name="position">The position on death.</param>
         /// <returns>A JSONified string containing the player's position on death.</returns>
-        public static string Died(string sessionId)
+        public static string Died(string userId)
         {
             var values = new Dictionary<string, string>()
             {
-                {"deadPlayerSessionId", sessionId}
+                {"deadPlayerId", userId}
             };
             return values.ToJson();
         }

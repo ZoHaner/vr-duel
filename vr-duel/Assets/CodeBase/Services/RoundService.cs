@@ -148,7 +148,7 @@ namespace CodeBase.Services
                 case OpCodes.Died:
                     Debug.LogError("Got a died match state. Deleting session id : " + matchState.UserPresence);
                     var deadInfo = GetStateAsDictionary(matchState.State);
-                    HandlePlayerDeath(deadInfo["deadPlayerSessionId"]);
+                    HandlePlayerDeath(deadInfo["deadPlayerId"]);
                     break;
             }
         }
