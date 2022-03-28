@@ -1,8 +1,6 @@
 ﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.Progress;
-using CodeBase.StaticData;
-using UnityEngine;
 
 namespace CodeBase.States
 {
@@ -15,8 +13,9 @@ namespace CodeBase.States
         private readonly IGameUIFactory _gameUIFactory;
         private readonly GameStateMachine _stateMachine;
         private readonly IGameMenuService _gameMenuService;
+        private readonly INetworkPlayerFactory _networkPlayerFactory;
 
-        public GameLoopState(GameStateMachine stateMachine, IRoundService roundService, ISaveLoadProgressService saveLoadProgressService, IPlayerDataService playerData, IProgressService playerProgress, IGameUIFactory gameUIFactory, IGameMenuService gameMenuService)
+        public GameLoopState(GameStateMachine stateMachine, IRoundService roundService, ISaveLoadProgressService saveLoadProgressService, IPlayerDataService playerData, IProgressService playerProgress, IGameUIFactory gameUIFactory, IGameMenuService gameMenuService, INetworkPlayerFactory networkPlayerFactory)
         {
             _roundService = roundService;
             _saveLoadProgressService = saveLoadProgressService;
@@ -24,12 +23,13 @@ namespace CodeBase.States
             _playerProgress = playerProgress;
             _gameUIFactory = gameUIFactory;
             _gameMenuService = gameMenuService;
+            _networkPlayerFactory = networkPlayerFactory;
             _stateMachine = stateMachine;
         }
 
         public void Enter()
         {
-            Debug.LogError("Enter GameLoopState");
+            _networkPlayerFactory.Initialize();
             _roundService.CheckPlayersCountAndStartRound();
             _gameUIFactory.CreateRootIfNotExist();
             _gameUIFactory.SetExitCallback(BackToLobby);
@@ -39,15 +39,16 @@ namespace CodeBase.States
         public void Exit()
         {
             _saveLoadProgressService.SaveProgressForPlayer(_playerData.User.Username, _playerProgress.Progress);
-            _roundService.StopRound();
+            _roundService.LeaveRound();
             _roundService.Cleanup();
             _gameUIFactory.ClearExitCallback();
             _gameMenuService.Cleanup();
+            _networkPlayerFactory.CleanUp();
         }
 
         private void BackToLobby()
         {
-            _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
+            _stateMachine.Enter<LoadLobbyLevelState>();
         }
     }
 }

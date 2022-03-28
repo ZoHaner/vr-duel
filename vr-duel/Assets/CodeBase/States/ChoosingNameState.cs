@@ -2,6 +2,8 @@ using System.Linq;
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.UI;
+using CodeBase.StaticData;
+using CodeBase.Utilities;
 
 namespace CodeBase.States
 {
@@ -12,27 +14,32 @@ namespace CodeBase.States
         private readonly IPlayerDataService _playerDataService;
         private readonly IWindowService _windowService;
         private readonly IPlayerAccountsService _accountsService;
+        private readonly SceneLoader _sceneLoader;
+        private readonly IPlayerFactory _playerFactory;
 
-        public ChoosingNameState(GameStateMachine gameStateMachine, INameSelectorService nameSelectorService, IPlayerDataService playerDataService, IWindowService windowService, IPlayerAccountsService accountsService)
+        public ChoosingNameState(GameStateMachine gameStateMachine, INameSelectorService nameSelectorService, IPlayerDataService playerDataService, IWindowService windowService, IPlayerAccountsService accountsService, SceneLoader sceneLoader, IPlayerFactory playerFactory)
         {
             _gameStateMachine = gameStateMachine;
             _nameSelectorService = nameSelectorService;
             _playerDataService = playerDataService;
             _windowService = windowService;
             _accountsService = accountsService;
+            _sceneLoader = sceneLoader;
+            _playerFactory = playerFactory;
         }
 
-        public void Enter()
+        public void Enter() => 
+            _sceneLoader.Load(AssetsPath.NameSelectionSceneName, OnSceneLoaded);
+
+        private void OnSceneLoaded()
         {
+            _playerFactory.SpawnLocalPlayer();
+
+            _windowService.Open(_accountsService.GetAccountsList().Any() ? 
+                WindowId.ChoosePlayerName : 
+                WindowId.GeneratePlayerName);
+
             _nameSelectorService.OnSelect += OnSelectedName;
-
-            if (_accountsService.GetAccountsList().Any())
-            {
-                _windowService.Open(WindowId.ChoosePlayerName);
-                return;
-            }
-
-            _windowService.Open(WindowId.GeneratePlayerName);
         }
 
         private void OnSelectedName(string username)
@@ -45,15 +52,11 @@ namespace CodeBase.States
 
         private void CreateAccountIfNotExist(string username)
         {
-            if (!_accountsService.AccountExist(username))
-            {
+            if (!_accountsService.AccountExist(username)) 
                 _accountsService.SaveNewAccount(username);
-            }
         }
 
-        public void Exit()
-        {
+        public void Exit() => 
             _nameSelectorService.OnSelect -= OnSelectedName;
-        }
     }
 }

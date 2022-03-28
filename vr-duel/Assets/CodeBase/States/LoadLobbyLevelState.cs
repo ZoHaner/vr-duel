@@ -1,11 +1,12 @@
 ﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.UI;
+using CodeBase.StaticData;
 using CodeBase.Utilities;
 
 namespace CodeBase.States
 {
-    public class LoadLobbyLevelState : IPayloadedState<string>
+    public class LoadLobbyLevelState : IState
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -20,16 +21,16 @@ namespace CodeBase.States
             _playerFactory = playerFactory;
         }
 
-        public void Enter(string sceneName)
+        public void Enter()
         {
-            _sceneLoader.Load(sceneName, OnLoaded);
+            _sceneLoader.Load(AssetsPath.LobbySceneName, OnLoaded);
         }
 
         private void OnLoaded()
         {
             _playerFactory.SpawnLocalPlayer();
             _windowService.Open(WindowId.MatchesList);
-            _gameStateMachine.Enter<ChoosingNameState>();
+            _gameStateMachine.Enter<LobbyCycleState>();
         }
 
         public void Exit()

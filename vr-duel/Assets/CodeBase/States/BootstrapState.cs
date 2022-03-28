@@ -45,7 +45,7 @@ namespace CodeBase.States
         }
 
         private void EnterLoadLevel() =>
-            _stateMachine.Enter<LoadLobbyLevelState, string>(AssetsPath.LobbySceneName);
+            _stateMachine.Enter<ChoosingNameState>();
 
         private void RegisterServices()
         {
