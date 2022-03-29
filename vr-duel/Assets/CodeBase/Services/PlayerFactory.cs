@@ -1,25 +1,19 @@
 using CodeBase.Services.Input;
-using CodeBase.Services.Input.Standalone;
-using CodeBase.StaticData;
-using CodeBase.Utilities;
 using UnityEngine;
 
 namespace CodeBase.Services
 {
-    public class PlayerFactory : IPlayerFactory
+    public abstract class PlayerFactory : IPlayerFactory
     {
-        private IInputService _inputService;
+        protected readonly IInputService InputService;
 
-        public PlayerFactory(IInputService inputService)
+        protected PlayerFactory(IInputService inputService)
         {
-            _inputService = inputService;
+            InputService = inputService;
         }
-        
-        public GameObject SpawnLocalPlayer()
-        {
-            var player = ResourcesUtilities.Instantiate(AssetsPath.LocalPlayer);
-            player.GetComponent<PlayerMovement>().Construct(_inputService);
-            return player;
-        }
+
+        public abstract GameObject SpawnMovingLocalPlayer();
+
+        public abstract GameObject SpawnStaticLocalPlayer();
     }
 }

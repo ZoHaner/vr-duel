@@ -4,6 +4,7 @@ namespace CodeBase.Services
 {
     public interface IPlayerFactory : IService
     {
-        GameObject SpawnLocalPlayer();
+        GameObject SpawnMovingLocalPlayer();
+        GameObject SpawnStaticLocalPlayer();
     }
 }

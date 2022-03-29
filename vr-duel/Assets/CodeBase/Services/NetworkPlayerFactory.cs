@@ -57,7 +57,7 @@ namespace CodeBase.Services
             Debug.LogError("Spawn Player");
             var isLocal = user.UserId == LocalUserId;
             Debug.LogError($"Is local : {isLocal} ; user.UserId =  {user.UserId} ; localUser.UserId {LocalUserId}");
-            var playerPrefabPath = isLocal ? AssetsPath.LocalNetworkPlayer : AssetsPath.RemoteNetworkPlayer;
+            var playerPrefabPath = isLocal ? AssetsPath.LocalNetworkPlayerStandalone : AssetsPath.RemoteNetworkPlayerStandalone;
 
             var initialPoint = _pointHolder.GetInitialPoint();
             var player = ResourcesUtilities.Instantiate(playerPrefabPath, initialPoint);

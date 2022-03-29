@@ -33,7 +33,7 @@ namespace CodeBase.States
 
         private void OnSceneLoaded()
         {
-            _playerFactory.SpawnLocalPlayer();
+            _playerFactory.SpawnStaticLocalPlayer();
 
             _windowService.Open(_accountsService.GetAccountsList().Any() ? 
                 WindowId.ChoosePlayerName : 
