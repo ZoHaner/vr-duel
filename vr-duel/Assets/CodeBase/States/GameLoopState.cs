@@ -13,9 +13,9 @@ namespace CodeBase.States
         private readonly IGameUIFactory _gameUIFactory;
         private readonly GameStateMachine _stateMachine;
         private readonly IGameMenuService _gameMenuService;
-        private readonly INetworkPlayerFactory _networkPlayerFactory;
+        private readonly IPlayerFactory _playerFactory;
 
-        public GameLoopState(GameStateMachine stateMachine, IRoundService roundService, ISaveLoadProgressService saveLoadProgressService, IPlayerDataService playerData, IProgressService playerProgress, IGameUIFactory gameUIFactory, IGameMenuService gameMenuService, INetworkPlayerFactory networkPlayerFactory)
+        public GameLoopState(GameStateMachine stateMachine, IRoundService roundService, ISaveLoadProgressService saveLoadProgressService, IPlayerDataService playerData, IProgressService playerProgress, IGameUIFactory gameUIFactory, IGameMenuService gameMenuService, IPlayerFactory playerFactory)
         {
             _roundService = roundService;
             _saveLoadProgressService = saveLoadProgressService;
@@ -23,13 +23,13 @@ namespace CodeBase.States
             _playerProgress = playerProgress;
             _gameUIFactory = gameUIFactory;
             _gameMenuService = gameMenuService;
-            _networkPlayerFactory = networkPlayerFactory;
+            _playerFactory = playerFactory;
             _stateMachine = stateMachine;
         }
 
         public void Enter()
         {
-            _networkPlayerFactory.Initialize();
+            _playerFactory.Initialize();
             _roundService.CheckPlayersCountAndStartRound();
             _gameUIFactory.CreateRootIfNotExist();
             _gameUIFactory.SetExitCallback(BackToLobby);
@@ -43,7 +43,7 @@ namespace CodeBase.States
             _roundService.Cleanup();
             _gameUIFactory.ClearExitCallback();
             _gameMenuService.Cleanup();
-            _networkPlayerFactory.CleanUp();
+            _playerFactory.CleanUp();
         }
 
         private void BackToLobby()

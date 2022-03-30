@@ -1,3 +1,4 @@
+using Nakama;
 using UnityEngine;
 
 namespace CodeBase.Services
@@ -6,5 +7,9 @@ namespace CodeBase.Services
     {
         GameObject SpawnMovingLocalPlayer();
         GameObject SpawnStaticLocalPlayer();
+        GameObject SpawnLocalNetworkPlayer(string userId);
+        GameObject SpawnRemoteNetworkPlayer(IUserPresence presence, IRoundService roundService);
+        void Initialize();
+        void CleanUp();
     }
 }

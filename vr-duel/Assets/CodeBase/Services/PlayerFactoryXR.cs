@@ -1,28 +1,28 @@
 using CodeBase.Services.Input;
-using CodeBase.Services.Input.Standalone;
 using CodeBase.StaticData;
-using CodeBase.Utilities;
 using UnityEngine;
 
 namespace CodeBase.Services
 {
     public class PlayerFactoryXR : PlayerFactory
     {
-        public PlayerFactoryXR(IInputService inputService) : base(inputService)
+        public PlayerFactoryXR(IInputService inputService, INetworkService networkService) : base(inputService, networkService)
         {
         }
 
         public override GameObject SpawnMovingLocalPlayer()
         {
-            var player = ResourcesUtilities.Instantiate(AssetsPath.LocalPlayerXR);
-            player.GetComponent<PlayerMovement>().Construct(InputService);
-            return player;  
+            return SpawnMovingLocalPlayerBase(AssetsPath.LocalPlayerXR);
         }
 
         public override GameObject SpawnStaticLocalPlayer()
         {
-            var player = ResourcesUtilities.Instantiate(AssetsPath.LocalStaticPlayerXR);
-            return player;
+            return SpawnStaticLocalPlayerBase(AssetsPath.LocalStaticPlayerXR);
+        }
+
+        public override GameObject SpawnLocalNetworkPlayer(string userId)
+        {
+            return SpawnLocalNetworkPlayerBase(AssetsPath.LocalNetworkPlayerXR);
         }
     }
 }

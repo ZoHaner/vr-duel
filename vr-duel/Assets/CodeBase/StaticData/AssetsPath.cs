@@ -10,7 +10,7 @@
         public static string LocalStaticPlayerXR = "Player/XR/OfflineStaticPlayerWithRay";
         public static string LocalNetworkPlayerXR = "Player/XR/NetworkLocalPlayer";
 
-        public static string RemoteNetworkPlayerStandalone = "Player/NetworkRemotePlayer";
+        public static string RemoteNetworkPlayer = "Player/NetworkRemotePlayer";
         
         public const string Revolver = "Guns/Revolver";
         public const string ConfigHolder = "Network/Network Config Holder";
