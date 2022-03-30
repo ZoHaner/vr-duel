@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using CodeBase.Extensions;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -36,15 +37,15 @@ namespace CodeBase.Utilities.Network
         {
             return new Dictionary<string, string>
             {
-                { $"{prefix}.velocity.x", velocity.x.ToString() },
-                { $"{prefix}.velocity.y", velocity.y.ToString() },
-                { $"{prefix}.velocity.z", velocity.z.ToString() },
-                { $"{prefix}.position.x", position.x.ToString() },
-                { $"{prefix}.position.y", position.y.ToString() },
-                { $"{prefix}.position.z", position.z.ToString() },
-                { $"{prefix}.rotation.x", rotation.x.ToString() },
-                { $"{prefix}.rotation.y", rotation.y.ToString() },
-                { $"{prefix}.rotation.z", rotation.z.ToString() },
+                { $"{prefix}.velocity.x", velocity.x.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.velocity.y", velocity.y.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.velocity.z", velocity.z.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.position.x", position.x.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.position.y", position.y.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.position.z", position.z.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.rotation.x", rotation.x.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.rotation.y", rotation.y.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.rotation.z", rotation.z.ToString("F1", new CultureInfo("en-US").NumberFormat) },
             };
         }
 
