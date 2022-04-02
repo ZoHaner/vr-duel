@@ -1,9 +1,15 @@
+using Nakama;
 using UnityEngine;
 
 namespace CodeBase.Services
 {
     public interface IPlayerFactory : IService
     {
-        GameObject SpawnLocalPlayer();
+        GameObject SpawnMovingLocalPlayer();
+        GameObject SpawnStaticLocalPlayer();
+        GameObject SpawnLocalNetworkPlayer(string userId);
+        GameObject SpawnRemoteNetworkPlayer(IUserPresence presence, IRoundService roundService);
+        void Initialize();
+        void CleanUp();
     }
 }

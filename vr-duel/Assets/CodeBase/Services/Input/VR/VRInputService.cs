@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace CodeBase.Services.Input.VR
@@ -7,17 +6,17 @@ namespace CodeBase.Services.Input.VR
     {
         public Vector2 GetMoveAxis()
         {
-            throw new NotImplementedException();
+            return Vector2.zero;
         }
 
         public bool IsAttackButtonPressed()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool IsMenuButtonPressed()
         {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }

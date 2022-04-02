@@ -68,22 +68,24 @@ namespace CodeBase.States
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>(), _allServices.Single<IGameUIFactory>()));
 
             _allServices.Register<IGameMenuService>(new GameMenuService(_allServices.Single<IInputService>(), _allServices.Single<IWindowService>(), _allServices.Single<IUpdateProvider>()));
-            
-            _allServices.Register<IPlayerFactory>(new PlayerFactory(_allServices.Single<IInputService>()));
-            _allServices.Register<INetworkPlayerFactory>(new NetworkPlayerFactory(_allServices.Single<INetworkService>(), _allServices.Single<IInputService>()));
-            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<INetworkPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IWindowService>()));
+            RegisterPlayerFactory();
+            _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<IPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IWindowService>()));
         }
 
         private void RegisterInputService()
         {
             if (Application.isMobilePlatform)
-            {
                 _allServices.Register<IInputService>(new VRInputService());
-            }
             else
-            {
                 _allServices.Register<IInputService>(new StandaloneInputService());
-            }
+        }
+        
+        private void RegisterPlayerFactory()
+        {
+            if (Application.isMobilePlatform)
+                _allServices.Register<IPlayerFactory>(new PlayerFactoryXR(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>()));
+            else
+                _allServices.Register<IPlayerFactory>(new PlayerFactoryStandalone(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>()));
         }
 
         private void RegisterNetworkService()

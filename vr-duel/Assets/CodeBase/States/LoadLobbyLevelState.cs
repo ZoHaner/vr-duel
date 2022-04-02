@@ -28,7 +28,7 @@ namespace CodeBase.States
 
         private void OnLoaded()
         {
-            _playerFactory.SpawnLocalPlayer();
+            _playerFactory.SpawnMovingLocalPlayer();
             _windowService.Open(WindowId.MatchesList);
             _gameStateMachine.Enter<LobbyCycleState>();
         }

@@ -30,7 +30,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 850e926fd95c40158eaeb9a8e9df2000, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 5058650538970215793}
   Speed: 12
 --- !u!114 &2313722803893019445
 MonoBehaviour:
@@ -59,49 +58,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c170427bb7a47d597dbc189c1a0a4dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1559401180309873621
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4697803586031326744}
-  - component: {fileID: 341578412115850184}
-  m_Layer: 0
-  m_Name: XR Interaction Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4697803586031326744
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559401180309873621}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.1300001, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8965989037593818960}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &341578412115850184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1559401180309873621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e4e6cca11330d4088d729ab4fc9d9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6609258145052524784
@@ -324,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 341578412115850184}
+  m_InteractionManager: {fileID: 0}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -850,7 +806,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8042620825110895444, guid: bfb686198ee294109a0a491c72ffe81e, type: 3}
       propertyPath: m_Name
-      value: Local Player
+      value: OfflinePlayerWithRay
       objectReference: {fileID: 0}
     - target: {fileID: 8042620825526709578, guid: bfb686198ee294109a0a491c72ffe81e, type: 3}
       propertyPath: m_LocalPosition.x

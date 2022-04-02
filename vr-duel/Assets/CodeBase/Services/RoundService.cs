@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CodeBase.Behaviours.Player.Remote;
 using CodeBase.Services.Progress;
 using CodeBase.Services.UI;
 using CodeBase.StaticData;
@@ -28,8 +29,8 @@ namespace CodeBase.Services
         private const int MinPlayers = 2;
 
         private readonly INetworkService _networkService;
-        private readonly INetworkPlayerFactory _playerFactory;
         private readonly IProgressService _progressService;
+        private readonly IPlayerFactory _playerFactory;
         private readonly IPlayerDataService _playerData;
         private readonly IWindowService _windowService;
 
@@ -39,7 +40,7 @@ namespace CodeBase.Services
         private RoundState _roundState = RoundState.Disable;
         private IMatch _currentMatch;
 
-        public RoundService(INetworkService networkService, INetworkPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
+        public RoundService(INetworkService networkService, IPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
         {
             _networkService = networkService;
             _playerFactory = playerFactory;
@@ -67,6 +68,7 @@ namespace CodeBase.Services
 
             PlayerDeath -= OnPlayerDeath;
 
+            RemoveAllPlayers();
             _waitingPlayers.Clear();
             _createdPlayers.Clear();
         }
@@ -98,7 +100,7 @@ namespace CodeBase.Services
 
         private void CacheLocalUser(IMatchmakerMatched matched)
         {
-            _playerFactory.LocalUserId = matched.Self.Presence.UserId;
+            LocalUserId = matched.Self.Presence.UserId;
 
             _roundState = RoundState.WaitForPlayers;
         }
@@ -131,8 +133,8 @@ namespace CodeBase.Services
                     UpdateWaitList(matchPresenceEvent.Joins, matchPresenceEvent.Leaves);
                     break;
                 case RoundState.Playing:
-                    _playerFactory.SpawnPlayers(matchPresenceEvent.Joins, this);
-                    _playerFactory.RemovePlayers(matchPresenceEvent.Leaves);
+                    SpawnPlayers(matchPresenceEvent.Joins);
+                    RemovePlayers(matchPresenceEvent.Leaves);
                     break;
             }
         }
@@ -143,7 +145,7 @@ namespace CodeBase.Services
             {
                 case OpCodes.VelocityAndPosition:
                 case OpCodes.Input:
-                    _playerFactory.UpdatePlayersState(matchState);
+                    UpdatePlayersState(matchState);
                     break;
                 case OpCodes.Died:
                     Debug.LogError("Got a died match state. Deleting session id : " + matchState.UserPresence);
@@ -166,12 +168,11 @@ namespace CodeBase.Services
         {
             var playerToRemove = _createdPlayers.First(p => p.UserId == userId);
 
-            _playerFactory.DeactivatePlayer(userId);
+            DeactivatePlayer(userId);
             _createdPlayers.Remove(playerToRemove);
             AddPlayerToWaitList(playerToRemove);
             CheckFinishRound();
         }
-
 
         private void UpdateWaitList(IEnumerable<IUserPresence> newUsers, IEnumerable<IUserPresence> leaveUsers)
         {
@@ -197,7 +198,7 @@ namespace CodeBase.Services
         private void StartRound()
         {
             Debug.LogError("StartRound");
-            _playerFactory.SpawnPlayers(_waitingPlayers, this);
+            SpawnPlayers(_waitingPlayers);
             _createdPlayers = new List<IUserPresence>(_waitingPlayers);
             _waitingPlayers.Clear();
 
@@ -207,7 +208,7 @@ namespace CodeBase.Services
         private void CheckFinishRound()
         {
             Debug.LogError("CheckFinishRound");
-            if (_playerFactory.PlayersCount == 1)
+            if (PlayersCount == 1)
             {
                 FinishRound();
             }
@@ -250,7 +251,7 @@ namespace CodeBase.Services
             AddPlayersToWaitList(_createdPlayers);
             _createdPlayers.Clear();
 
-            _playerFactory.RemoveAllPlayers();
+            RemoveAllPlayers();
             _windowService.CloseAllWindows();
 
             if (EnoughPlayers())
@@ -282,6 +283,93 @@ namespace CodeBase.Services
         private IDictionary<string, string> GetStateAsDictionary(byte[] state)
         {
             return Encoding.UTF8.GetString(state).FromJson<Dictionary<string, string>>();
+        }
+        
+        // from factory
+        
+        
+        
+        private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
+        Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
+        public int PlayersCount => _players.Count;
+        public string LocalUserId { get; set; }
+        
+        
+        public void SpawnPlayers(IEnumerable<IUserPresence> presences)
+        {
+            foreach (var presence in presences)
+            {
+                var isLocal = presence.UserId == LocalUserId;
+                GameObject player;
+                if (isLocal)
+                {
+                    player = _playerFactory.SpawnLocalNetworkPlayer(presence.UserId);
+                }
+                else
+                {
+                    player = _playerFactory.SpawnRemoteNetworkPlayer(presence, this);
+                }
+                
+                _players.Add(presence.UserId, player);
+            }
+        }
+        public void RemovePlayers(IEnumerable<IUserPresence> userPresences)
+        {
+            foreach (var presence in userPresences)
+            {
+                if (_players.ContainsKey(presence.UserId))
+                {
+                    RemovePlayer(presence.UserId);
+                }
+            }
+        }
+
+        public void RemovePlayer(string userId)
+        {
+            Debug.LogError("Remove player");
+            var player = _players[userId];
+            _players.Remove(userId);
+            UnityEngine.Object.Destroy(player);
+        }
+
+        // Todo shouldn't destroy player
+        public void DeactivatePlayer(string userId)
+        {
+            Debug.LogError("Deactivate Player");
+            var player = _players[userId];
+            _players.Remove(userId);
+            UnityEngine.Object.Destroy(player, 1.5f);
+        }
+
+        public void UpdatePlayersState(IMatchState state)
+        {
+            string userId = state.UserPresence.UserId;
+
+            if (!_players.ContainsKey(userId))
+            {
+                return;
+            }
+
+            if (IsRemotePlayer(userId))
+            {
+                _players[userId].GetComponent<RemotePlayerSync>().UpdateState(state);
+            }
+        }
+
+        public void RemoveAllPlayers()
+        {
+            foreach (var player in _players)
+            {
+                UnityEngine.Object.Destroy(player.Value);
+            }
+            
+            _players.Clear();
+        }
+
+
+        private bool IsRemotePlayer(string userId)
+        {
+            return userId != LocalUserId;
         }
     }
 }
