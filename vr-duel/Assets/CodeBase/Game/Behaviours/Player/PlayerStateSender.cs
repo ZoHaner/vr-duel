@@ -1,7 +1,5 @@
 using CodeBase.Services;
 using CodeBase.Services.Input;
-using CodeBase.StaticData;
-using CodeBase.Utilities.Network;
 using UnityEngine;
 
 namespace CodeBase.Behaviours.Player

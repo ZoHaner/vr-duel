@@ -18,16 +18,14 @@ namespace CodeBase.States
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly AllServices _allServices;
-        private readonly UnityWebRequestAdapter _unityWebRequestAdapter;
         private readonly MainThreadDispatcher _mainThreadDispatcher;
         private readonly IUpdateProvider _updateProvider;
 
-        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices allServices, UnityWebRequestAdapter unityWebRequestAdapter, MainThreadDispatcher mainThreadDispatcher, IUpdateProvider updateProvider)
+        public BootstrapState(GameStateMachine stateMachine, SceneLoader sceneLoader, AllServices allServices, MainThreadDispatcher mainThreadDispatcher, IUpdateProvider updateProvider)
         {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
             _allServices = allServices;
-            _unityWebRequestAdapter = unityWebRequestAdapter;
             _mainThreadDispatcher = mainThreadDispatcher;
             _updateProvider = updateProvider;
 

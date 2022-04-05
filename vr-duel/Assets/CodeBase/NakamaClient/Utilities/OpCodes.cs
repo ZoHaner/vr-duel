@@ -1,4 +1,4 @@
-namespace CodeBase.StaticData
+namespace CodeBase.NakamaClient.Utilities
 {
     public class OpCodes
     {

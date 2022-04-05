@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CodeBase.Extensions
+namespace CodeBase.NakamaClient.Extensions
 {
     public static class CollectionExtensions
     {

@@ -14,7 +14,6 @@ namespace CodeBase
         public Game(ICoroutineRunner coroutineRunner,
             LoadingCurtain loadingCurtain,
             MainThreadDispatcher mainThreadDispatcher,
-            UnityWebRequestAdapter unityWebRequestAdapter,
             UpdateProvider updateProvider,
             AllServices allServices)
         {
@@ -23,8 +22,7 @@ namespace CodeBase
                 loadingCurtain,
                 allServices,
                 mainThreadDispatcher, 
-                updateProvider,
-                unityWebRequestAdapter);
+                updateProvider);
         }
     }
 }

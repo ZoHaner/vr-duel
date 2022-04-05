@@ -15,7 +15,7 @@ namespace CodeBase
 
         private void Awake()
         {
-            _game = new Game(this, Curtain, MainThreadDispatcher.Instance, UnityWebRequestAdapter.Instance, UpdateProvider.Instance, AllServices.Container);
+            _game = new Game(this, Curtain, MainThreadDispatcher.Instance, UpdateProvider.Instance, AllServices.Container);
             _game.StateMachine.Enter<BootstrapState>();
             
             DontDestroyOnLoad(this);

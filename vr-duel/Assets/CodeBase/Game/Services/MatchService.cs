@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeBase.Behaviours.Player.Remote;
+using CodeBase.NetworkAPI.Messaging;
 using CodeBase.Services.Progress;
 using CodeBase.Services.UI;
-using CodeBase.StaticData;
-using CodeBase.Utilities.Network;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;
@@ -34,19 +33,22 @@ namespace CodeBase.Services
         private readonly IPlayerDataService _playerData;
         private readonly IWindowService _windowService;
 
+        private readonly IPlayerDeathSender _playerDeathSender;
+        
         private readonly List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
 
         private RoundState _roundState = RoundState.WaitForPlayers;
         private IMatch _currentMatch;
 
-        public MatchService(INetworkService networkService, IPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
+        public MatchService(INetworkService networkService, IPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService, IPlayerDeathSender playerDeathSender)
         {
             _networkService = networkService;
             _playerFactory = playerFactory;
             _progressService = progressService;
             _playerData = playerData;
             _windowService = windowService;
+            _playerDeathSender = playerDeathSender;
         }
 
         public void SubscribeEvents()
@@ -162,7 +164,7 @@ namespace CodeBase.Services
         /// </summary>
         private void OnPlayerDeath(IUserPresence userPresence)
         {
-            _networkService.SendMatchState(OpCodes.Died, MatchDataJson.Died(userPresence.UserId));
+            _playerDeathSender.SendMatchState(OpCodes.Died, MatchDataJson.Died(userPresence.UserId));
             HandlePlayerDeath(userPresence.UserId);
         }
 
@@ -293,6 +295,8 @@ namespace CodeBase.Services
         
         private readonly Vector3 _gunPivotOffset = new Vector3(0.4f, 0.7f, 0f);
         Dictionary<string, GameObject> _players = new Dictionary<string, GameObject>();
+        
+        
         public int PlayersCount => _players.Count;
         public string LocalUserId { get; set; }
         

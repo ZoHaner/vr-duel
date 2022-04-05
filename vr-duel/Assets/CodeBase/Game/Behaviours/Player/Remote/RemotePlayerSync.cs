@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Text;
 using CodeBase.Behaviours.Gun;
 using CodeBase.Entities;
-using CodeBase.StaticData;
 using Nakama;
 using Nakama.TinyJson;
 using UnityEngine;

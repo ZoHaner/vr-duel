@@ -16,11 +16,11 @@ namespace CodeBase.Infrastructure.StateMachine
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, LoadingCurtain curtain, AllServices allServices, MainThreadDispatcher dispatcher, UpdateProvider updateProvider, UnityWebRequestAdapter adapter)
+        public GameStateMachine(SceneLoader sceneLoader, LoadingCurtain curtain, AllServices allServices, MainThreadDispatcher dispatcher, UpdateProvider updateProvider)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, adapter, dispatcher, updateProvider),
+                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, allServices, updateProvider),
                 [typeof(ChoosingNameState)] = new ChoosingNameState(this, allServices.Single<INameSelectorService>(), allServices.Single<IPlayerDataService>(), allServices.Single<IWindowService>(), allServices.Single<IPlayerAccountsService>(), sceneLoader, allServices.Single<IPlayerFactory>()),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, allServices.Single<IProgressService>(), allServices.Single<ISaveLoadProgressService>(), allServices.Single<IPlayerDataService>()),
                 [typeof(LoadLobbyLevelState)] = new LoadLobbyLevelState(this, sceneLoader, allServices.Single<IWindowService>(), allServices.Single<IPlayerFactory>()),

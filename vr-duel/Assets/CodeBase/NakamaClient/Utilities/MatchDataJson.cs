@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Globalization;
-using CodeBase.Extensions;
+using CodeBase.NakamaClient.Extensions;
 using Nakama.TinyJson;
 using UnityEngine;
 
-namespace CodeBase.Utilities.Network
+namespace CodeBase.NakamaClient.Utilities
 {
     /// <summary>
     /// A static class that creates JSON string network messages.
