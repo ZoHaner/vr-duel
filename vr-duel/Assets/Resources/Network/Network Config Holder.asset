@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Network Config Holder
   m_EditorClassIdentifier: 
   _configs:
-  - IsActive: 0
+  - IsActive: 1
     Scheme: http
     Host: localhost
     Port: 7350
     ServerKey: defaultkey
-  - IsActive: 1
+  - IsActive: 0
     Scheme: http
     Host: 192.168.0.16
     Port: 7350
