@@ -1,0 +1,17 @@
+{
+    "name": "NakamaClient",
+    "rootNamespace": "",
+    "references": [
+        "GUID:104181370e28646349ffb0cf5bb86723",
+        "GUID:69810832b544b46da9804f1af9373521"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
