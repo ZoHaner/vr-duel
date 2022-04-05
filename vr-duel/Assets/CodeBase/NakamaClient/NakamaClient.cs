@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Nakama;
 
-public class NakamaClient : MonoBehaviour
+namespace CodeBase.NakamaClient
 {
-    // Start is called before the first frame update
-    void Start()
+    public class NakamaClient : NetworkAPI.IClient
     {
-        
-    }
+        public IClient Client { get; private set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private readonly UnityWebRequestAdapter _adapter;
+
+        public NakamaClient(UnityWebRequestAdapter adapter)
+        {
+            _adapter = adapter;
+        }
+
+        public void CreateClient(string scheme, string host, int port, string serverKey)
+        {
+            Client = new Client(scheme, host, port, serverKey, _adapter);
+        }
     }
 }

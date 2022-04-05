@@ -1,4 +1,4 @@
-namespace CodeBase.NetworkAPI
+namespace CodeBase.NetworkAPI.Messaging
 {
     public interface IPlayerPositionSender
     {

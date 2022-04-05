@@ -1,20 +1,21 @@
 using System.Threading.Tasks;
+using CodeBase.NetworkAPI;
 using Nakama;
 using UnityEngine;
 
-namespace CodeBase.Entities.NetworkTest
+namespace CodeBase.NakamaClient
 {
-    public class ConnectionService : IConnectionService
+    public class ConnectionService : IServerConnector
     {
         public ISocket Socket { get; private set; }
 
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IClientService _clientService;
+        private readonly Authenticator _authenticator;
+        private readonly NakamaClient _nakamaClient;
 
-        public ConnectionService(IAuthenticationService authenticationService, IClientService clientService)
+        public ConnectionService(Authenticator authenticator, NakamaClient nakamaClient)
         {
-            _clientService = clientService;
-            _authenticationService = authenticationService;
+            _nakamaClient = nakamaClient;
+            _authenticator = authenticator;
         }
 
         public bool IsConnected()
@@ -30,7 +31,7 @@ namespace CodeBase.Entities.NetworkTest
             if (Socket == null)
                 CreateSocket();
 
-            await Socket.ConnectAsync(_authenticationService.Session, true);
+            await Socket.ConnectAsync(_authenticator.Session, true);
         }
 
         public async Task DisconnectAsync()
@@ -44,7 +45,7 @@ namespace CodeBase.Entities.NetworkTest
 
         private void CreateSocket()
         {
-            Socket = _clientService.Client.NewSocket();
+            Socket = _nakamaClient.Client.NewSocket();
         }
     }
 }
