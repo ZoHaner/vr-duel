@@ -4,7 +4,7 @@ namespace CodeBase.NetworkAPI
 {
     public interface IMatchFinder
     {
-        Task StartMatchFinding();
-        Task CancelMatchFinding();
+        Task StartMatchFindingAsync();
+        Task CancelMatchFindingAsync();
     }
 }

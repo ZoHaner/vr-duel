@@ -19,7 +19,7 @@ namespace CodeBase.NakamaClient
             _connectionService = connectionService;
         }
 
-        public async Task StartMatchFinding()
+        public async Task StartMatchFindingAsync()
         {
             Debug.LogError("Finding match ...");
             var matchmakerTicket = await _connectionService.Socket.AddMatchmakerAsync(Query, MinPlayers, MaxPlayers);
@@ -27,7 +27,7 @@ namespace CodeBase.NakamaClient
             Debug.LogError("Ticket : " + _ticket);
         }
 
-        public async Task CancelMatchFinding()
+        public async Task CancelMatchFindingAsync()
         {
             await _connectionService.Socket.RemoveMatchmakerAsync(_ticket);
         }
