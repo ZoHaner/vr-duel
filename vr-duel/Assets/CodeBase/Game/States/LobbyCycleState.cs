@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using CodeBase.Entities.NetworkTest;
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.UI;

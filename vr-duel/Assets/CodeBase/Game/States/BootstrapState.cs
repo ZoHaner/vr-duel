@@ -1,5 +1,4 @@
-﻿using CodeBase.Entities.NetworkTest;
-using CodeBase.Infrastructure.StateMachine;
+﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
@@ -10,7 +9,6 @@ using CodeBase.Services.Singletons;
 using CodeBase.Services.UI;
 using CodeBase.StaticData;
 using CodeBase.Utilities;
-using Nakama;
 using UnityEngine;
 
 namespace CodeBase.States

@@ -8,7 +8,6 @@ using CodeBase.Services.UI;
 using CodeBase.States;
 using CodeBase.UI;
 using CodeBase.Utilities;
-using Nakama;
 
 namespace CodeBase.Infrastructure.StateMachine
 {
