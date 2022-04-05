@@ -1,3 +1,4 @@
+using CodeBase.ServiceLocator;
 using Nakama;
 using UnityEngine;
 

@@ -1,3 +1,4 @@
+using CodeBase.ServiceLocator;
 using UnityEngine;
 
 namespace CodeBase.Services.UI

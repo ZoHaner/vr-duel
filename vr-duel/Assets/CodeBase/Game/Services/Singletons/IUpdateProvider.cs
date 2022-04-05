@@ -1,4 +1,5 @@
 using System;
+using CodeBase.ServiceLocator;
 
 namespace CodeBase.Services.Singletons
 {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using CodeBase.Entities;
+using CodeBase.ServiceLocator;
 
 namespace CodeBase.Services
 {

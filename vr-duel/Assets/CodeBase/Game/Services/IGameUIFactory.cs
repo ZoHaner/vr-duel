@@ -1,4 +1,5 @@
 using System;
+using CodeBase.ServiceLocator;
 using CodeBase.Services.UI;
 using UnityEngine;
 

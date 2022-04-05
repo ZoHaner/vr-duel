@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using CodeBase.ServiceLocator;
 using CodeBase.Services;
 using CodeBase.Services.Progress;
-using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.Singletons;
 using CodeBase.Services.UI;
 using CodeBase.States;

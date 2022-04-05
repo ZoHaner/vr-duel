@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
+using CodeBase.ServiceLocator;
 
 namespace CodeBase.Services.Singletons
 {

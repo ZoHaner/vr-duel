@@ -1,4 +1,4 @@
-namespace CodeBase.Services
+namespace CodeBase.ServiceLocator
 {
     public interface IService
     {

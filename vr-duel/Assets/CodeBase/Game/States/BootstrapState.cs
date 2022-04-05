@@ -1,10 +1,10 @@
 ﻿using CodeBase.Infrastructure.StateMachine;
+using CodeBase.ServiceLocator;
 using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
 using CodeBase.Services.Input.VR;
 using CodeBase.Services.Progress;
-using CodeBase.Services.ServiceLocator;
 using CodeBase.Services.Singletons;
 using CodeBase.Services.UI;
 using CodeBase.StaticData;

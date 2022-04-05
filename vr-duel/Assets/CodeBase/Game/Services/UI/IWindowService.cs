@@ -1,3 +1,5 @@
+using CodeBase.ServiceLocator;
+
 namespace CodeBase.Services.UI
 {
     public interface IWindowService : IService

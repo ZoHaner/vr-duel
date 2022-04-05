@@ -1,11 +1,11 @@
+using CodeBase.Infrastructure;
 using CodeBase.Infrastructure.StateMachine;
-using CodeBase.Services.ServiceLocator;
+using CodeBase.ServiceLocator;
 using CodeBase.Services.Singletons;
 using CodeBase.UI;
 using CodeBase.Utilities;
-using Nakama;
 
-namespace CodeBase.Infrastructure
+namespace CodeBase
 {
     public class Game
     {

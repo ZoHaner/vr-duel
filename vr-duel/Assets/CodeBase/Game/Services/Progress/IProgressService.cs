@@ -1,4 +1,5 @@
 using CodeBase.Entities;
+using CodeBase.ServiceLocator;
 
 namespace CodeBase.Services.Progress
 {

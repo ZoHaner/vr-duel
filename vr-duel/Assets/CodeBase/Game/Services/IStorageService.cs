@@ -1,3 +1,5 @@
+using CodeBase.ServiceLocator;
+
 namespace CodeBase.Services
 {
     public interface IStorageService : IService

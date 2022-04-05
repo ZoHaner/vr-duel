@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using CodeBase.ServiceLocator;
 using Nakama;
 
 namespace CodeBase.Services

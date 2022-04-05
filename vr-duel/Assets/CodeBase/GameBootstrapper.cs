@@ -1,11 +1,11 @@
-using CodeBase.Services.ServiceLocator;
+using CodeBase.Infrastructure;
+using CodeBase.ServiceLocator;
 using CodeBase.Services.Singletons;
 using CodeBase.States;
 using CodeBase.UI;
-using Nakama;
 using UnityEngine;
 
-namespace CodeBase.Infrastructure
+namespace CodeBase
 {
     public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
     {

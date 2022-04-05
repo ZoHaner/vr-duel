@@ -1,4 +1,5 @@
 using System;
+using CodeBase.ServiceLocator;
 using Nakama;
 
 namespace CodeBase.Services
