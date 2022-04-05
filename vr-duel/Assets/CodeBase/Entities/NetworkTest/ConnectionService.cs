@@ -17,6 +17,14 @@ namespace CodeBase.Entities.NetworkTest
             _authenticationService = authenticationService;
         }
 
+        public bool IsConnected()
+        {
+            if (Socket != null)
+                return Socket.IsConnected;
+
+            return false;
+        }
+        
         public async Task ConnectAsync()
         {
             if (Socket == null)
