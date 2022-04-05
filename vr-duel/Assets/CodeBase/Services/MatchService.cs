@@ -21,7 +21,7 @@ namespace CodeBase.Services
         Playing
     }
 
-    public class RoundService : IRoundService
+    public class MatchService : IRoundService
     {
         public Action<IUserPresence> PlayerDeath { get; set; }
 
@@ -37,10 +37,10 @@ namespace CodeBase.Services
         private readonly List<IUserPresence> _waitingPlayers = new List<IUserPresence>();
         private List<IUserPresence> _createdPlayers = new List<IUserPresence>();
 
-        private RoundState _roundState = RoundState.Disable;
+        private RoundState _roundState = RoundState.WaitForPlayers;
         private IMatch _currentMatch;
 
-        public RoundService(INetworkService networkService, IPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
+        public MatchService(INetworkService networkService, IPlayerFactory playerFactory, IProgressService progressService, IPlayerDataService playerData, IWindowService windowService)
         {
             _networkService = networkService;
             _playerFactory = playerFactory;
@@ -51,7 +51,7 @@ namespace CodeBase.Services
 
         public void SubscribeEvents()
         {
-            _networkService.ReceivedMatchmakerMatched += CacheLocalUser;
+            // _networkService.ReceivedMatchmakerMatched += CacheLocalUser;
             _networkService.MatchJoined += MatchJoined;
             _networkService.ReceivedMatchPresence += ReceivedMatchPresence;
             _networkService.ReceivedMatchState += ReceivedMatchState;
@@ -61,7 +61,7 @@ namespace CodeBase.Services
 
         public void Cleanup()
         {
-            _networkService.ReceivedMatchmakerMatched -= CacheLocalUser;
+            // _networkService.ReceivedMatchmakerMatched -= CacheLocalUser;
             _networkService.MatchJoined -= MatchJoined;
             _networkService.ReceivedMatchPresence -= ReceivedMatchPresence;
             _networkService.ReceivedMatchState -= ReceivedMatchState;
@@ -98,28 +98,30 @@ namespace CodeBase.Services
         }
 
 
-        private void CacheLocalUser(IMatchmakerMatched matched)
+        private void CacheLocalUser(string localUserId)
         {
-            LocalUserId = matched.Self.Presence.UserId;
-
-            _roundState = RoundState.WaitForPlayers;
+            LocalUserId = localUserId;
         }
 
         private void MatchJoined(IMatch match)
         {
+            CacheLocalUser(match.Self.UserId);
+            // _roundState = RoundState.WaitForPlayers;
             _currentMatch = match;
-            switch (_roundState)
-            {
-                case RoundState.Disable:
-                    AddPlayersToWaitList(match.Presences);
-                    break;
-                case RoundState.WaitForPlayers:
-                    AddPlayersToWaitList(match.Presences);
-                    break;
-                case RoundState.Playing:
-                    Debug.LogError("You shouldn't be here");
-                    break;
-            }
+            AddPlayersToWaitList(match.Presences);
+            
+            // switch (_roundState)
+            // {
+            //     case RoundState.Disable:
+            //         AddPlayersToWaitList(match.Presences);
+            //         break;
+            //     case RoundState.WaitForPlayers:
+            //         AddPlayersToWaitList(match.Presences);
+            //         break;
+            //     case RoundState.Playing:
+            //         Debug.LogError("You shouldn't be here");
+            //         break;
+            // }
         }
 
         private void ReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
