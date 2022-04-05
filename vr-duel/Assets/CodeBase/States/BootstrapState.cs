@@ -1,4 +1,5 @@
-﻿using CodeBase.Infrastructure.StateMachine;
+﻿using CodeBase.Entities.NetworkTest;
+using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
@@ -55,6 +56,7 @@ namespace CodeBase.States
 
             _allServices.Register<IStorageService>(new StorageService());
             _allServices.Register<IPlayerDataService>(new PlayerDataService());
+            RegisterNakamaServices();
             RegisterNetworkService();
             RegisterStaticDataService();
 
@@ -62,7 +64,7 @@ namespace CodeBase.States
             _allServices.Register<INameSelectorService>(new NameSelectorService());
             _allServices.Register<ISaveLoadProgressService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
-           
+
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
             _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>()));
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>(), _allServices.Single<IGameUIFactory>()));
@@ -79,13 +81,20 @@ namespace CodeBase.States
             else
                 _allServices.Register<IInputService>(new StandaloneInputService());
         }
-        
+
         private void RegisterPlayerFactory()
         {
             if (Application.isMobilePlatform)
                 _allServices.Register<IPlayerFactory>(new PlayerFactoryXR(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>()));
             else
                 _allServices.Register<IPlayerFactory>(new PlayerFactoryStandalone(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>()));
+        }
+
+        private void RegisterNakamaServices()
+        {
+            _allServices.Register<IClientService>(new ClientService(_unityWebRequestAdapter));
+            _allServices.Register<IAuthenticationService>(new AuthenticationService(_allServices.Single<IClientService>()));
+            _allServices.Register<IConnectionService>(new ConnectionService(_allServices.Single<IAuthenticationService>(), _allServices.Single<IClientService>()));
         }
 
         private void RegisterNetworkService()
