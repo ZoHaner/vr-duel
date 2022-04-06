@@ -18,7 +18,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5892515897636292870
+--- !u!114 &8802415274429695211
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27,10 +27,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8965989037593818958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 850e926fd95c40158eaeb9a8e9df2000, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ade20ec6fe0483898e0b2cef4bac1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _controller: {fileID: 5058650538970215793}
   Speed: 12
 --- !u!114 &2313722803893019445
 MonoBehaviour:
@@ -292,7 +291,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8042620825110895444, guid: bfb686198ee294109a0a491c72ffe81e, type: 3}
       propertyPath: m_Name
-      value: Standalone Player
+      value: NetworkLocalPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 8042620825526709578, guid: bfb686198ee294109a0a491c72ffe81e, type: 3}
       propertyPath: m_LocalPosition.x

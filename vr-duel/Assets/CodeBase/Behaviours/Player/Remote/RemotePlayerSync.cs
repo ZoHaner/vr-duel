@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using CodeBase.Behaviours.Gun;
 using CodeBase.Entities;
@@ -84,12 +85,11 @@ namespace CodeBase.Behaviours.Player.Remote
         private Vector3 GetPositionFromDictionary(IDictionary<string, string> dictionary, string prefix, string attribute)
         {
             return new Vector3(
-                float.Parse(dictionary[$"{prefix}.{attribute}.x"]),
-                float.Parse(dictionary[$"{prefix}.{attribute}.y"]),
-                float.Parse(dictionary[$"{prefix}.{attribute}.z"])
+                float.Parse(dictionary[$"{prefix}.{attribute}.x"], new CultureInfo("en-US")),
+                float.Parse(dictionary[$"{prefix}.{attribute}.y"], new CultureInfo("en-US")),
+                float.Parse(dictionary[$"{prefix}.{attribute}.z"], new CultureInfo("en-US"))
             );
         }
-
 
         private IDictionary<string, string> GetStateAsDictionary(byte[] state)
         {
