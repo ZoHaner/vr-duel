@@ -5,30 +5,37 @@ namespace CodeBase.Services.Input.VR
 {
     public class VRInputService : IInputService
     {
-        private readonly Control<bool> _gunControl = new Control<bool>(XRNode.RightHand, CommonUsages.triggerButton);
-        private readonly Control<bool> _menuControl = new Control<bool>(XRNode.LeftHand, CommonUsages.menuButton);
-        private readonly Control<Vector2> _movingControl = new Control<Vector2>(XRNode.LeftHand, CommonUsages.primary2DAxis);
+        private readonly XRInputBool _gunControl1 = new XRInputBool(XRNode.RightHand, CommonUsages.triggerButton, PressType.Begin);
+        private readonly XRInputBool _menuControl1 = new XRInputBool(XRNode.LeftHand, CommonUsages.menuButton, PressType.Begin);
+        private readonly XRInputAxis _movingControl1 = new XRInputAxis(XRNode.LeftHand, CommonUsages.primary2DAxis);
         
-        private readonly XRInputSystem _xrInputSystem;
+        private readonly XRInputUpdater _xrInputUpdater;
 
-        public VRInputService()
+        public VRInputService(XRInputUpdater xrInputUpdater)
         {
-            _xrInputSystem = new XRInputSystem();
+            _xrInputUpdater = xrInputUpdater;
         }
-        
-        public Vector2 GetMoveAxis()
+
+        public void Initialize()
         {
-            return _xrInputSystem.GetControllerInputValue(_movingControl.Hand, _movingControl.Button);
+            _xrInputUpdater.AddBinding(_gunControl1);
+            _xrInputUpdater.AddBinding(_menuControl1);
+            _xrInputUpdater.AddBinding(_movingControl1);
         }
 
         public bool IsAttackButtonPressed()
         {
-            return _xrInputSystem.GetControllerInputValue(_gunControl.Hand, _gunControl.Button);
+            return _gunControl1.Value;
         }
 
         public bool IsMenuButtonPressed()
         {
-            return _xrInputSystem.GetControllerInputValue(_menuControl.Hand, _menuControl.Button);
+            return _menuControl1.Value;
+        }
+
+        public Vector2 GetMoveAxis()
+        {
+            return _movingControl1.Value;
         }
     }
 }

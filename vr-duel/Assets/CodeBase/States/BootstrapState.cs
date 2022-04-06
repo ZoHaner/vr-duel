@@ -75,7 +75,13 @@ namespace CodeBase.States
         private void RegisterInputService()
         {
             if (Application.isMobilePlatform)
-                _allServices.Register<IInputService>(new VRInputService());
+            {
+                var xrInputSystem = new XRInputUpdater(_updateProvider);
+                xrInputSystem.Initialize();
+                var vrInputService = new VRInputService(xrInputSystem);
+                vrInputService.Initialize();
+                _allServices.Register<IInputService>(vrInputService);
+            }
             else
                 _allServices.Register<IInputService>(new StandaloneInputService());
         }
