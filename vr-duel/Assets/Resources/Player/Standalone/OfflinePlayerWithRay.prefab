@@ -18,7 +18,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5892515897636292870
+--- !u!114 &9062812592581512866
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27,7 +27,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8965989037593818958}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 850e926fd95c40158eaeb9a8e9df2000, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ade20ec6fe0483898e0b2cef4bac1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 12

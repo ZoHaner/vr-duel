@@ -140,7 +140,7 @@ MonoBehaviour:
   m_CameraFloorOffsetObject: {fileID: 26372861764199027}
   m_RequestedTrackingOriginMode: 0
   m_CameraYOffset: 1.1176
---- !u!114 &7645686160042868120
+--- !u!114 &8437322525837457585
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,10 +149,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 26372861349294983}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 850e926fd95c40158eaeb9a8e9df2000, type: 3}
+  m_Script: {fileID: 11500000, guid: b371ad53fd1f4e36a4e08b5beb9fc76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 12
+  _playerCamera: {fileID: 26372860641251782}
 --- !u!114 &849376678480083724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -719,6 +720,11 @@ Transform:
 --- !u!1 &26372860641251783 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8042620823664605460, guid: bfb686198ee294109a0a491c72ffe81e, type: 3}
+  m_PrefabInstance: {fileID: 8052595550434601171}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &26372860641251782 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8042620823664605461, guid: bfb686198ee294109a0a491c72ffe81e, type: 3}
   m_PrefabInstance: {fileID: 8052595550434601171}
   m_PrefabAsset: {fileID: 0}
 --- !u!20 &26372860641251803 stripped
