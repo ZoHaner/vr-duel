@@ -16,7 +16,7 @@
         public const string ConfigHolder = "Network/Network Config Holder";
         public const string InitialSceneName = "Loader";
         public const string NameSelectionSceneName = "NameSelection";
-        public const string LobbySceneName = "Game";
+        public const string LobbySceneName = "Lobby";
         public const string GameSceneName = "Game";
     }
 }
