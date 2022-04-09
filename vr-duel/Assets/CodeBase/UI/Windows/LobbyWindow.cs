@@ -22,6 +22,7 @@ namespace CodeBase.UI.Windows
 
         protected override void Initialize()
         {
+            _playerInformationContainer.Initialize();
             _connectionStatusContainer.Initialize();
             _matchmakingContainer.Initialize();
         }

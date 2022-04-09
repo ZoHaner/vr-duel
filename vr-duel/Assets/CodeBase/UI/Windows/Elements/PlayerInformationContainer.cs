@@ -34,8 +34,8 @@ namespace CodeBase.UI.Windows.Elements
         private string BuildTextInformation()
         {
             var sb = new StringBuilder();
-            sb.Append("Hello, ").Append(_playerDataService.User.Username).Append("\n");
-            sb.Append("You won ").Append(_progressService.Progress.WinsCount).Append(" times");
+            sb.Append("Hello, ").Append(_playerDataService.User.Username).Append("!\n");
+            sb.Append("Your score is: ").Append(_progressService.Progress.WinsCount);
             return sb.ToString();
         }
     }
