@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
-using CodeBase.Services.UI;
 using CodeBase.StaticData;
 using Nakama;
 
@@ -12,14 +11,12 @@ namespace CodeBase.States
         private readonly GameStateMachine _gameStateMachine;
         private readonly INetworkService _networkService;
         private readonly IRoundService _roundService;
-        private readonly ILobbyUIFactory _lobbyUIFactory;
 
-        public LobbyCycleState(GameStateMachine gameStateMachine, INetworkService networkService, IRoundService roundService, ILobbyUIFactory lobbyUIFactory)
+        public LobbyCycleState(GameStateMachine gameStateMachine, INetworkService networkService, IRoundService roundService)
         {
             _gameStateMachine = gameStateMachine;
             _networkService = networkService;
             _roundService = roundService;
-            _lobbyUIFactory = lobbyUIFactory;
         }
 
         public async void Enter()
@@ -29,7 +26,6 @@ namespace CodeBase.States
 
             _networkService.ReceivedMatchmakerMatched += LoadGameState;
 
-            _lobbyUIFactory.CreateLobbyWindow();
         }
 
         private async Task ConnectIfNotConnected()

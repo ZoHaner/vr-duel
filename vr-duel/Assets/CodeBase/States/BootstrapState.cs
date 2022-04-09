@@ -73,6 +73,7 @@ namespace CodeBase.States
             _allServices.Register<IGameMenuService>(new GameMenuService(_allServices.Single<IInputService>(), _allServices.Single<IWindowService>(), _allServices.Single<IUpdateProvider>()));
             RegisterPlayerFactory();
             _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<IPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IWindowService>()));
+            _allServices.Register<ILobbyConfigureService>(new LobbyConfigureService(_allServices.Single<IPlayerFactory>(), _allServices.Single<ILobbyUIFactory>()));
         }
 
         private void RegisterApplicationCloseService()

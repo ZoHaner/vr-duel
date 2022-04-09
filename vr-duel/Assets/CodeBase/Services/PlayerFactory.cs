@@ -34,7 +34,7 @@ namespace CodeBase.Services
             _pointHolder.CleanPoints();
         }
 
-        public abstract GameObject SpawnMovingLocalPlayer();
+        public abstract GameObject SpawnLobbyPlayer();
         public abstract GameObject SpawnStaticLocalPlayer();
         public abstract GameObject SpawnLocalNetworkPlayer(string userId);
 
