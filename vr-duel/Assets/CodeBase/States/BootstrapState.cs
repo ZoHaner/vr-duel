@@ -1,5 +1,6 @@
 ﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
+using CodeBase.Services.Editor;
 using CodeBase.Services.Input;
 using CodeBase.Services.Input.Standalone;
 using CodeBase.Services.Input.VR;
@@ -50,7 +51,7 @@ namespace CodeBase.States
         private void RegisterServices()
         {
             RegisterInputService();
-
+            RegisterApplicationCloseService();
             _allServices.Register<IUpdateProvider>(_updateProvider);
 
             _allServices.Register<IStorageService>(new StorageService());
@@ -62,14 +63,25 @@ namespace CodeBase.States
             _allServices.Register<INameSelectorService>(new NameSelectorService());
             _allServices.Register<ISaveLoadProgressService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
-           
+
             _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
             _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>()));
+            _allServices.Register<ILobbyUIFactory>(new LobbyUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IProgressService>(), _allServices.Single<ICloseApplicationService>()));
+
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>(), _allServices.Single<IGameUIFactory>()));
 
             _allServices.Register<IGameMenuService>(new GameMenuService(_allServices.Single<IInputService>(), _allServices.Single<IWindowService>(), _allServices.Single<IUpdateProvider>()));
             RegisterPlayerFactory();
             _allServices.Register<IRoundService>(new RoundService(_allServices.Single<INetworkService>(), _allServices.Single<IPlayerFactory>(), _allServices.Single<IProgressService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IWindowService>()));
+        }
+
+        private void RegisterApplicationCloseService()
+        {
+#if UNITY_EDITOR
+            _allServices.Register<ICloseApplicationService>(new EditorCloseApplicationService());
+#else
+            _allServices.Register<ICloseApplicationService>(new StandaloneCloseApplicationService());
+#endif
         }
 
         private void RegisterInputService()
@@ -85,7 +97,7 @@ namespace CodeBase.States
             else
                 _allServices.Register<IInputService>(new StandaloneInputService());
         }
-        
+
         private void RegisterPlayerFactory()
         {
             if (Application.isMobilePlatform)

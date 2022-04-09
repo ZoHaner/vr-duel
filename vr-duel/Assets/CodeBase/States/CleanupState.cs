@@ -17,7 +17,6 @@ namespace CodeBase.States
         public void Enter()
         {
             _roundService.Cleanup();
-            _networkService.Cleanup();
             if (_networkService.IsConnected())
                 _networkService.Disconnect();
         }

@@ -10,6 +10,11 @@ namespace CodeBase.Services
 {
     public class NetworkService : INetworkService
     {
+        public Action OnConnect { get; set; }
+        public Action OnDisconnect { get; set; }
+        public Action OnConnectionError { get; set; }
+        public Action MatchmakingStarted { get; set; }
+        public Action MatchmakingCanceled { get; set; }
         public Action<IMatch> MatchJoined { get; set; }
         public Action<IMatchmakerMatched> ReceivedMatchmakerMatched { get; set; }
         public Action<IMatchPresenceEvent> ReceivedMatchPresence { get; set; }
@@ -41,36 +46,6 @@ namespace CodeBase.Services
             _playerData = playerData;
         }
 
-        public void SubscribeEvents()
-        {
-            _socket.ReceivedMatchmakerMatched += m => _dispatcher.Enqueue(() => OnReceivedMatchmakerMatched(m));
-            _socket.ReceivedMatchPresence += m => _dispatcher.Enqueue(() => OnReceivedMatchPresence(m));
-            _socket.ReceivedMatchState += m => _dispatcher.Enqueue(async () => await OnReceivedMatchState(m));
-        }
-
-        public void Cleanup()
-        {
-            _socket.ReceivedMatchmakerMatched -= m => _dispatcher.Enqueue(() => OnReceivedMatchmakerMatched(m));
-            _socket.ReceivedMatchPresence -= m => _dispatcher.Enqueue(() => OnReceivedMatchPresence(m));
-            _socket.ReceivedMatchState -= m => _dispatcher.Enqueue(async () => await OnReceivedMatchState(m));
-        }
-
-        private void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatched)
-        {
-            JoinMatch(matchmakerMatched);
-            ReceivedMatchmakerMatched?.Invoke(matchmakerMatched);
-        }
-
-        private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
-        {
-            ReceivedMatchPresence?.Invoke(matchPresenceEvent);
-        }
-
-        private async Task OnReceivedMatchState(IMatchState matchState)
-        {
-            ReceivedMatchState?.Invoke(matchState);
-        }
-
         public bool IsConnected()
         {
             if (_socket != null)
@@ -84,9 +59,31 @@ namespace CodeBase.Services
             var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
             var config = configHolder.GetActiveConfig();
             _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _adapter);
-            _session = await _client.AuthenticateDeviceAsync(_playerData.User.Id, _playerData.User.Username);
+
+            try
+            {
+                _session = await _client.AuthenticateDeviceAsync(_playerData.User.Id, _playerData.User.Username);
+            }
+            catch (ApiResponseException ex)
+            {
+                OnConnectionError?.Invoke();
+                Debug.LogError($"Authentication error: '{ex}'");
+                return;
+            }
+
             _socket = _client.NewSocket();
-            await _socket.ConnectAsync(_session, true);
+            SubscribeSocketEvents();
+
+            try
+            {
+                await _socket.ConnectAsync(_session, true);
+            }
+            catch (ApiResponseException ex)
+            {
+                OnConnectionError?.Invoke();
+                Debug.LogError($"Socket connection error: '{ex}'");
+                return;
+            }
 
             Debug.LogError(_client);
             Debug.LogError(_session);
@@ -95,8 +92,20 @@ namespace CodeBase.Services
 
         public async Task Disconnect()
         {
-            await _socket.CloseAsync();
-            Debug.LogError("CONNECTION CLOSED");
+            if (!IsConnected())
+                return;
+
+            Cleanup();
+
+            try
+            {
+                await _socket.CloseAsync();
+                Debug.LogError("CONNECTION CLOSED");
+            }
+            catch (ApiResponseException ex)
+            {
+                Debug.LogError($"Socket connection error: '{ex}'");
+            }
         }
 
         public async Task<IApiMatchList> GetMatchList()
@@ -136,6 +145,7 @@ namespace CodeBase.Services
         public async Task AddMatchmaker()
         {
             Debug.LogError("Finding match ...");
+            MatchmakingStarted?.Invoke();
             var matchmakerTicket = await _socket.AddMatchmakerAsync(Query, MinPlayers, MaxPlayers);
             _ticket = matchmakerTicket.Ticket;
             Debug.LogError("Ticket : " + _ticket);
@@ -144,6 +154,7 @@ namespace CodeBase.Services
         public async Task CancelMatchmaker()
         {
             await _socket.RemoveMatchmakerAsync(_ticket);
+            MatchmakingCanceled?.Invoke();
         }
 
         public async void JoinMatch(IMatchmakerMatched matchmakerMatch)
@@ -161,6 +172,50 @@ namespace CodeBase.Services
         public void SendMatchState(long opCode, string state)
         {
             _socket.SendMatchStateAsync(_match.Id, opCode, state);
+        }
+
+        private void SubscribeSocketEvents()
+        {
+            _socket.Connected += () => _dispatcher.Enqueue(OnConnected);
+            _socket.Closed += () => _dispatcher.Enqueue(OnDisconnected);
+            _socket.ReceivedMatchmakerMatched += m => _dispatcher.Enqueue(() => OnReceivedMatchmakerMatched(m));
+            _socket.ReceivedMatchPresence += m => _dispatcher.Enqueue(() => OnReceivedMatchPresence(m));
+            _socket.ReceivedMatchState += m => _dispatcher.Enqueue(async () => await OnReceivedMatchState(m));
+        }
+
+        private void Cleanup()
+        {
+            _socket.Connected -= () => _dispatcher.Enqueue(OnConnected);
+            _socket.Closed -= () => _dispatcher.Enqueue(OnDisconnected);
+            _socket.ReceivedMatchmakerMatched -= m => _dispatcher.Enqueue(() => OnReceivedMatchmakerMatched(m));
+            _socket.ReceivedMatchPresence -= m => _dispatcher.Enqueue(() => OnReceivedMatchPresence(m));
+            _socket.ReceivedMatchState -= m => _dispatcher.Enqueue(async () => await OnReceivedMatchState(m));
+        }
+
+        private void OnConnected()
+        {
+            OnConnect?.Invoke();
+        }
+
+        private void OnDisconnected()
+        {
+            OnDisconnect?.Invoke();
+        }
+
+        private void OnReceivedMatchmakerMatched(IMatchmakerMatched matchmakerMatched)
+        {
+            JoinMatch(matchmakerMatched);
+            ReceivedMatchmakerMatched?.Invoke(matchmakerMatched);
+        }
+
+        private void OnReceivedMatchPresence(IMatchPresenceEvent matchPresenceEvent)
+        {
+            ReceivedMatchPresence?.Invoke(matchPresenceEvent);
+        }
+
+        private async Task OnReceivedMatchState(IMatchState matchState)
+        {
+            ReceivedMatchState?.Invoke(matchState);
         }
     }
 }

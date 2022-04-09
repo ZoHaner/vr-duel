@@ -8,6 +8,11 @@ namespace CodeBase.Services
     {
         Task Connect();
         Task Disconnect();
+        Action OnConnect { get; set; }
+        Action OnDisconnect { get; set; }
+        Action OnConnectionError { get; set; }
+        Action MatchmakingStarted { get; set; }
+        Action MatchmakingCanceled { get; set; }
         Action<IMatchmakerMatched> ReceivedMatchmakerMatched { get; set; }
         Action<IMatch> MatchJoined { get; set; }
         Action<IMatchPresenceEvent> ReceivedMatchPresence { get; set; }
@@ -19,8 +24,6 @@ namespace CodeBase.Services
         Task AddMatchmaker();
         Task CancelMatchmaker();
         void JoinMatch(IMatchmakerMatched matchmakerMatch);
-        void SubscribeEvents();
-        void Cleanup();
         void SendMatchState(long opCode, string state);
         bool IsConnected();
         void LeaveMatch(string matchId);
