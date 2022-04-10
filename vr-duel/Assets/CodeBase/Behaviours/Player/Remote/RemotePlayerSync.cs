@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using CodeBase.Behaviours.Gun;
+using CodeBase.Behaviours.Player.Remote.Lerp;
 using CodeBase.Entities;
 using CodeBase.StaticData;
 using Nakama;
@@ -12,27 +13,33 @@ namespace CodeBase.Behaviours.Player.Remote
 {
     public class RemotePlayerSync : MonoBehaviour
     {
-        public RemotePlayer NetworkData;
-        
         public float LerpTime = 0.05f;
 
         public Transform HeadTransform;
         public Transform LeftHandTransform;
         public Transform RightHandTransform;
 
-        public Rigidbody HeadRigidbody;
-        public Rigidbody LeftHandRigidbody;
-        public Rigidbody RightHandRigidbody;
-
         public GunShooting Gun;
-        
-        private Rigidbody2D playerRigidbody;
-        private Transform playerTransform;
+
+        private readonly Dictionary<string, PositionSync> _positionsToSync = new Dictionary<string, PositionSync>();
+        private readonly Dictionary<string, RotationSync> _rotationsToSync = new Dictionary<string, RotationSync>();
+
+        private readonly CultureInfo _cultureInfo = new CultureInfo("en-US");
+        private RemotePlayer _networkData;
 
         public void Construct(RemotePlayer networkData, GunShooting gun)
         {
-            NetworkData = networkData;
+            _networkData = networkData;
             Gun = gun;
+
+            FillPositionSyncList();
+            FillRotationSyncList();
+        }
+
+        private void LateUpdate()
+        {
+            LerpPosition();
+            LerpRotation();
         }
 
         public void UpdateState(IMatchState matchState)
@@ -53,21 +60,45 @@ namespace CodeBase.Behaviours.Player.Remote
 
         private bool NotMyMatchState(IMatchState matchState)
         {
-            return matchState.UserPresence.SessionId != NetworkData.Presence.SessionId;
+            return matchState.UserPresence.SessionId != _networkData.Presence.SessionId;
         }
 
         private void UpdateVelocityAndPositionFromState(byte[] state)
         {
             IDictionary<string, string> stateDictionary = GetStateAsDictionary(state);
-            
-            HeadTransform.position = GetPositionFromDictionary(stateDictionary, "head", "position");
-            LeftHandTransform.position = GetPositionFromDictionary(stateDictionary, "lhand", "position");
-            RightHandTransform.position = GetPositionFromDictionary(stateDictionary, "rhand", "position");
-            
-            HeadTransform.rotation = Quaternion.Euler(GetPositionFromDictionary(stateDictionary, "head", "rotation"));
-            LeftHandTransform.rotation = Quaternion.Euler(GetPositionFromDictionary(stateDictionary, "lhand", "rotation"));
-            RightHandTransform.rotation = Quaternion.Euler(GetPositionFromDictionary(stateDictionary, "rhand", "rotation"));
-            
+
+            SetTargetPositions(stateDictionary);
+            SetTargetRotations(stateDictionary);
+        }
+
+        private void SetTargetRotations(IDictionary<string, string> stateDictionary)
+        {
+            foreach (var prefix in _rotationsToSync.Keys)
+            {
+                var newRotation = GetRotationFromDictionary(stateDictionary, prefix);
+                _rotationsToSync[prefix].SetNewTarget(newRotation);
+            }
+        }
+
+        private void SetTargetPositions(IDictionary<string, string> stateDictionary)
+        {
+            foreach (var prefix in _positionsToSync.Keys)
+            {
+                var newPosition = GetPositionFromDictionary(stateDictionary, prefix);
+                _positionsToSync[prefix].SetNewTarget(newPosition);
+            }
+        }
+
+        private void LerpPosition()
+        {
+            foreach (var positionSync in _positionsToSync.Values)
+                positionSync.ApplyLerp(Time.deltaTime);
+        }
+
+        private void LerpRotation()
+        {
+            foreach (var rotationSync in _rotationsToSync.Values)
+                rotationSync.ApplyLerp(Time.deltaTime);
         }
 
         private void UpdateInput(byte[] state)
@@ -79,16 +110,44 @@ namespace CodeBase.Behaviours.Player.Remote
             {
                 Gun.Shoot();
             }
-
         }
 
-        private Vector3 GetPositionFromDictionary(IDictionary<string, string> dictionary, string prefix, string attribute)
+        private void FillPositionSyncList()
+        {
+            _positionsToSync["head"] = new PositionSync(HeadTransform, new VectorLerp(LerpTime));
+            _positionsToSync["lhand"] = new PositionSync(LeftHandTransform, new VectorLerp(LerpTime));
+            _positionsToSync["rhand"] = new PositionSync(RightHandTransform, new VectorLerp(LerpTime));
+        }
+
+        private void FillRotationSyncList()
+        {
+            _rotationsToSync["head"] = new RotationSync(HeadTransform, new QuaternionLerp(LerpTime));
+            _rotationsToSync["lhand"] = new RotationSync(LeftHandTransform, new QuaternionLerp(LerpTime));
+            _rotationsToSync["rhand"] = new RotationSync(RightHandTransform, new QuaternionLerp(LerpTime));
+        }
+
+        private Vector3 GetPositionFromDictionary(IDictionary<string, string> dictionary, string prefix)
         {
             return new Vector3(
-                float.Parse(dictionary[$"{prefix}.{attribute}.x"], new CultureInfo("en-US")),
-                float.Parse(dictionary[$"{prefix}.{attribute}.y"], new CultureInfo("en-US")),
-                float.Parse(dictionary[$"{prefix}.{attribute}.z"], new CultureInfo("en-US"))
+                ParseFloat(dictionary[$"{prefix}.position.x"]),
+                ParseFloat(dictionary[$"{prefix}.position.y"]),
+                ParseFloat(dictionary[$"{prefix}.position.z"])
             );
+        }
+
+        private Quaternion GetRotationFromDictionary(IDictionary<string, string> dictionary, string prefix)
+        {
+            return new Quaternion(
+                ParseFloat(dictionary[$"{prefix}.rotation.x"]),
+                ParseFloat(dictionary[$"{prefix}.rotation.y"]),
+                ParseFloat(dictionary[$"{prefix}.rotation.z"]),
+                ParseFloat(dictionary[$"{prefix}.rotation.w"])
+            );
+        }
+
+        private float ParseFloat(string number)
+        {
+            return float.Parse(number, _cultureInfo);
         }
 
         private IDictionary<string, string> GetStateAsDictionary(byte[] state)
