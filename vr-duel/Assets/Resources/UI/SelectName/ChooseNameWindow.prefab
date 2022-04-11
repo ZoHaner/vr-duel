@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Content: {fileID: 4134013456596401944}
   m_Horizontal: 1
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -556,7 +556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 86956180158823362, guid: 773b22c2837824348b1721b5f84227fe, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.12
+      value: 0.11999893
       objectReference: {fileID: 0}
     - target: {fileID: 86956180158823362, guid: 773b22c2837824348b1721b5f84227fe, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
