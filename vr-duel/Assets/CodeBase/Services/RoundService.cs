@@ -338,7 +338,7 @@ namespace CodeBase.Services
             Debug.LogError("Deactivate Player");
             var player = _players[userId];
             _players.Remove(userId);
-            UnityEngine.Object.Destroy(player, 1.5f);
+            UnityEngine.Object.Destroy(player, 2f);
         }
 
         public void UpdatePlayersState(IMatchState state)
