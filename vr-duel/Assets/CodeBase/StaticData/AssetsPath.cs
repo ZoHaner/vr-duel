@@ -2,8 +2,8 @@
 {
     public class AssetsPath
     {
-        public static string LocalPlayerStandalone = "Player/Standalone/OfflinePlayerWithRay";
-        public static string LocalStaticPlayerStandalone = "Player/Standalone/OfflineStaticPlayerWithRay";
+        public static string LocalPlayerStandalone = "Player/Standalone/OfflinePlayer";
+        public static string LocalStaticPlayerStandalone = "Player/Standalone/OfflineStaticPlayer";
         public static string LocalNetworkPlayerStandalone = "Player/Standalone/NetworkLocalPlayer";
 
         public static string LocalPlayerXR = "Player/XR/OfflinePlayerWithRay";
