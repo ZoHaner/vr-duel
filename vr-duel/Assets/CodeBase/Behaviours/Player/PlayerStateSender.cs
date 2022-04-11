@@ -8,18 +8,12 @@ namespace CodeBase.Behaviours.Player
 {
     public class PlayerStateSender : MonoBehaviour
     {
-        public PlayerDeath PlayerDeath;
-        
-        public float StateFrequency = 0.1f;
+        [SerializeField] private float StateFrequency = 0.1f;
 
-        public Transform HeadTransform;
-        public Transform LeftHandTransform;
-        public Transform RightHandTransform;
+        [SerializeField] private Transform _headTransform;
+        [SerializeField] private Transform _leftHandTransform;
+        [SerializeField] private Transform _rightHandTransform;
 
-        public Rigidbody HeadRigidbody;
-        public Rigidbody LeftHandRigidbody;
-        public Rigidbody RightHandRigidbody;
-        
         private IInputService _service;
         private INetworkService _networkService;
         private float _stateSyncTimer;
@@ -46,11 +40,11 @@ namespace CodeBase.Behaviours.Player
                     OpCodes.VelocityAndPosition,
                     MatchDataJson.BodyVelocityAndPosition(
                         headVelocity: Vector3.zero,
-                        HeadTransform,
+                        _headTransform,
                         Vector3.zero,
-                        LeftHandTransform,
+                        _leftHandTransform,
                         Vector3.zero,
-                        RightHandTransform
+                        _rightHandTransform
                     ));
 
                 _stateSyncTimer = StateFrequency;
