@@ -26,14 +26,14 @@ namespace CodeBase.Utilities.Network
             Transform rhandTransform)
         {
             var values = new Dictionary<string, string>();
-            values.AddRange(VelocityAndPosition("head", headVelocity, headTransform.position, headTransform.eulerAngles));
-            values.AddRange(VelocityAndPosition("lhand", lhandVelocity, lhandTransform.position, lhandTransform.eulerAngles));
-            values.AddRange(VelocityAndPosition("rhand", rhandVelocity, rhandTransform.position, rhandTransform.eulerAngles));
+            values.AddRange(VelocityAndPosition("head", headVelocity, headTransform.position, headTransform.rotation));
+            values.AddRange(VelocityAndPosition("lhand", lhandVelocity, lhandTransform.position, lhandTransform.rotation));
+            values.AddRange(VelocityAndPosition("rhand", rhandVelocity, rhandTransform.position, rhandTransform.rotation));
 
             return values.ToJson();
         }
 
-        private static Dictionary<string, string> VelocityAndPosition(string prefix, Vector3 velocity, Vector3 position, Vector3 rotation)
+        private static Dictionary<string, string> VelocityAndPosition(string prefix, Vector3 velocity, Vector3 position, Quaternion rotation)
         {
             return new Dictionary<string, string>
             {
@@ -43,6 +43,7 @@ namespace CodeBase.Utilities.Network
                 { $"{prefix}.position.x", position.x.ToString("F1", new CultureInfo("en-US").NumberFormat) },
                 { $"{prefix}.position.y", position.y.ToString("F1", new CultureInfo("en-US").NumberFormat) },
                 { $"{prefix}.position.z", position.z.ToString("F1", new CultureInfo("en-US").NumberFormat) },
+                { $"{prefix}.rotation.w", rotation.w.ToString("F1", new CultureInfo("en-US").NumberFormat) },
                 { $"{prefix}.rotation.x", rotation.x.ToString("F1", new CultureInfo("en-US").NumberFormat) },
                 { $"{prefix}.rotation.y", rotation.y.ToString("F1", new CultureInfo("en-US").NumberFormat) },
                 { $"{prefix}.rotation.z", rotation.z.ToString("F1", new CultureInfo("en-US").NumberFormat) },

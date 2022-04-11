@@ -10,14 +10,16 @@ namespace CodeBase.States
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly IWindowService _windowService;
         private readonly IPlayerFactory _playerFactory;
+        private readonly ILobbyUIFactory _lobbyUIFactory;
+        private ILobbyConfigureService _lobbyService;
 
-        public LoadLobbyLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IWindowService windowService, IPlayerFactory playerFactory)
+        public LoadLobbyLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IPlayerFactory playerFactory, ILobbyUIFactory lobbyUIFactory, ILobbyConfigureService lobbyService)
         {
+            _lobbyUIFactory = lobbyUIFactory;
+            _lobbyService = lobbyService;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
-            _windowService = windowService;
             _playerFactory = playerFactory;
         }
 
@@ -28,8 +30,8 @@ namespace CodeBase.States
 
         private void OnLoaded()
         {
-            _playerFactory.SpawnMovingLocalPlayer();
-            _windowService.Open(WindowId.MatchesList);
+            
+            _lobbyService.ConfigureLobbyObjects();
             _gameStateMachine.Enter<LobbyCycleState>();
         }
 

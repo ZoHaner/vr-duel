@@ -6,13 +6,17 @@ namespace CodeBase.Services
 {
     public class PlayerFactoryStandalone : PlayerFactory
     {
+        private readonly Vector3 _lobbyPlayerPosition = new Vector3(-1.27f, 0.61f, -2.84f);
+
         public PlayerFactoryStandalone(IInputService inputService, INetworkService networkService) : base(inputService, networkService)
         {
         }
 
-        public override GameObject SpawnMovingLocalPlayer()
+        public override GameObject SpawnLobbyPlayer()
         {
-            return SpawnMovingLocalPlayerBase(AssetsPath.LocalPlayerStandalone);
+            var player = SpawnMovingLocalPlayerBase(AssetsPath.LocalPlayerStandalone);
+            player.transform.position = _lobbyPlayerPosition;
+            return player;
         }
 
         public override GameObject SpawnStaticLocalPlayer()

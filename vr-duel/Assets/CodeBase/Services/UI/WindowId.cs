@@ -10,5 +10,6 @@ namespace CodeBase.Services.UI
         WinnerPopup = 5,
         LoosePopup = 6,
         BackToLobby = 7,
+        LobbyWindow = 8,
     }
 }
