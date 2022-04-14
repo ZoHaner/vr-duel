@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e96b878bd4f4e82b17a80021cc1b9b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GenerateButton: {fileID: 4655078716759222137}
+  GenerateButton: {fileID: 3269892034594122961}
   NameField: {fileID: 8175778300361640593}
 --- !u!114 &4203386573665328927
 MonoBehaviour:
@@ -857,7 +857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2202125473442279447, guid: 6c23833bc7d5146e88d018f8fe7c3345, type: 3}
       propertyPath: m_text
-      value: No
+      value: Try again
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c23833bc7d5146e88d018f8fe7c3345, type: 3}
@@ -866,6 +866,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2202125473268114222, guid: 6c23833bc7d5146e88d018f8fe7c3345, type: 3}
   m_PrefabInstance: {fileID: 3742341792450777086}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3269892034594122961 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2202125473268114223, guid: 6c23833bc7d5146e88d018f8fe7c3345, type: 3}
+  m_PrefabInstance: {fileID: 3742341792450777086}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5855568869381967034
 PrefabInstance:
   m_ObjectHideFlags: 0
