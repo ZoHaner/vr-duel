@@ -9,7 +9,6 @@ namespace CodeBase.Services.Input.Standalone
         [SerializeField] private Transform Camera;
         [SerializeField] private Transform PlayerBody;
 
-        [SerializeField] private Transform LeftHand;
         [SerializeField] private Transform RightHand;
         
         
@@ -34,7 +33,6 @@ namespace CodeBase.Services.Input.Standalone
             _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
             Camera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
-            LeftHand.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
             RightHand.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
             
             PlayerBody.Rotate(Vector3.up * mouseX);

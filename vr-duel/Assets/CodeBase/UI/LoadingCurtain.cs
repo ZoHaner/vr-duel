@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CodeBase.UI
 {
     public class LoadingCurtain : MonoBehaviour
     {
         [SerializeField]
-        private CanvasGroup _curtain;
+        private Image _curtain;
 
         private void Awake()
         {
@@ -16,7 +17,7 @@ namespace CodeBase.UI
         public void Show()
         {
             gameObject.SetActive(true);
-            _curtain.alpha = 1;
+            SetAlpha(1f);
         }
 
         public void Hide() => 
@@ -24,13 +25,20 @@ namespace CodeBase.UI
 
         private IEnumerator FadeIn()
         {
-            while (_curtain.alpha > 0)
+            while (_curtain.color.a > 0)
             {
-                _curtain.alpha -= 0.03f;
+                SetAlpha(_curtain.color.a - 0.03f);
                 yield return new WaitForSeconds(0.03f);
             }
             
             gameObject.SetActive(false);
+        }
+
+        private void SetAlpha(float alpha)
+        {
+            var color = _curtain.color;
+            color.a = alpha;
+            _curtain.color = color;
         }
     }
 }
