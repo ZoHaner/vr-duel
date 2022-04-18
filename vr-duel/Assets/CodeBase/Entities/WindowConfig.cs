@@ -1,6 +1,7 @@
 using System;
 using CodeBase.Services.UI;
 using CodeBase.UI.Windows;
+using UnityEngine.AddressableAssets;
 
 namespace CodeBase.Entities
 {
@@ -8,6 +9,6 @@ namespace CodeBase.Entities
     public class WindowConfig
     {
         public WindowId WindowId;
-        public WindowBase Prefab;
+        public AssetReferenceGameObject PrefabReference;
     }
 }

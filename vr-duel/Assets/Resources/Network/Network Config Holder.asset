@@ -20,6 +20,6 @@ MonoBehaviour:
     ServerKey: defaultkey
   - IsActive: 1
     Scheme: http
-    Host: 192.168.0.16
+    Host: 192.168.0.14
     Port: 7350
     ServerKey: defaultkey

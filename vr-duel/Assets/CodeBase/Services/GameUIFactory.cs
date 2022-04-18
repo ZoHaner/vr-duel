@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using CodeBase.Services.Progress;
 using CodeBase.Services.UI;
 using CodeBase.UI.Windows;
@@ -29,31 +30,34 @@ namespace CodeBase.Services
                 CreateUIRoot();
         }
 
-        public GameObject CreateWinnerPopup()
+        public async Task<GameObject> CreateWinnerPopup()
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.WinnerPopup);
-            var window = InstantiateWindow(config.Prefab).GetComponent<WinPopup>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var window = InstantiateWindow(prefab).GetComponent<WinPopup>();
             window.Construct(_progressService);
             return window.gameObject;
         }
 
-        public GameObject ShowLoosePopup()
+        public async Task<GameObject> ShowLoosePopup()
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LoosePopup);
-            var window = InstantiateWindow(config.Prefab);
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var window = InstantiateWindow(prefab);
             return window.gameObject;
         }
 
-        public GameObject CreateBackToLobbyWindow(WindowService windowService)
+        public async Task<GameObject> CreateBackToLobbyWindow(WindowService windowService)
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.BackToLobby);
-            var window = InstantiateWindow(config.Prefab).GetComponent<BackToLobbyWindow>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var window = InstantiateWindow(prefab).GetComponent<BackToLobbyWindow>();
             window.Construct(
                 windowService.CloseAllWindows, 
                 () => _backToLobby());
@@ -76,10 +80,10 @@ namespace CodeBase.Services
             _uiRoot.position = _rootPosition;
         }
 
-        private WindowBase InstantiateWindow(WindowBase configPrefab)
+        private GameObject InstantiateWindow(GameObject configPrefab)
         {
             var window = UnityEngine.Object.Instantiate(configPrefab, _uiRoot);
-            window.gameObject.transform.localPosition = Vector3.zero;
+            window.transform.localPosition = Vector3.zero;
             return window;
         }
     }

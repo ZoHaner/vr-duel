@@ -16,7 +16,43 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 5f4e86698242b4549af61f88deefc2b3
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 3d35565098501448786c130c31abd1d7
+    m_Address: UI/GameLoop/BackToLobbyWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: eba7246f4321e416a8e6186c4e96c70f
+    m_Address: UI/GameLoop/WinPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 6745ca8371cf94e58a9ffe2e6cd41b03
+    m_Address: UI/Lobby/LobbyWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5c1c2f45647fe4b49870688f82ebc634
+    m_Address: UI/SelectName/GenerateNameWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: fb1a9b34b38e24447b0f415c6f6e14ff
+    m_Address: UI/SelectName/ChooseNameWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 3bf9124982dc54542b028c716bc34e48
+    m_Address: UI/GameLoop/LoosePopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f1f2eb3a8342b4fb59780cf4253451b0, type: 2}
   m_SchemaSet:

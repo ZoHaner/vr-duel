@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CodeBase.UI.Windows;
 using CodeBase.Utilities;
 using UnityEngine;
@@ -28,49 +29,52 @@ namespace CodeBase.Services.UI
                 CreateUIRoot();
         }
 
-        public GameObject CreateMatchesListWindow()
+        public async Task<GameObject> CreateMatchesListWindow()
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.MatchesList);
-            var configPrefab = config.Prefab;
-            var window = InstantiateWindow(configPrefab).GetComponent<MatchListWindow>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var window = InstantiateWindow(prefab).GetComponent<MatchListWindow>();
             window.Construct(_networkService);
             return window.gameObject;
         }
 
-        public GameObject CreateMatchmakingWindow()
+        public async Task<GameObject> CreateMatchmakingWindow()
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.Matchmaking);
-            var matchmakingWindow = InstantiateWindow(config.Prefab).GetComponent<MatchmakingWindow>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var matchmakingWindow = InstantiateWindow(prefab).GetComponent<MatchmakingWindow>();
             matchmakingWindow.Construct(_networkService);
             return matchmakingWindow.gameObject;
         }
 
-        public GameObject CreateChoosePlayerNameWindow(IWindowService windowService)
+        public async Task<GameObject> CreateChoosePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
-            var chooseNameWindow = InstantiateWindow(config.Prefab).GetComponent<ChooseNameWindow>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var chooseNameWindow = InstantiateWindow(prefab).GetComponent<ChooseNameWindow>();
             chooseNameWindow.Construct(_nameSelectorService, _playersAccountService, windowService);
             return chooseNameWindow.gameObject;
         }
 
-        public GameObject CreateGeneratePlayerNameWindow(IWindowService windowService)
+        public async Task<GameObject> CreateGeneratePlayerNameWindow(IWindowService windowService)
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
-            var generateNameWindow = InstantiateWindow(config.Prefab).GetComponent<GenerateNameWindow>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var generateNameWindow = InstantiateWindow(prefab).GetComponent<GenerateNameWindow>();
             generateNameWindow.Construct(_nameSelectorService, windowService);
 
             return generateNameWindow.gameObject;
         }
 
-        private WindowBase InstantiateWindow(WindowBase configPrefab)
+        private GameObject InstantiateWindow(GameObject configPrefab)
         {
             var window = Object.Instantiate(configPrefab, _uiRoot);
             window.gameObject.transform.localPosition = Vector3.zero;

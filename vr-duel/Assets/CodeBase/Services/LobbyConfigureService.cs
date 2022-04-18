@@ -14,10 +14,10 @@ namespace CodeBase.Services
             _lobbyUIFactory = lobbyUIFactory;
         }
         
-        public void ConfigureLobbyObjects()
+        public async void ConfigureLobbyObjects()
         {
             var player = _playerFactory.SpawnLobbyPlayer();
-            var window = _lobbyUIFactory.CreateLobbyWindow();
+            var window = await _lobbyUIFactory.CreateLobbyWindow();
             player.RotateToObjectAroundYAxis(window);
         }
     }

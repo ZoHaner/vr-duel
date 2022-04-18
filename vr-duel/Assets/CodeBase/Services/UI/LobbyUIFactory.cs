@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CodeBase.Services.Progress;
 using CodeBase.UI.Windows;
 using CodeBase.Utilities;
@@ -25,13 +26,13 @@ namespace CodeBase.Services.UI
             _closeApplicationService = closeApplicationService;
         }
 
-        public GameObject CreateLobbyWindow()
+        public async Task<GameObject> CreateLobbyWindow()
         {
             CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LobbyWindow);
-            var configPrefab = config.Prefab;
-            var window = InstantiateWindow(configPrefab).GetComponent<LobbyWindow>();
+            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var window = InstantiateWindow(prefab).GetComponent<LobbyWindow>();
             window.Construct(_playerDataService, _progressService, _networkService, _closeApplicationService);
             return window.gameObject;
         }
@@ -42,10 +43,10 @@ namespace CodeBase.Services.UI
                 CreateUIRoot();
         }
         
-        private WindowBase InstantiateWindow(WindowBase configPrefab)
+        private GameObject InstantiateWindow(GameObject configPrefab)
         {
             var window = Object.Instantiate(configPrefab, _uiRoot);
-            window.gameObject.transform.localPosition = Vector3.zero;
+            window.transform.localPosition = Vector3.zero;
             return window;
         }
         

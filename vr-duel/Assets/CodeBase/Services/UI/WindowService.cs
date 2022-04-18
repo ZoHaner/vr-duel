@@ -17,7 +17,7 @@ namespace CodeBase.Services.UI
             _gameUIFactory = gameUIFactory;
         }
 
-        public void Open(WindowId windowId)
+        public async void Open(WindowId windowId)
         {
             CloseWindowIfOpened();
 
@@ -26,25 +26,25 @@ namespace CodeBase.Services.UI
                 case WindowId.Unknown:
                     break;
                 case WindowId.Matchmaking:
-                    _openWindow = _uiFactory.CreateMatchmakingWindow();
+                    _openWindow = await _uiFactory.CreateMatchmakingWindow();
                     break;
                 case WindowId.MatchesList:
-                    _openWindow = _uiFactory.CreateMatchesListWindow();
+                    _openWindow = await _uiFactory.CreateMatchesListWindow();
                     break;
                 case WindowId.ChoosePlayerName:
-                    _openWindow = _uiFactory.CreateChoosePlayerNameWindow(this);
+                    _openWindow = await _uiFactory.CreateChoosePlayerNameWindow(this);
                     break;
                 case WindowId.GeneratePlayerName:
-                    _openWindow = _uiFactory.CreateGeneratePlayerNameWindow(this);
+                    _openWindow = await _uiFactory.CreateGeneratePlayerNameWindow(this);
                     break;
                 case WindowId.WinnerPopup:
-                    _openWindow = _gameUIFactory.CreateWinnerPopup();
+                    _openWindow = await _gameUIFactory.CreateWinnerPopup();
                     break;
                 case WindowId.LoosePopup:
-                    _openWindow = _gameUIFactory.ShowLoosePopup();
+                    _openWindow = await _gameUIFactory.ShowLoosePopup();
                     break;
                 case WindowId.BackToLobby:
-                    _openWindow = _gameUIFactory.CreateBackToLobbyWindow(this);
+                    _openWindow = await _gameUIFactory.CreateBackToLobbyWindow(this);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(windowId), windowId, null);
