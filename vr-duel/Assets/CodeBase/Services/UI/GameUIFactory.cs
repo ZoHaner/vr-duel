@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using CodeBase.Services.Progress;
 using CodeBase.UI.Windows;
-using CodeBase.Utilities;
 using UnityEngine;
 
 namespace CodeBase.Services.UI
