@@ -6,13 +6,13 @@ namespace CodeBase.Services.UI
 {
     public class SelectNameUIFactory : UIBaseFactory, ISelectNameUIFactory
     {
-        protected override string UIRootPath => "UI/UIRoot";
+        protected override string UIRootPrefabPath => "UI/UIRoot";
 
         private readonly IStaticDataService _staticData;
         private readonly INameSelectorService _nameSelectorService;
         private readonly IPlayerAccountsService _playersAccountService;
 
-        public SelectNameUIFactory(IStaticDataService staticData, INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService)
+        public SelectNameUIFactory(IStaticDataService staticData, INameSelectorService nameSelectorService, IPlayerAccountsService playersAccountService, IAssetProvider assetProvider) : base(assetProvider)
         {
             _staticData = staticData;
             _nameSelectorService = nameSelectorService;
@@ -21,7 +21,7 @@ namespace CodeBase.Services.UI
         
         public async Task<GameObject> CreateChoosePlayerNameWindow(IWindowService windowService)
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
             var prefab = await config.PrefabReference.LoadAssetAsync().Task;
@@ -32,7 +32,7 @@ namespace CodeBase.Services.UI
 
         public async Task<GameObject> CreateGeneratePlayerNameWindow(IWindowService windowService)
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
             var prefab = await config.PrefabReference.LoadAssetAsync().Task;

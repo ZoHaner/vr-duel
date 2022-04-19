@@ -7,7 +7,7 @@ namespace CodeBase.Services.UI
 {
     public class LobbyUIFactory : UIBaseFactory, ILobbyUIFactory
     {
-        protected override string UIRootPath => "UI/Lobby/UIRoot";
+        protected override string UIRootPrefabPath => "UI/Lobby/UIRoot";
 
         private readonly IStaticDataService _staticData;
         private readonly INetworkService _networkService;
@@ -15,8 +15,7 @@ namespace CodeBase.Services.UI
         private readonly IProgressService _progressService;
         private readonly ICloseApplicationService _closeApplicationService;
 
-
-        public LobbyUIFactory(IStaticDataService staticData, INetworkService networkService, IPlayerDataService playerDataService, IProgressService progressService, ICloseApplicationService closeApplicationService)
+        public LobbyUIFactory(IStaticDataService staticData, INetworkService networkService, IPlayerDataService playerDataService, IProgressService progressService, ICloseApplicationService closeApplicationService, IAssetProvider assetProvider) : base(assetProvider)
         {
             _staticData = staticData;
             _networkService = networkService;
@@ -27,7 +26,7 @@ namespace CodeBase.Services.UI
 
         public async Task<GameObject> CreateLobbyWindow()
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LobbyWindow);
             var prefab = await config.PrefabReference.LoadAssetAsync().Task;

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CodeBase.Utilities;
 using UnityEngine;
 
@@ -5,13 +6,20 @@ namespace CodeBase.Services.UI
 {
     public abstract class UIBaseFactory
     {
+        private readonly IAssetProvider _assetProvider;
         private Transform _uiRoot;
-        protected abstract string UIRootPath { get; } // UIRootPrefabPath
 
-        protected void CreateRootIfNotExist()
+        protected UIBaseFactory(IAssetProvider assetProvider)
+        {
+            _assetProvider = assetProvider;
+        }
+
+        protected abstract string UIRootPrefabPath { get; }
+
+        protected async Task CreateRootIfNotExist()
         {
             if (_uiRoot == null)
-                CreateUIRoot();
+                await CreateUIRoot();
         }
         
         protected GameObject InstantiateWindow(GameObject configPrefab)
@@ -21,9 +29,10 @@ namespace CodeBase.Services.UI
             return window;
         }
 
-        private void CreateUIRoot()
+        private async Task CreateUIRoot()
         {
-            _uiRoot = ResourcesUtilities.Instantiate(UIRootPath).transform;
+            var prefab = await _assetProvider.Load<GameObject>(UIRootPrefabPath);
+            _uiRoot = Object.Instantiate(prefab).transform;
             _uiRoot.position += Vector3.up;
         }
     }

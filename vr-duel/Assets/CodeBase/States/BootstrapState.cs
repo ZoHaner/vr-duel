@@ -65,9 +65,9 @@ namespace CodeBase.States
             _allServices.Register<ISaveLoadProgressService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
 
-            _allServices.Register<ISelectNameUIFactory>(new SelectNameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
-            _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>()));
-            _allServices.Register<ILobbyUIFactory>(new LobbyUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IProgressService>(), _allServices.Single<ICloseApplicationService>()));
+            _allServices.Register<ISelectNameUIFactory>(new SelectNameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>(), _allServices.Single<IAssetProvider>()));
+            _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>(), _allServices.Single<IAssetProvider>()));
+            _allServices.Register<ILobbyUIFactory>(new LobbyUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IProgressService>(), _allServices.Single<ICloseApplicationService>(), _allServices.Single<IAssetProvider>()));
 
             _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IGameUIFactory>(), _allServices.Single<ISelectNameUIFactory>()));
 
