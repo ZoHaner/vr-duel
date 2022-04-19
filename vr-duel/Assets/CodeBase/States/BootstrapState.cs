@@ -56,6 +56,7 @@ namespace CodeBase.States
 
             _allServices.Register<IStorageService>(new StorageService());
             _allServices.Register<IPlayerDataService>(new PlayerDataService());
+            _allServices.Register<IAssetProvider>(new AssetProvider());
             RegisterNetworkService();
             RegisterStaticDataService();
 
