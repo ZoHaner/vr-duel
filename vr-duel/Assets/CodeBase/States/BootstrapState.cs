@@ -65,11 +65,11 @@ namespace CodeBase.States
             _allServices.Register<ISaveLoadProgressService>(new SaveLoadProgressService(_allServices.Single<IStorageService>()));
             _allServices.Register<IProgressService>(new ProgressService());
 
-            _allServices.Register<IUIFactory>(new UIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
+            _allServices.Register<ISelectNameUIFactory>(new SelectNameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INameSelectorService>(), _allServices.Single<IPlayerAccountsService>()));
             _allServices.Register<IGameUIFactory>(new GameUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<IProgressService>()));
             _allServices.Register<ILobbyUIFactory>(new LobbyUIFactory(_allServices.Single<IStaticDataService>(), _allServices.Single<INetworkService>(), _allServices.Single<IPlayerDataService>(), _allServices.Single<IProgressService>(), _allServices.Single<ICloseApplicationService>()));
 
-            _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IUIFactory>(), _allServices.Single<IGameUIFactory>()));
+            _allServices.Register<IWindowService>(new WindowService(_allServices.Single<IGameUIFactory>(), _allServices.Single<ISelectNameUIFactory>()));
 
             _allServices.Register<IGameMenuService>(new GameMenuService(_allServices.Single<IInputService>(), _allServices.Single<IWindowService>(), _allServices.Single<IUpdateProvider>()));
             RegisterPlayerFactory();

@@ -6,15 +6,15 @@ namespace CodeBase.Services.UI
 {
     public class WindowService : IWindowService
     {
-        private readonly IUIFactory _uiFactory;
         private readonly IGameUIFactory _gameUIFactory;
+        private readonly ISelectNameUIFactory _uiSelectNameFactory;
 
         private GameObject _openWindow;
 
-        public WindowService(IUIFactory uiFactory, IGameUIFactory gameUIFactory)
+        public WindowService(IGameUIFactory gameUIFactory, ISelectNameUIFactory uiSelectNameFactory)
         {
-            _uiFactory = uiFactory;
             _gameUIFactory = gameUIFactory;
+            _uiSelectNameFactory = uiSelectNameFactory;
         }
 
         public async void Open(WindowId windowId)
@@ -32,10 +32,10 @@ namespace CodeBase.Services.UI
                     _openWindow = await _uiFactory.CreateMatchesListWindow();
                     break;
                 case WindowId.ChoosePlayerName:
-                    _openWindow = await _uiFactory.CreateChoosePlayerNameWindow(this);
+                    _openWindow = await _uiSelectNameFactory.CreateChoosePlayerNameWindow(this);
                     break;
                 case WindowId.GeneratePlayerName:
-                    _openWindow = await _uiFactory.CreateGeneratePlayerNameWindow(this);
+                    _openWindow = await _uiSelectNameFactory.CreateGeneratePlayerNameWindow(this);
                     break;
                 case WindowId.WinnerPopup:
                     _openWindow = await _gameUIFactory.CreateWinnerPopup();

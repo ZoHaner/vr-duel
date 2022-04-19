@@ -1,6 +1,7 @@
 ﻿using CodeBase.Infrastructure.StateMachine;
 using CodeBase.Services;
 using CodeBase.Services.Progress;
+using CodeBase.Services.UI;
 
 namespace CodeBase.States
 {
@@ -31,7 +32,6 @@ namespace CodeBase.States
         {
             _playerFactory.Initialize();
             _roundService.CheckPlayersCountAndStartRound();
-            _gameUIFactory.CreateRootIfNotExist();
             _gameUIFactory.SetExitCallback(BackToLobby);
             _gameMenuService.SubscribeEvents();
         }

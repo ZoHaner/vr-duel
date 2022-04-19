@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using CodeBase.Services.Progress;
-using CodeBase.Services.UI;
 using CodeBase.UI.Windows;
 using CodeBase.Utilities;
 using UnityEngine;
 
-namespace CodeBase.Services
+namespace CodeBase.Services.UI
 {
     public class GameUIFactory : IGameUIFactory
     {
