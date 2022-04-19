@@ -17,7 +17,7 @@ namespace CodeBase.Services.UI
             _uiSelectNameFactory = uiSelectNameFactory;
         }
 
-        public void Open(WindowId windowId)
+        public async void Open(WindowId windowId)
         {
             CloseWindowIfOpened();
 
@@ -26,19 +26,19 @@ namespace CodeBase.Services.UI
                 case WindowId.Unknown:
                     break;
                 case WindowId.ChoosePlayerName:
-                    _openWindow = _uiSelectNameFactory.CreateChoosePlayerNameWindow(this).Result;
+                    _openWindow = await _uiSelectNameFactory.CreateChoosePlayerNameWindow(this);
                     break;
                 case WindowId.GeneratePlayerName:
-                    _openWindow = _uiSelectNameFactory.CreateGeneratePlayerNameWindow(this).Result;
+                    _openWindow = await _uiSelectNameFactory.CreateGeneratePlayerNameWindow(this);
                     break;
                 case WindowId.WinnerPopup:
-                    _openWindow = _gameUIFactory.CreateWinnerPopup().Result;
+                    _openWindow = await _gameUIFactory.CreateWinnerPopup();
                     break;
                 case WindowId.LoosePopup:
-                    _openWindow = _gameUIFactory.ShowLoosePopup().Result;
+                    _openWindow = await _gameUIFactory.ShowLoosePopup();
                     break;
                 case WindowId.BackToLobby:
-                    _openWindow = _gameUIFactory.CreateBackToLobbyWindow(this).Result;
+                    _openWindow = await _gameUIFactory.CreateBackToLobbyWindow(this);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(windowId), windowId, null);
