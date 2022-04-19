@@ -7,31 +7,24 @@ using UnityEngine;
 
 namespace CodeBase.Services.UI
 {
-    public class GameUIFactory : IGameUIFactory
+    public class GameUIFactory : UIBaseFactory, IGameUIFactory
     {
-        private const string UIRootPath = "UI/GameLoop/UIRoot";
+        protected override string UIRootPrefabPath => "UI/GameLoop/UIRoot";
         private readonly Vector3 _rootPosition = Vector3.up * 2;
 
         private readonly IStaticDataService _staticData;
         private readonly IProgressService _progressService;
-        private Transform _uiRoot;
         private Action _backToLobby;
 
-        public GameUIFactory(IStaticDataService staticData, IProgressService progressService)
+        public GameUIFactory(IStaticDataService staticData, IProgressService progressService, IAssetProvider assetProvider) : base(assetProvider)
         {
             _staticData = staticData;
             _progressService = progressService;
         }
 
-        public void CreateRootIfNotExist()
-        {
-            if (_uiRoot == null)
-                CreateUIRoot();
-        }
-
         public async Task<GameObject> CreateWinnerPopup()
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.WinnerPopup);
             var prefab = await config.PrefabReference.LoadAssetAsync().Task;
@@ -42,7 +35,7 @@ namespace CodeBase.Services.UI
 
         public async Task<GameObject> ShowLoosePopup()
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LoosePopup);
             var prefab = await config.PrefabReference.LoadAssetAsync().Task;
@@ -52,7 +45,7 @@ namespace CodeBase.Services.UI
 
         public async Task<GameObject> CreateBackToLobbyWindow(WindowService windowService)
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.BackToLobby);
             var prefab = await config.PrefabReference.LoadAssetAsync().Task;
@@ -71,19 +64,6 @@ namespace CodeBase.Services.UI
         public void ClearExitCallback()
         {
             _backToLobby = null;
-        }
-
-        private void CreateUIRoot()
-        {
-            _uiRoot = ResourcesUtilities.Instantiate(UIRootPath).transform;
-            _uiRoot.position = _rootPosition;
-        }
-
-        private GameObject InstantiateWindow(GameObject configPrefab)
-        {
-            var window = UnityEngine.Object.Instantiate(configPrefab, _uiRoot);
-            window.transform.localPosition = Vector3.zero;
-            return window;
         }
     }
 }
