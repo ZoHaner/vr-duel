@@ -6,7 +6,7 @@ namespace CodeBase.Services.UI
 {
     public class SelectNameUIFactory : UIBaseFactory, ISelectNameUIFactory
     {
-        protected override string UIRootPrefabPath => "UI/UIRoot";
+        protected override string UIRootPrefabPath => "UI/SelectName/UIRoot";
 
         private readonly IStaticDataService _staticData;
         private readonly INameSelectorService _nameSelectorService;
