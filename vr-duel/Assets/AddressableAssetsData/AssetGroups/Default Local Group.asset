@@ -53,6 +53,24 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: 4f5adbfc8668f4d2c959fd9f5d23aac1
+    m_Address: UI/Lobby/UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 8591e7c0aa51a4a528918d08c81f576e
+    m_Address: UI/SelectName/UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: f938e531d730743e5a9bc5f749eefc7e
+    m_Address: UI/GameLoop/UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f1f2eb3a8342b4fb59780cf4253451b0, type: 2}
   m_SchemaSet:
