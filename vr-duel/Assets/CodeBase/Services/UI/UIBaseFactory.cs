@@ -5,7 +5,7 @@ namespace CodeBase.Services.UI
 {
     public abstract class UIBaseFactory
     {
-        protected abstract string UIRootPrefabPath { get; }
+        protected abstract string UIRootPrefabId { get; }
         
         private readonly IAssetProvider _assetProvider;
         private Transform _uiRoot;
@@ -30,7 +30,7 @@ namespace CodeBase.Services.UI
 
         private async Task CreateUIRoot()
         {
-            var prefab = await _assetProvider.Load<GameObject>(UIRootPrefabPath);
+            var prefab = await _assetProvider.Load<GameObject>(UIRootPrefabId);
             _uiRoot = Object.Instantiate(prefab).transform;
             _uiRoot.position += Vector3.up;
         }

@@ -7,7 +7,7 @@ namespace CodeBase.Services.UI
 {
     public class LobbyUIFactory : UIBaseFactory, ILobbyUIFactory
     {
-        protected override string UIRootPrefabPath => "UI/Lobby/UIRoot";
+        protected override string UIRootPrefabId => "UI/Lobby/UIRoot";
 
         private readonly IStaticDataService _staticData;
         private readonly INetworkService _networkService;

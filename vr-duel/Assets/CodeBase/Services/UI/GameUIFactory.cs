@@ -8,7 +8,7 @@ namespace CodeBase.Services.UI
 {
     public class GameUIFactory : UIBaseFactory, IGameUIFactory
     {
-        protected override string UIRootPrefabPath => "UI/GameLoop/UIRoot";
+        protected override string UIRootPrefabId => "UI/GameLoop/UIRoot";
         private readonly Vector3 _rootPosition = Vector3.up * 2;
 
         private readonly IStaticDataService _staticData;
