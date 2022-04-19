@@ -13,16 +13,6 @@ MonoBehaviour:
   m_Name: WindowStaticData
   m_EditorClassIdentifier: 
   Configs:
-  - WindowId: 1
-    PrefabReference:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-  - WindowId: 2
-    PrefabReference:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
   - WindowId: 3
     PrefabReference:
       m_AssetGUID: fb1a9b34b38e24447b0f415c6f6e14ff
