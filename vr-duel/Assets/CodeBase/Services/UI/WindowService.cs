@@ -25,12 +25,6 @@ namespace CodeBase.Services.UI
             {
                 case WindowId.Unknown:
                     break;
-                case WindowId.Matchmaking:
-                    _openWindow = await _uiFactory.CreateMatchmakingWindow();
-                    break;
-                case WindowId.MatchesList:
-                    _openWindow = await _uiFactory.CreateMatchesListWindow();
-                    break;
                 case WindowId.ChoosePlayerName:
                     _openWindow = await _uiSelectNameFactory.CreateChoosePlayerNameWindow(this);
                     break;
