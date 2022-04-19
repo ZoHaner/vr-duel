@@ -1,6 +1,5 @@
 using System;
 using CodeBase.Services.UI;
-using CodeBase.UI.Windows;
 using UnityEngine.AddressableAssets;
 
 namespace CodeBase.Entities
