@@ -7,7 +7,7 @@ namespace CodeBase.Services.UI
     {
         protected abstract string UIRootPrefabId { get; }
         
-        private readonly IAssetProvider _assetProvider;
+        protected readonly IAssetProvider _assetProvider;
         private Transform _uiRoot;
 
         protected UIBaseFactory(IAssetProvider assetProvider)

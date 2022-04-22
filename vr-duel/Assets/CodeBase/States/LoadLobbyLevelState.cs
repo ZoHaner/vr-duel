@@ -25,7 +25,7 @@ namespace CodeBase.States
 
         public void Enter()
         {
-            _sceneLoader.Load(AssetsPath.LobbySceneName, OnLoaded);
+            _sceneLoader.Load(AssetAddresses.LobbySceneName, OnLoaded);
         }
 
         private void OnLoaded()

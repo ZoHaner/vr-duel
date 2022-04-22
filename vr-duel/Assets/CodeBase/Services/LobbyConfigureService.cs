@@ -16,7 +16,7 @@ namespace CodeBase.Services
         
         public async void ConfigureLobbyObjects()
         {
-            var player = _playerFactory.SpawnLobbyPlayer();
+            var player = await _playerFactory.SpawnLobbyPlayer();
             var window = await _lobbyUIFactory.CreateLobbyWindow();
             player.RotateToObjectAroundYAxis(window);
         }

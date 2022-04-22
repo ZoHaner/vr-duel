@@ -32,13 +32,13 @@ namespace CodeBase.States
             _unityWebRequestAdapter = unityWebRequestAdapter;
             _mainThreadDispatcher = mainThreadDispatcher;
             _updateProvider = updateProvider;
-
+            
             RegisterServices();
         }
 
         public void Enter()
         {
-            _sceneLoader.Load(AssetsPath.InitialSceneName, onLoaded: EnterLoadLevel);
+            _sceneLoader.Load(AssetAddresses.InitialSceneName, onLoaded: EnterLoadLevel);
         }
 
         public void Exit()
@@ -103,20 +103,20 @@ namespace CodeBase.States
         private void RegisterPlayerFactory()
         {
             if (Application.isMobilePlatform)
-                _allServices.Register<IPlayerFactory>(new PlayerFactoryXR(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>()));
+                _allServices.Register<IPlayerFactory>(new PlayerFactoryXR(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>(), _allServices.Single<IAssetProvider>()));
             else
-                _allServices.Register<IPlayerFactory>(new PlayerFactoryStandalone(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>()));
+                _allServices.Register<IPlayerFactory>(new PlayerFactoryStandalone(_allServices.Single<IInputService>(), _allServices.Single<INetworkService>(), _allServices.Single<IAssetProvider>()));
         }
 
         private void RegisterNetworkService()
         {
-            var networkService = new NetworkService(_unityWebRequestAdapter, _mainThreadDispatcher, _allServices.Single<IPlayerDataService>());
+            var networkService = new NetworkService(_unityWebRequestAdapter, _mainThreadDispatcher, _allServices.Single<IPlayerDataService>(), _allServices.Single<IAssetProvider>());
             _allServices.Register<INetworkService>(networkService);
         }
 
         private void RegisterStaticDataService()
         {
-            var staticData = new StaticDataService();
+            var staticData = new StaticDataService(_allServices.Single<IAssetProvider>());
             staticData.LoadStatics();
             _allServices.Register<IStaticDataService>(staticData);
         }

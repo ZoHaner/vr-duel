@@ -29,7 +29,7 @@ namespace CodeBase.Services.UI
             await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LobbyWindow);
-            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
             var window = InstantiateWindow(prefab).GetComponent<LobbyWindow>();
             window.Construct(_playerDataService, _progressService, _networkService, _closeApplicationService);
             return window.gameObject;

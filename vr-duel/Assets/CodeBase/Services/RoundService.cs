@@ -295,19 +295,19 @@ namespace CodeBase.Services
         public string LocalUserId { get; set; }
         
         
-        public void SpawnPlayers(IEnumerable<IUserPresence> presences)
+        public async void SpawnPlayers(IEnumerable<IUserPresence> presences)
         {
-            foreach (var presence in presences)
+            foreach (var presence in presences.ToArray())
             {
                 var isLocal = presence.UserId == LocalUserId;
                 GameObject player;
                 if (isLocal)
                 {
-                    player = _playerFactory.SpawnLocalNetworkPlayer(presence.UserId);
+                    player = await _playerFactory.SpawnLocalNetworkPlayer(presence.UserId);
                 }
                 else
                 {
-                    player = _playerFactory.SpawnRemoteNetworkPlayer(presence, this);
+                    player = await _playerFactory.SpawnRemoteNetworkPlayer(presence, this);
                 }
                 
                 _players.Add(presence.UserId, player);
@@ -332,7 +332,6 @@ namespace CodeBase.Services
             UnityEngine.Object.Destroy(player);
         }
 
-        // Todo shouldn't destroy player
         public void DeactivatePlayer(string userId)
         {
             Debug.LogError("Deactivate Player");

@@ -26,7 +26,7 @@ namespace CodeBase.Services.UI
             await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.WinnerPopup);
-            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
             var window = InstantiateWindow(prefab).GetComponent<WinPopup>();
             window.Construct(_progressService);
             return window.gameObject;
@@ -37,7 +37,7 @@ namespace CodeBase.Services.UI
             await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LoosePopup);
-            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
             var window = InstantiateWindow(prefab);
             return window.gameObject;
         }
@@ -47,7 +47,7 @@ namespace CodeBase.Services.UI
             await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.BackToLobby);
-            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
             var window = InstantiateWindow(prefab).GetComponent<BackToLobbyWindow>();
             window.Construct(
                 windowService.CloseAllWindows, 

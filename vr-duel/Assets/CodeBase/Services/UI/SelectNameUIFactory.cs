@@ -24,7 +24,7 @@ namespace CodeBase.Services.UI
             await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.ChoosePlayerName);
-            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
             var chooseNameWindow = InstantiateWindow(prefab).GetComponent<ChooseNameWindow>();
             chooseNameWindow.Construct(_nameSelectorService, _playersAccountService, windowService);
             return chooseNameWindow.gameObject;
@@ -35,7 +35,7 @@ namespace CodeBase.Services.UI
             await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.GeneratePlayerName);
-            var prefab = await config.PrefabReference.LoadAssetAsync().Task;
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
             var generateNameWindow = InstantiateWindow(prefab).GetComponent<GenerateNameWindow>();
             generateNameWindow.Construct(_nameSelectorService, windowService);
 

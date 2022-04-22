@@ -1,19 +1,21 @@
 ﻿namespace CodeBase.StaticData
 {
-    public class AssetsPath
+    public static class AssetAddresses
     {
-        public static string LocalPlayerStandalone = "Player/Standalone/OfflinePlayer";
-        public static string LocalStaticPlayerStandalone = "Player/Standalone/OfflineStaticPlayer";
-        public static string LocalNetworkPlayerStandalone = "Player/Standalone/NetworkLocalPlayer";
+        public const string LocalPlayerStandalone = "Player/Standalone/OfflinePlayer";
+        public const string LocalStaticPlayerStandalone = "Player/Standalone/OfflineStaticPlayer";
+        public const string LocalNetworkPlayerStandalone = "Player/Standalone/NetworkLocalPlayer";
 
-        public static string LocalPlayerXR = "Player/XR/OfflinePlayerWithRay";
-        public static string LocalStaticPlayerXR = "Player/XR/OfflineStaticPlayerWithRay";
-        public static string LocalNetworkPlayerXR = "Player/XR/NetworkLocalPlayer";
+        public const string LocalPlayerXR = "Player/XR/OfflinePlayerWithRay";
+        public const string LocalStaticPlayerXR = "Player/XR/OfflineStaticPlayerWithRay";
+        public const string LocalNetworkPlayerXR = "Player/XR/NetworkLocalPlayer";
 
-        public static string RemoteNetworkPlayer = "Player/NetworkRemotePlayer";
+        public const string RemoteNetworkPlayer = "Player/NetworkRemotePlayer";
         
-        public const string Revolver = "Guns/Revolver";
         public const string ConfigHolder = "Network/Network Config Holder";
+
+        public const string Revolver = "Guns/Revolver";
+
         public const string InitialSceneName = "Loader";
         public const string NameSelectionSceneName = "NameSelection";
         public const string LobbySceneName = "Lobby";
