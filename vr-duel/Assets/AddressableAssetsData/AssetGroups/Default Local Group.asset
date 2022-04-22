@@ -71,6 +71,66 @@ MonoBehaviour:
     m_SerializedLabels: []
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
+  - m_GUID: 4f423c28c3aac456faec42d4fce85977
+    m_Address: Player/XR/OfflineStaticPlayerWithRay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: c1e2d58c424be4055b4652337e5a829c
+    m_Address: Player/Standalone/OfflinePlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: ff52cf9b3200740f2a16c0f27f7d23d2
+    m_Address: Player/XR/NetworkLocalPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5d147a8d4bda443a5b294b0c37480aa4
+    m_Address: Player/Standalone/NetworkLocalPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 370fa842739a84a0c8faea6c758cc271
+    m_Address: Player/XR/OfflinePlayerWithRay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 8f5d65adce3bc445e98f4b8319cf6e46
+    m_Address: Player/Standalone/OfflineStaticPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b2e5742754273f142a7a446bd07b387f
+    m_Address: Guns/Revolver
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b5b7dd91b5ae5bc469f2e438cfa3fa23
+    m_Address: Player/NetworkRemotePlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: d255fd446e63346599f78f39b5d7ae8a
+    m_Address: StaticData/UI/WindowStaticData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a20b42d614d875b4db6d0caf540846f2
+    m_Address: Network/Network Config Holder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: f1f2eb3a8342b4fb59780cf4253451b0, type: 2}
   m_SchemaSet:
