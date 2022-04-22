@@ -33,17 +33,19 @@ namespace CodeBase.Services
         private MainThreadDispatcher _dispatcher;
         private readonly ICoroutineRunner _coroutineRunner;
         private Coroutine _matchSearchingCoroutine;
-        private IPlayerDataService _playerData;
+        private readonly IPlayerDataService _playerData;
+        private readonly IAssetProvider _assetProvider;
 
         private const int MatchesSearchLimit = 0;
         private const bool Authoritative = false;
         private const string Query = "*";
 
-        public NetworkService(UnityWebRequestAdapter adapter, MainThreadDispatcher dispatcher, IPlayerDataService playerData)
+        public NetworkService(UnityWebRequestAdapter adapter, MainThreadDispatcher dispatcher, IPlayerDataService playerData, IAssetProvider assetProvider)
         {
             _adapter = adapter;
             _dispatcher = dispatcher;
             _playerData = playerData;
+            _assetProvider = assetProvider;
         }
 
         public bool IsConnected()
@@ -56,7 +58,7 @@ namespace CodeBase.Services
 
         public async Task Connect()
         {
-            var configHolder = Resources.Load<NetworkConfigHolder>(AssetsPath.ConfigHolder);
+            var configHolder = await _assetProvider.Load<NetworkConfigHolder>(AssetAddresses.ConfigHolder);
             var config = configHolder.GetActiveConfig();
             _client = new Client(config.Scheme, config.Host, config.Port, config.ServerKey, _adapter);
 

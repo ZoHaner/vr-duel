@@ -1,22 +1,21 @@
+using System.Threading.Tasks;
 using CodeBase.Services.Progress;
 using CodeBase.UI.Windows;
-using CodeBase.Utilities;
 using UnityEngine;
 
 namespace CodeBase.Services.UI
 {
-    public class LobbyUIFactory : ILobbyUIFactory
+    public class LobbyUIFactory : UIBaseFactory, ILobbyUIFactory
     {
-        private const string UIRootPath = "UI/Lobby/UIRoot";
+        protected override string UIRootPrefabId => "UI/Lobby/UIRoot";
 
-        private Transform _uiRoot;
         private readonly IStaticDataService _staticData;
         private readonly INetworkService _networkService;
         private readonly IPlayerDataService _playerDataService;
         private readonly IProgressService _progressService;
         private readonly ICloseApplicationService _closeApplicationService;
 
-        public LobbyUIFactory(IStaticDataService staticData, INetworkService networkService, IPlayerDataService playerDataService, IProgressService progressService, ICloseApplicationService closeApplicationService)
+        public LobbyUIFactory(IStaticDataService staticData, INetworkService networkService, IPlayerDataService playerDataService, IProgressService progressService, ICloseApplicationService closeApplicationService, IAssetProvider assetProvider) : base(assetProvider)
         {
             _staticData = staticData;
             _networkService = networkService;
@@ -25,34 +24,15 @@ namespace CodeBase.Services.UI
             _closeApplicationService = closeApplicationService;
         }
 
-        public GameObject CreateLobbyWindow()
+        public async Task<GameObject> CreateLobbyWindow()
         {
-            CreateRootIfNotExist();
+            await CreateRootIfNotExist();
 
             var config = _staticData.ForWindow(WindowId.LobbyWindow);
-            var configPrefab = config.Prefab;
-            var window = InstantiateWindow(configPrefab).GetComponent<LobbyWindow>();
+            var prefab = await _assetProvider.Load<GameObject>(config.PrefabReference);
+            var window = InstantiateWindow(prefab).GetComponent<LobbyWindow>();
             window.Construct(_playerDataService, _progressService, _networkService, _closeApplicationService);
             return window.gameObject;
-        }
-
-        public void CreateRootIfNotExist()
-        {
-            if (_uiRoot == null)
-                CreateUIRoot();
-        }
-        
-        private WindowBase InstantiateWindow(WindowBase configPrefab)
-        {
-            var window = Object.Instantiate(configPrefab, _uiRoot);
-            window.gameObject.transform.localPosition = Vector3.zero;
-            return window;
-        }
-        
-        private void CreateUIRoot()
-        {
-            _uiRoot = ResourcesUtilities.Instantiate(UIRootPath).transform;
-            _uiRoot.position += Vector3.up;
         }
     }
 }

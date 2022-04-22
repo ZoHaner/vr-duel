@@ -3,19 +3,25 @@ using System.Linq;
 using CodeBase.Entities;
 using CodeBase.Services.UI;
 using CodeBase.StaticData;
-using UnityEngine;
 
 namespace CodeBase.Services
 {
     public class StaticDataService : IStaticDataService
     {
-        private Dictionary<WindowId, WindowConfig> _windowConfigs;
         private const string StaticDataWindowsPath = "StaticData/UI/WindowStaticData";
+        
+        private readonly IAssetProvider _assetProvider;
+        private Dictionary<WindowId, WindowConfig> _windowConfigs;
 
-        public void LoadStatics()
+        public StaticDataService(IAssetProvider assetProvider)
         {
-            _windowConfigs = Resources
-                .Load<WindowStaticData>(StaticDataWindowsPath)
+            _assetProvider = assetProvider;
+        }
+        
+        public async void LoadStatics()
+        {
+            var staticData = await _assetProvider.Load<WindowStaticData>(StaticDataWindowsPath);
+            _windowConfigs = staticData
                 .Configs
                 .ToDictionary(t => t.WindowId, t => t);
         }

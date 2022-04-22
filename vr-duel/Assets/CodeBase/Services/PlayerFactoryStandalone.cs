@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CodeBase.Services.Input;
 using CodeBase.StaticData;
 using UnityEngine;
@@ -8,25 +9,25 @@ namespace CodeBase.Services
     {
         private readonly Vector3 _lobbyPlayerPosition = new Vector3(-1.27f, 0.61f, -2.84f);
 
-        public PlayerFactoryStandalone(IInputService inputService, INetworkService networkService) : base(inputService, networkService)
+        public PlayerFactoryStandalone(IInputService inputService, INetworkService networkService, IAssetProvider assetProvider) : base(inputService, networkService, assetProvider)
         {
         }
 
-        public override GameObject SpawnLobbyPlayer()
+        public override async Task<GameObject> SpawnLobbyPlayer()
         {
-            var player = SpawnMovingLocalPlayerBase(AssetsPath.LocalPlayerStandalone);
+            var player = await SpawnMovingLocalPlayerBase(AssetAddresses.LocalPlayerStandalone);
             player.transform.position = _lobbyPlayerPosition;
             return player;
         }
 
-        public override GameObject SpawnStaticLocalPlayer()
+        public override async Task<GameObject> SpawnStaticLocalPlayer()
         {
-            return SpawnStaticLocalPlayerBase(AssetsPath.LocalStaticPlayerStandalone);
+            return await SpawnStaticLocalPlayerBase(AssetAddresses.LocalStaticPlayerStandalone);
         }
 
-        public override GameObject SpawnLocalNetworkPlayer(string userId)
+        public override async Task<GameObject> SpawnLocalNetworkPlayer(string userId)
         {
-            return SpawnLocalNetworkPlayerBase(AssetsPath.LocalNetworkPlayerStandalone);
+            return await SpawnLocalNetworkPlayerBase(AssetAddresses.LocalNetworkPlayerStandalone);
         }
     }
 }

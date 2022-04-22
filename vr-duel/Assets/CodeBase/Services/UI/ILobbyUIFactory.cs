@@ -1,10 +1,10 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeBase.Services.UI
 {
     public interface ILobbyUIFactory : IService
     {
-        GameObject CreateLobbyWindow();
-        void CreateRootIfNotExist();
+        Task<GameObject> CreateLobbyWindow();
     }
 }

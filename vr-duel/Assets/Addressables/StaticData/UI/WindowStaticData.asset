@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69ff5af9a2194b08a392cea5626ad9f1, type: 3}
+  m_Name: WindowStaticData
+  m_EditorClassIdentifier: 
+  Configs:
+  - WindowId: 3
+    PrefabReference:
+      m_AssetGUID: fb1a9b34b38e24447b0f415c6f6e14ff
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - WindowId: 4
+    PrefabReference:
+      m_AssetGUID: 5c1c2f45647fe4b49870688f82ebc634
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - WindowId: 5
+    PrefabReference:
+      m_AssetGUID: eba7246f4321e416a8e6186c4e96c70f
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - WindowId: 6
+    PrefabReference:
+      m_AssetGUID: 3bf9124982dc54542b028c716bc34e48
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - WindowId: 7
+    PrefabReference:
+      m_AssetGUID: 3d35565098501448786c130c31abd1d7
+      m_SubObjectName: 
+      m_SubObjectType: 
+  - WindowId: 8
+    PrefabReference:
+      m_AssetGUID: 6745ca8371cf94e58a9ffe2e6cd41b03
+      m_SubObjectName: 
+      m_SubObjectType: 

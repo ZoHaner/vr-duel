@@ -36,7 +36,7 @@ namespace CodeBase.States
 
         private void LoadGameState(IMatchmakerMatched matchmakerMatched)
         {
-            _gameStateMachine.Enter<LoadGameLevelState, string>(AssetsPath.GameSceneName);
+            _gameStateMachine.Enter<LoadGameLevelState, string>(AssetAddresses.GameSceneName);
         }
 
         public void Exit()

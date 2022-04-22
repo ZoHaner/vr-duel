@@ -29,11 +29,11 @@ namespace CodeBase.States
         }
 
         public void Enter() => 
-            _sceneLoader.Load(AssetsPath.NameSelectionSceneName, OnSceneLoaded);
+            _sceneLoader.Load(AssetAddresses.NameSelectionSceneName, OnSceneLoaded);
 
-        private void OnSceneLoaded()
+        private async void OnSceneLoaded()
         {
-            _playerFactory.SpawnStaticLocalPlayer();
+            await _playerFactory.SpawnStaticLocalPlayer();
 
             _windowService.Open(_accountsService.GetAccountsList().Any() ? 
                 WindowId.ChoosePlayerName : 

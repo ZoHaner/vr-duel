@@ -1,0 +1,139 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 5f4e86698242b4549af61f88deefc2b3
+  m_SerializeEntries:
+  - m_GUID: 3d35565098501448786c130c31abd1d7
+    m_Address: UI/GameLoop/BackToLobbyWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: eba7246f4321e416a8e6186c4e96c70f
+    m_Address: UI/GameLoop/WinPopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 6745ca8371cf94e58a9ffe2e6cd41b03
+    m_Address: UI/Lobby/LobbyWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5c1c2f45647fe4b49870688f82ebc634
+    m_Address: UI/SelectName/GenerateNameWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: fb1a9b34b38e24447b0f415c6f6e14ff
+    m_Address: UI/SelectName/ChooseNameWindow
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 3bf9124982dc54542b028c716bc34e48
+    m_Address: UI/GameLoop/LoosePopup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 4f5adbfc8668f4d2c959fd9f5d23aac1
+    m_Address: UI/Lobby/UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 8591e7c0aa51a4a528918d08c81f576e
+    m_Address: UI/SelectName/UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: f938e531d730743e5a9bc5f749eefc7e
+    m_Address: UI/GameLoop/UIRoot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 4f423c28c3aac456faec42d4fce85977
+    m_Address: Player/XR/OfflineStaticPlayerWithRay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: c1e2d58c424be4055b4652337e5a829c
+    m_Address: Player/Standalone/OfflinePlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: ff52cf9b3200740f2a16c0f27f7d23d2
+    m_Address: Player/XR/NetworkLocalPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 5d147a8d4bda443a5b294b0c37480aa4
+    m_Address: Player/Standalone/NetworkLocalPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 370fa842739a84a0c8faea6c758cc271
+    m_Address: Player/XR/OfflinePlayerWithRay
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 8f5d65adce3bc445e98f4b8319cf6e46
+    m_Address: Player/Standalone/OfflineStaticPlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b2e5742754273f142a7a446bd07b387f
+    m_Address: Guns/Revolver
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b5b7dd91b5ae5bc469f2e438cfa3fa23
+    m_Address: Player/NetworkRemotePlayer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: d255fd446e63346599f78f39b5d7ae8a
+    m_Address: StaticData/UI/WindowStaticData
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: a20b42d614d875b4db6d0caf540846f2
+    m_Address: Network/Network Config Holder
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: f1f2eb3a8342b4fb59780cf4253451b0, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d5c9f90c560504638a8cb542be28408f, type: 2}
+    - {fileID: 11400000, guid: af8f7e2827af94252bdfdfd31c34bc90, type: 2}
